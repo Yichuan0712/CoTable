@@ -48,9 +48,9 @@ def html_table_to_markdown_2(html):
         cols = [" ".join(col.stripped_strings) for col in row]
         while len(cols) < max_cols:
             cols.append("")
-        header_markdown.append(" | ".join(cols))
+        header_markdown.append("| " + " | ".join(cols) + " |")
 
-    separator = " | ".join(["---"] * max_cols)
+    separator = "| " + " | ".join(["---"] * max_cols) + " |"
     header_markdown.append(separator)
 
     body_markdown = []
@@ -58,7 +58,7 @@ def html_table_to_markdown_2(html):
         cols = [" ".join(col.stripped_strings) for col in row]
         while len(cols) < max_cols:
             cols.append("")
-        body_markdown.append(" | ".join(cols))
+        body_markdown.append("| " + " | ".join(cols) + " |")
 
     return "\n".join(header_markdown + body_markdown)
 
