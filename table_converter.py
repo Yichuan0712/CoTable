@@ -17,9 +17,13 @@ def html_table_to_markdown(html):
 
     for i, row in enumerate(rows):
         cols = [" ".join(col.stripped_strings) for col in row.find_all(["th", "td"])]
-        markdown.append(" | ".join(cols))
         if i == 0:
-            markdown.append(" | ".join(["---"] * len(cols)))
+            header = " | ".join(cols)
+            separator = " | ".join(["---"] * len(cols))
+            markdown.append(header)
+            markdown.append(separator)
+        else:
+            markdown.append(" | ".join(cols))
 
     return "\n".join(markdown)
 
