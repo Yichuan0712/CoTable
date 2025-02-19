@@ -85,6 +85,68 @@ def html_table_to_markdown(html):
     return "\n".join(formatted_header + body_markdown)
 
 
+def html_table_to_markdown_new(html):
+    """
+    Convert an HTML table into a Markdown table, handling both colspan and rowspan.
+
+    :param html: HTML string containing a table
+    :return: Markdown-formatted table as a string
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    table = soup.find("table")
+    if not table:
+        return ""
+
+    rows = table.find_all("tr")
+
+    # Matrix to store the table structure, considering rowspan and colspan
+    table_matrix = []
+    max_cols = 0
+
+    rowspan_tracker = {}  # Dictionary to track rowspan placements
+
+    for row_idx, row in enumerate(rows):
+        cols = row.find_all(["th", "td"])
+        row_data = []
+        col_idx = 0
+
+        while col_idx in rowspan_tracker and rowspan_tracker[col_idx] > 0:
+            row_data.append(" ")  # Fill in empty space for rowspan continuation
+            rowspan_tracker[col_idx] -= 1
+            if rowspan_tracker[col_idx] == 0:
+                del rowspan_tracker[col_idx]
+            col_idx += 1
+
+        for col in cols:
+            for sup in col.find_all("sup"):  # Remove superscript elements
+                sup.decompose()
+
+            text = " ".join(col.stripped_strings)
+            colspan = int(col.get("colspan", 1))
+            rowspan = int(col.get("rowspan", 1))
+
+            row_data.extend([text] * colspan)  # Expand colspan cells
+
+            if rowspan > 1:
+                for i in range(colspan):
+                    rowspan_tracker[col_idx + i] = rowspan - 1  # Track rowspan usage
+
+            col_idx += colspan
+
+        max_cols = max(max_cols, len(row_data))
+        table_matrix.append(row_data)
+
+    # Normalize all rows to the maximum column count
+    for row in table_matrix:
+        row.extend([" "] * (max_cols - len(row)))
+
+    # Convert to Markdown
+    markdown_rows = ["| " + " | ".join(row) + " |" for row in table_matrix]
+    separator = "| " + " | ".join(["---"] * max_cols) + " |"
+
+    return "\n".join([markdown_rows[0], separator] + markdown_rows[1:])
+
+
 def get_html_content_from_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
