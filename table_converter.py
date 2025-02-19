@@ -6,26 +6,41 @@ todo: html -> md + csv + captions
 from bs4 import BeautifulSoup
 
 
-def html_table_to_markdown(html):
-    soup = BeautifulSoup(html, "html.parser")
-    table = soup.find("table")
+def parse_html_table(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    table = soup.find('table')
+
     if not table:
-        return ""
+        return "No table found"
 
-    rows = table.find_all("tr")
-    markdown = []
+    rows = table.find_all('tr')
+    data = []
+    colspans = {}
 
-    for i, row in enumerate(rows):
-        cols = [" ".join(col.stripped_strings) for col in row.find_all(["th", "td"])]
-        if i == 0:
-            header = " | ".join(cols)
-            separator = " | ".join(["---"] * len(cols))
-            markdown.append(header)
-            markdown.append(separator)
-        else:
-            markdown.append(" | ".join(cols))
+    for row in rows:
+        cells = row.find_all(['th', 'td'])
+        row_data = []
+        col_index = 0
 
-    return "\n".join(markdown)
+        for cell in cells:
+            while col_index in colspans and colspans[col_index] > 0:
+                row_data.append('')
+                colspans[col_index] -= 1
+                col_index += 1
+
+            colspan = int(cell.get('colspan', 1))
+            cell_text = cell.get_text(strip=True)
+            row_data.append(cell_text)
+
+            if colspan > 1:
+                for i in range(1, colspan):
+                    colspans[col_index + i] = colspan - 1
+
+            col_index += 1
+
+        data.append(row_data)
+
+    return data
 
 
 def get_html_content_from_file(file_path):
