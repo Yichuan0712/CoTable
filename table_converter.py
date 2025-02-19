@@ -16,7 +16,7 @@ def html_table_to_markdown(html):
     markdown = []
 
     for i, row in enumerate(rows):
-        cols = [col.get_text(strip=True) for col in row.find_all(["th", "td"])]
+        cols = [" ".join(col.stripped_strings) for col in row.find_all(["th", "td"])]
         markdown.append(" | ".join(cols))
         if i == 0:
             markdown.append(" | ".join(["---"] * len(cols)))
