@@ -6,7 +6,7 @@ todo: html -> md + csv + captions
 from bs4 import BeautifulSoup
 
 
-def html_table_to_markdown(html):
+def html_table_to_markdown_basic(html):
     soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table")
     if not table:
@@ -24,61 +24,62 @@ def html_table_to_markdown(html):
     return "\n".join(markdown)
 
 
-def html_table_to_markdown_2(html):
+def html_table_to_markdown(html):
+    """
+    Convert an HTML table into a Markdown table.
+
+    :param html: HTML string containing a table
+    :return: Markdown-formatted table as a string
+    """
     soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table")
     if not table:
         return ""
 
     rows = table.find_all("tr")
-    header_rows = []
-    body_rows = []
-
-    # 解析表头（支持多层级表头和 colspan）
-    header_matrix = []
+    header_matrix, body_rows = [], []
     max_cols = 0
 
+    # Parse table rows
     for row in rows:
         cols = row.find_all(["th", "td"])
         row_data = []
         col_spans = []
 
         for col in cols:
+            # Remove superscript elements (e.g., footnotes)
             for sup in col.find_all("sup"):
-                sup.decompose()  # 彻底移除 <sup> 标签及其内容
-            text = " ".join(col.stripped_strings)
-            colspan = int(col.get("colspan", 1))  # 获取 colspan
+                sup.decompose()
+
+            text = " ".join(col.stripped_strings)  # Extract text content
+            colspan = int(col.get("colspan", 1))  # Get colspan, default is 1
             row_data.append((text, colspan))
             col_spans.append(colspan)
 
-        max_cols = max(max_cols, sum(col_spans))
-        if any(col.name == "th" for col in cols):
-            header_matrix.append(row_data)
-        else:
-            body_rows.append(cols)
+        max_cols = max(max_cols, sum(col_spans))  # Track max columns for alignment
 
-    # 构建完整的表头结构
-    formatted_header = [""] * len(header_matrix)
-    for i, row in enumerate(header_matrix):
+        if any(col.name == "th" for col in cols):
+            header_matrix.append(row_data)  # Store header row
+        else:
+            body_rows.append(cols)  # Store body row
+
+    # Format header rows
+    formatted_header = []
+    for row in header_matrix:
         expanded_row = []
         for text, colspan in row:
-            expanded_row.extend([text] * colspan)  # 按 colspan 扩展列
-        formatted_header[i] = "| " + " | ".join(expanded_row) + " |"
+            expanded_row.extend([text] * colspan)  # Expand colspan cells
+        formatted_header.append("| " + " | ".join(expanded_row) + " |")
 
-    # 生成分隔行
+    # Add separator line after header
     separator = "| " + " | ".join(["---"] * max_cols) + " |"
     formatted_header.append(separator)
 
-    # 处理数据行
+    # Format body rows
     body_markdown = []
     for row in body_rows:
-        cols = []
-        for col in row:
-            for sup in col.find_all("sup"):
-                sup.decompose()  # 彻底移除 <sup> 标签及其内容
-            cols.append(" ".join(col.stripped_strings))
-        while len(cols) < max_cols:
-            cols.append("")  # 补齐缺少的列
+        cols = [" ".join(col.stripped_strings) for col in row]
+        cols.extend([""] * (max_cols - len(cols)))  # Ensure all rows have equal columns
         body_markdown.append("| " + " | ".join(cols) + " |")
 
     return "\n".join(formatted_header + body_markdown)
