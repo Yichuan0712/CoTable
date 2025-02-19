@@ -140,11 +140,19 @@ def html_table_to_markdown_new(html):
     for row in table_matrix:
         row.extend([" "] * (max_cols - len(row)))
 
+    # Identify header rows (all initial rows with <th>)
+    header_end_idx = 0
+    for i, row in enumerate(table_matrix):
+        if any(cell.strip() for cell in row):
+            header_end_idx = i
+        else:
+            break
+
     # Convert to Markdown
     markdown_rows = ["| " + " | ".join(row) + " |" for row in table_matrix]
     separator = "| " + " | ".join(["---"] * max_cols) + " |"
 
-    return "\n".join([markdown_rows[0], separator] + markdown_rows[1:])
+    return "\n".join(markdown_rows[:header_end_idx + 1] + [separator] + markdown_rows[header_end_idx + 1:])
 
 
 def get_html_content_from_file(file_path):
