@@ -9,7 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 if "GEMINI_15_API_KEY" in os.environ:
-    print("GEMINI_15_API_KEY")
     genai.configure(api_key=os.environ.get("GEMINI_15_API_KEY", None))
 
 def get_client():
@@ -22,8 +21,8 @@ def get_client():
             os.environ.get("GEMINI_15_FLASH_MODEL", "gemini-1.5-flash-latest")
             ) \
             if "GEMINI_15_FLASH_MODEL" in os.environ else None
-        print(os.environ)
-        print((model_15_pro, model_15_flash))
+        # print(os.environ)
+        # print((model_15_pro, model_15_flash))
         return (model_15_pro, model_15_flash)
     except Exception:
         print(Exception)
