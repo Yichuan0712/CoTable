@@ -9,6 +9,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 if "GEMINI_15_API_KEY" in os.environ:
+    print("GEMINI_15_API_KEY")
     genai.configure(api_key=os.environ.get("GEMINI_15_API_KEY", None))
 
 def get_client():
