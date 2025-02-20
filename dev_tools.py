@@ -8,16 +8,12 @@ from extractor.request_geminiai import (
     request_to_gemini_15_pro,
     request_to_gemini_15_flash,
 )
-from dotenv import load_dotenv
-
 
 def get_llm_response(messages, question, model="gemini_15_pro"):
     """
     A further wrapper around Shaohong's request_llm function.
     Send messages and question to the specified LLM and return response details.
     """
-
-    load_dotenv()
 
     prompt_list = [{"role": "user", "content": msg} for msg in messages]
 
