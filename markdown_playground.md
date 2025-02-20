@@ -1,7 +1,8 @@
-| . | Dose range 1 (5–15 mg/kg/12 h) . | Dose range 1 (5–15 mg/kg/12 h) . | Dose range 1 (5–15 mg/kg/12 h) . | Dose range 2 (15–25 mg/kg/12 h) . | Dose range 2 (15–25 mg/kg/12 h) . | Dose range 2 (15–25 mg/kg/12 h) . | Dose range 3 (25–35 mg/kg/12 h) . | Dose range 3 (25–35 mg/kg/12 h) . | Dose range 3 (25–35 mg/kg/12 h) . |
-| PK parameters . | Historical data . | Current data . | p value . | Historical data . | Current data . | p value . | Historical data . | Current data . | p value . |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| C max (µg/mL) | 24.8 ± 8.3 | 19.19 ± 4.12 | 0.07 | 57.1 ± 14.9 | 35.12 ± 10.54 | 0.001 | 73.2 ± 19.2 | 36.11 (27.58–44.64) | – |
-| AUC 0–12 (h*µg /mL) | 145 ± 44 | 167.0 ± 45.6 | 0.26 | 322 ± 71 | 316.5 ± 108.4 | 0.88 | 433 ± 94 | 290.9 (176.14–405.59) | – |
-| C trough (µg/mL) | 8.4 ± 3.8 | 9.99 ± 3.86 | 0.34 | 15.6 ± 5.3 | 19.25 ± 8.48 | 0.22 | 20.6 ± 5.8 | 13.03 (2.98–23.07) | – |
-| T max (h) | 0.5 (0.25–3.0) | 1.5 (1.5–2.5) | – | 0.5 (0.5–3.0) | 2.5 (2.0–3.3) | – | 0.5 (0.5–3) | 1.5 (1.5) | – |
+|  | Patients without ARC | Patients with ARC | P-value |
+| --- | --- | --- | --- |
+| EI | N= 28 | N= 26 |  |
+| Cmid(mg/L) | 19.9 (13.5−29.5) | 14.8 (11.4−19.1) | 0.20 |
+| Ctrough(mg/L) | 3.5 (2.0−6.1) | 1.6 (1.0−2.6) | 0.04 |
+| IB | N= 11 | N= 7 |  |
+| Cmid(mg/L) | 4.9 (2.6−9.2) | 1.9 (0.4−9.6) | 0.14 |
+| Ctrough(mg/L) | 0.8 (0.4−1.6) | 0.9 (0.2−4.2) | 0.85 |
