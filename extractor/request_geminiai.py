@@ -23,6 +23,7 @@ def get_client():
             if "GEMINI_15_FLASH_MODEL" in os.environ else None
         return (model_15_pro, model_15_flash)
     except Exception:
+        print(Exception)
         return (None, None)
 
 def add_message_message_list(msgs: List[Any], msg: Dict[str, Any]):
