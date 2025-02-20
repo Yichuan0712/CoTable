@@ -167,7 +167,7 @@ def fill_empty_headers(md_table):
     for i in range(len(headers)):
         headers[i] = headers[i].strip()
         if not headers[i]:
-            headers[i] = f'Unnamed_{empty_count}'
+            headers[i] = f'Unnamed' if empty_count == 0 else f'Unnamed_{empty_count}'
             empty_count += 1
 
     # Reconstruct table
