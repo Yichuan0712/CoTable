@@ -1,7 +1,3 @@
-"""
-todo: html -> md + csv + captions
-34114632
-"""
 from bs4 import BeautifulSoup
 import re
 
@@ -118,7 +114,7 @@ def stack_md_table_headers(md_table):
     return updated_md_table
 
 
-def remove_empty_col_row(md_table: str):
+def remove_empty_col_row(md_table):
     """
     Removes empty rows and columns from a Markdown table.
 
@@ -178,6 +174,37 @@ def fill_empty_headers(md_table):
     filled_header_line = '| ' + ' | '.join(headers) + ' |'
 
     return '\n'.join([filled_header_line, separator] + lines[2:])
+
+
+def deduplicate_headers(md_table):
+    """
+    Detects duplicate column headers in a Markdown table and renames them with _0, _1, ... suffixes.
+
+    :param md_table: Markdown table as a string
+    :return: Modified Markdown table with unique headers
+    """
+    lines = md_table.strip().split('\n')
+    if len(lines) < 2:
+        return md_table  # Not enough lines to form a valid table
+
+    # Extract header line
+    headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty parts
+    separator = lines[1]
+
+    # Deduplicate headers
+    seen = {}
+    for i in range(len(headers)):
+        headers[i] = headers[i].strip()
+        if headers[i] in seen:
+            seen[headers[i]] += 1
+            headers[i] = f"{headers[i]}_{seen[headers[i]]}"
+        else:
+            seen[headers[i]] = 0  # First occurrence remains unchanged
+
+    # Reconstruct table
+    deduplicated_header_line = '| ' + ' | '.join(headers) + ' |'
+
+    return '\n'.join([deduplicated_header_line, separator] + lines[2:])
 
 
 def get_html_content_from_file(file_path):
