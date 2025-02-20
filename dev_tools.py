@@ -9,6 +9,7 @@ from extractor.request_geminiai import (
     request_to_gemini_15_flash,
 )
 
+
 def get_llm_response(messages, question, model="gemini_15_pro"):
     """
     A further wrapper around Shaohong's request_llm function.
