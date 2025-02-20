@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import pandas as pd
 import re
 
 
@@ -78,6 +79,30 @@ def html_table_to_markdown(html):
     separator = "| " + " | ".join(["---"] * max_cols) + " |"
 
     return "\n".join(markdown_rows[:header_end_idx + 1] + [separator] + markdown_rows[header_end_idx + 1:])
+
+
+def markdown_to_dataframe(md_table):
+    """
+    Convert a Markdown table to a Pandas DataFrame, treating all values as strings.
+
+    :param md_table: A string containing the Markdown table.
+    :return: Pandas DataFrame representing the table with all values as strings.
+    """
+    lines = md_table.strip().split('\n')
+    if len(lines) < 3:
+        return pd.DataFrame()  # Return empty DataFrame if table is invalid
+
+    # Extract header and data rows, skipping the separator line
+    headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty parts
+    data_rows = [line.split('|')[1:-1] for line in lines[2:]]
+
+    # Trim whitespace from headers and data cells
+    headers = [h.strip() for h in headers]
+    data_rows = [[cell.strip() for cell in row] for row in data_rows]
+
+    # Create DataFrame treating all values as strings
+    df = pd.DataFrame(data_rows, columns=headers, dtype=str)
+    return df
 
 
 def stack_md_table_headers(md_table):
@@ -205,6 +230,33 @@ def deduplicate_headers(md_table):
     deduplicated_header_line = '| ' + ' | '.join(headers) + ' |'
 
     return '\n'.join([deduplicated_header_line, separator] + lines[2:])
+
+
+def display_md_table(md_table):
+    """
+    Adds labels to each row in a Markdown table.
+
+    The first row is prefixed with "col:", and subsequent rows are prefixed with "row 1:", "row 2:", etc.
+
+    :param md_table: Markdown table as a string
+    :return: Modified Markdown table with labeled rows
+    """
+    lines = md_table.strip().split('\n')
+    if len(lines) < 2:
+        return md_table  # Not enough lines to form a valid table
+
+    labeled_lines = []
+    for i, line in enumerate(lines):
+        if i == 0:
+            headers = line.split('|')
+            headers = [f'"{header.strip()}"' for header in headers if header.strip()]
+            labeled_lines.append(f"col: | {' | '.join(headers)} |")
+        elif i == 1 and re.match(r'\|\s*-+\s*\|', line):
+            labeled_lines.append(line)  # Keep separator unchanged
+        else:
+            labeled_lines.append(f"row {i - 2}: {line}")
+
+    return '\n'.join(labeled_lines)
 
 
 def get_html_content_from_file(file_path):
