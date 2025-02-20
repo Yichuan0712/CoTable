@@ -21,6 +21,8 @@ def get_client():
             os.environ.get("GEMINI_15_FLASH_MODEL", "gemini-1.5-flash-latest")
             ) \
             if "GEMINI_15_FLASH_MODEL" in os.environ else None
+        print(os.environ)
+        print((model_15_pro, model_15_flash))
         return (model_15_pro, model_15_flash)
     except Exception:
         print(Exception)
