@@ -105,6 +105,33 @@ def markdown_to_dataframe(md_table):
     return df
 
 
+def dataframe_to_markdown(df):
+    """
+    Convert a Pandas DataFrame to a Markdown-formatted table.
+
+    :param df: Pandas DataFrame to convert
+    :return: Markdown-formatted table as a string
+    """
+    if df.empty:
+        return ""  # Return empty string if DataFrame is empty
+
+    # Prepare header
+    headers = df.columns.tolist()
+    header_line = '| ' + ' | '.join(headers) + ' |'
+    separator_line = '| ' + ' | '.join(['---'] * len(headers)) + ' |'
+
+    # Prepare data rows
+    data_lines = []
+    for _, row in df.iterrows():
+        row_str = '| ' + ' | '.join(str(cell) for cell in row) + ' |'
+        data_lines.append(row_str)
+
+    # Combine into final Markdown table
+    md_table = '\n'.join([header_line, separator_line] + data_lines)
+
+    return md_table
+
+
 def stack_md_table_headers(md_table):
     """
     Detects multi-line headers in a Markdown table and merges them by column, separating names with →,
