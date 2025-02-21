@@ -5,7 +5,7 @@ from llm_utils import *
 from operations.f_select_row_col import *
 
 
-def s_delete_pk_individual_prompt(md_table_for_display):
+def s_pk_delete_individual_prompt(md_table_for_display):
     instructions = f"""
     There is now a table related to pharmacokinetics (PK). 
     {md_table_for_display}
@@ -19,7 +19,7 @@ def s_delete_pk_individual_prompt(md_table_for_display):
     return instructions
 
 
-def s_delete_pk_individual_parse(content):
+def s_pk_delete_individual_parse(content):
     match_end = re.search(r'\[\[END\]\]', content)
     match_angle = re.search(r'<<.*?>>', content)
 
@@ -43,22 +43,22 @@ def s_delete_pk_individual_parse(content):
         raise NotImplementedError
 
 
-def s_delete_pk_individual(md_table, model_name="gemini_15_pro"):
-    msg = s_delete_pk_individual_prompt(display_md_table(md_table))
+def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
+    msg = s_pk_delete_individual_prompt(display_md_table(md_table))
 
     messages = [msg, ]
     question = ""
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-    row_list, col_list = s_delete_pk_individual_parse(content)
+    row_list, col_list = s_pk_delete_individual_parse(content)
     df_table = f_select_row_col(row_list, col_list, markdown_to_dataframe(md_table))
     return_md_table = dataframe_to_markdown(df_table)
 
     return return_md_table, res, content, usage, truncated
 
 
-# def s_delete_pk_individual_parse(response):
+# def s_pk_delete_individual_parse(response):
 #     match_end = re.search(r'\[\[END\]\]', response)
 #     match_angle = re.search(r'<<.*?>>', response)
 #
