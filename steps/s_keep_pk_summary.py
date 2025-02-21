@@ -9,16 +9,12 @@ def s_keep_pk_summary_prompt(md_table_for_display):
     instructions = f"""
     There is now a table related to pharmacokinetics (PK). 
     {md_table_for_display}
-    Carefully examine the table and follow these two steps:
-    (1) Remove any columns or rows that are NOT about PK study.
-    (2) Remove any information that is specific to an individual.
-    If the table already meets these two criteria (no unrelated parts and no individual-specific information), return [[END]].
-    If the table does NOT meet these criteria, use the following function to create a new table:
-    f_select_row_col(row_list, col_list)
-    Replace row_list with row indices that meet the above two criteria.
-    Replace col_list with column names that meet the above two criteria.
-    Return how you would use this function.
-    Enclose the function call within double angle brackets.
+    Carefully examine the table and follow these steps:
+    (1) Remove any information that is specific to an individual.
+    If the table already meets this requirement, return [[END]].
+    If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
+    Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement. 
+    When returning this, enclose the function call in double angle brackets.
     """
     return instructions
 
