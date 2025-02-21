@@ -22,6 +22,7 @@ def s_pk_split_table_prompt(md_table):
     col_groups = [["ColumnA", "ColumnB"], ["ColumnC", "ColumnD", "ColumnE"]] (example)
     When returning this, enclose the function call in double angle brackets, like this:
     <<f_split_table([[0, 1, 2], [3, 4]], [["ColumnA", "ColumnB"], ["ColumnC", "ColumnD", "ColumnE"]])>>
+    Note: When selecting column names, carefully check the parts within double quotes; there must be no differences whatsoever.
     """
 
 
