@@ -6,6 +6,7 @@ from operations.f_select_row_col import *
 
 
 def s_pk_delete_individual_prompt(md_table):
+    strengthen_reasoning = "Please provide your reasoning process step by step before giving the final answer."
     return f"""
     There is now a table related to pharmacokinetics (PK). 
     {display_md_table(md_table)}
@@ -27,7 +28,7 @@ def s_pk_delete_individual_parse(content):
 
     elif match_angle:
         inner_content = match_angle.group()[2:-2]
-        match_func = re.match(r'\w+\s*\(\s*(\[[^\]]*\])\s*,\s*(\[[^\]]*\])\s*\)', inner_content)
+        match_func = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)', inner_content)
 
         if match_func:
             arg1_str = match_func.group(1)
