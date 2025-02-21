@@ -7,7 +7,7 @@ def f_split_table(row_groups, col_groups, df_table):
         missing_rows = all_rows - grouped_rows
         raise ValueError(f"Missing Rows: {missing_rows}")
 
-    all_cols = set(range(df_table.shape[1]))
+    all_cols = set(df_table.columns)
     grouped_cols = set(sum(col_groups, []))
     if all_cols != grouped_cols:
         missing_cols = all_cols - grouped_cols
