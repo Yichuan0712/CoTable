@@ -1,9 +1,5 @@
-def f_select_row_col(row_list, col_list, df):
+def f_select_row_col(row_list, col_list, df_table):
     try:
-        return df.iloc[row_list][col_list].reset_index(drop=True)
+        return df_table.iloc[row_list][col_list].reset_index(drop=True)
     except Exception:
-        return df
-
-
-def f_select_row_col_instructions():
-    pass
+        return df_table
