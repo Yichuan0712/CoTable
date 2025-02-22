@@ -11,17 +11,19 @@ def s_pk_split_table_prompt(md_table):
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:
-(1) Determine if this table has subtables.
-(2) If it has, specify whether the division should be by rows, columns, or both.
+(1) Determine if this table can be further divided into subtables.
+This is the ONLY criterion: Check columns and rows separately to identify if there are highly similar or repeating patterns. If such patterns exist, the table can be split into subtables accordingly. If not, do not split the table.
+(2) If it can be divided, specify whether the division should be by rows, columns, or both.
+Important: If there is any index or descriptor column or row (e.g., "PK parameter") that applies to all groups when splitting by columns or rows, ensure this descriptor is included in every subgroup created from the split.
 If the table cannot be divided into subtables either by rows or columns, return [[END]].
 If it can be divided, please use the following function to create a new table:
 f_split_table(row_groups, col_groups)
 Replace row_groups with row indices in the following format:
-row_groups = [[0, 1, 2], [3, 4]] (example)
+row_groups = [[0, 1, 2], [3, 4, 5]] (example)
 Replace col_groups with column names in the following format:
-col_groups = [["ColumnA", "ColumnB"], ["ColumnA", "ColumnC", "ColumnD", "ColumnE"]] (example)
+col_groups = [["ColumnA", "ColumnB", "ColumnC"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF"]] (example)
 When returning this, enclose the function call in double angle brackets, like this:
-<<f_split_table([[0, 1, 2], [3, 4]], [["ColumnA", "ColumnB"], ["ColumnA", "ColumnC", "ColumnD", "ColumnE"]])>>
+<<f_split_table([[0, 1, 2], [3, 4, 5]], [["ColumnA", "ColumnB", "ColumnC"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF"]])>>
 """
 
 
