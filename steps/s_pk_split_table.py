@@ -11,8 +11,8 @@ def s_pk_split_table_prompt(md_table):
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:
-(1) Determine if this table can be further divided into subtables.
-(2) If it can be divided, specify whether the division should be by rows, columns, or both.
+(1) Determine if this table has subtables.
+(2) If it has, specify whether the division should be by rows, columns, or both.
 If there is any index or descriptor column or row (e.g., "PK parameter") that applies to all groups when splitting by columns or rows, ensure this descriptor is included in every subgroup created from the split.
 If the table cannot be divided into subtables either by rows or columns, return [[END]].
 If it can be divided, please use the following function to create a new table:
