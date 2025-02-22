@@ -81,6 +81,8 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
+    print(content)
+
     row_groups, col_groups = s_pk_split_table_parse(content)
 
     if row_groups is None and col_groups is None:
