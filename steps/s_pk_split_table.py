@@ -82,6 +82,10 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
 
     row_groups, col_groups = s_pk_split_table_parse(content)
 
+    if row_groups is None and col_groups is None:
+        col_groups = [markdown_to_dataframe(md_table).columns.tolist()]
+        row_groups = [markdown_to_dataframe(md_table).index.tolist()]
+
     col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
 
     _row_groups, _col_groups = adjust_splits(row_groups, col_groups, markdown_to_dataframe(md_table))
