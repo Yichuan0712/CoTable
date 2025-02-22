@@ -81,7 +81,7 @@ def adjust_splits(row_groups, col_groups, df_table):
             _col_groups.remove(col_list)
 
     # remove duplicate
-    _col_groups = list(set(_row_groups))
+    _col_groups = list(set(_col_groups))
 
     return _row_groups, _col_groups
 
