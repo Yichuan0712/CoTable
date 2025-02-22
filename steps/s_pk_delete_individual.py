@@ -6,7 +6,6 @@ from operations.f_select_row_col import *
 
 
 def s_pk_delete_individual_prompt(md_table):
-    strengthen_reasoning = "Please provide your reasoning process step by step before giving the final answer."
     return f"""
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
@@ -20,6 +19,7 @@ When returning this, enclose the function call in double angle brackets.
 
 
 def s_pk_delete_individual_parse(content):
+    content.replace('\n', '')
     match_end = re.search(r'\[\[END\]\]', content)
     match_angle = re.search(r'<<.*?>>', content)
 
@@ -50,11 +50,15 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     question = ""
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+    print(display_md_table(md_table))
+    print(usage)
+    print(content)
 
     row_list, col_list = s_pk_delete_individual_parse(content)
     col_list = [fix_col_name(item, md_table) for item in col_list]
     df_table = f_select_row_col(row_list, col_list, markdown_to_dataframe(md_table))
     return_md_table = dataframe_to_markdown(df_table)
+    print(display_md_table(return_md_table))
 
     return return_md_table, res, content, usage, truncated
 

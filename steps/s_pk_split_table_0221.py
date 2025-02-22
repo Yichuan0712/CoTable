@@ -6,14 +6,13 @@ from operations.f_split_table import *
 
 
 def s_pk_split_table_prompt(md_table):
-    strengthen_reasoning = "Please provide your reasoning process step by step before giving the final answer."
     return f"""
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:
 (1) Determine if this table has subtables.
 (2) If it has, specify whether the division should be by rows, columns, or both.
-(3) If there is any index or descriptor column (e.g., "PK parameter") that applies to all groups when splitting by columns, ensure this descriptor is included in every subgroup created from the split.
+(3) If there is any index or descriptor column or row (e.g., "PK parameter") that applies to all groups when splitting by columns or rows, ensure this descriptor is included in every subgroup created from the split.
 (4) Important note: Pay attention to repeating column names, such as "N," "N_1," and "N_2," which indicates that the columns can certainly be divided into at least three groups.
 If the table cannot be divided into subtables either by rows or columns, return [[END]].
 If it can be divided, please use the following function to create a new table:
@@ -28,6 +27,7 @@ When returning this, enclose the function call in double angle brackets, like th
 
 
 def s_pk_split_table_parse(content):
+    content.replace('\n', '')
     match_end = re.search(r'\[\[END\]\]', content)
     match_angle = re.search(r'<<.*?>>', content)
 
@@ -56,34 +56,41 @@ def adjust_splits(row_groups, col_groups, df_table):
     Shit happens.
     I wipe.
     """
-    # overly strict split: 1 + (n-1)
-    def check_lists(lists, reference_set):
-        if len(lists) != 2:
-            return lists
-
-        list1, list2 = lists
-        combined = set(list1) | set(list2)
-
-        conditions_met = (
-            (len(list1) == 1 or len(list2) == 1)  # and
-            # combined == reference_set and
-            # len(combined) == len(list1) + len(list2)
-        )
-
-        return [list(combined)] if conditions_met else lists
-
-    _col_groups = check_lists(col_groups, set(df_table.columns))
-    _row_groups = check_lists(row_groups, set(df_table.index))
+    _row_groups = row_groups.copy()
+    _col_groups = col_groups.copy()
 
     # remove wrong names
     for col_list in _col_groups:
         if False in col_list:
-            _col_groups.remove(col_list)
+            col_list.remove(False)
 
     # remove duplicate
-    _col_groups = [tuple(x) for x in _col_groups]
-    _col_groups = list(set(_col_groups))
-    _col_groups = [list(x) for x in _col_groups]
+    def remove_duplicates_keep_order(groups):
+        seen = set()
+        new_groups = []
+        for group in groups:
+            t_group = tuple(group)
+            if t_group not in seen:
+                seen.add(t_group)
+                new_groups.append(group)
+        return new_groups
+
+    _col_groups = remove_duplicates_keep_order(_col_groups)
+    _row_groups = remove_duplicates_keep_order(_row_groups)
+
+
+    # remove sublists
+    def remove_sublists(list_of_lists):
+      sets = [set(sublist) for sublist in list_of_lists]
+      keep_indices = set(range(len(list_of_lists)))
+      for i in range(len(sets)):
+          for j in range(len(sets)):
+              if i != j and sets[i].issubset(sets[j]):
+                  keep_indices.discard(i)
+                  break
+      return [list_of_lists[i] for i in keep_indices]
+    _row_groups = remove_sublists(_row_groups)
+    _col_groups = remove_sublists(_col_groups)
 
     return _row_groups, _col_groups
 
@@ -111,6 +118,9 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
     if _row_groups != row_groups or _col_groups != col_groups:
         content += "\n\nYICHUAN: ERROR DETECTED\n\n"
 
+    print(_row_groups)
+    print(_col_groups)
+
     df_subtables = f_split_table(_row_groups, _col_groups, markdown_to_dataframe(md_table))
 
     md_subtables = {}
@@ -118,4 +128,3 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
         md_subtables[key] = dataframe_to_markdown(value)
 
     return md_subtables, res, content, usage, truncated
-
