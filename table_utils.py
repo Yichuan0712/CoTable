@@ -295,7 +295,8 @@ def fix_col_name(col_name, md_table):
         return col_name
     else:
         # Find the closest match
-        closest_match = get_close_matches(col_name, col_names, n=1, cutoff=0.6)
+        closest_match = get_close_matches(col_name, col_names, n=1)
+        print("MATCH", col_name, closest_match)
         return closest_match[0] if closest_match else False
 
 
