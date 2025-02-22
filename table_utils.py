@@ -203,6 +203,7 @@ def remove_empty_col_row(md_table):
 def fill_empty_headers(md_table):
     """
     Detects empty column headers in a Markdown table and assigns them unique names.
+    If existing 'Unnamed_x' headers are present, numbering continues from the highest x.
 
     :param md_table: Markdown table as a string
     :return: Modified Markdown table with filled headers
@@ -215,13 +216,26 @@ def fill_empty_headers(md_table):
     headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty parts
     separator = lines[1]
 
+    # Find existing Unnamed_x numbers
+    existing_numbers = set()
+    pattern = re.compile(r"Unnamed_(\d+)")
+
+    for header in headers:
+        match = pattern.match(header.strip())
+        if match:
+            existing_numbers.add(int(match.group(1)))
+
+    # Start numbering from the next available number
+    next_num = 0 if not existing_numbers else max(existing_numbers) + 1
+
     # Assign unique names to empty headers
-    empty_count = 0
     for i in range(len(headers)):
         headers[i] = headers[i].strip()
         if not headers[i]:
-            headers[i] = f'Unnamed' if empty_count == 0 else f'Unnamed_{empty_count}'
-            empty_count += 1
+            while next_num in existing_numbers:
+                next_num += 1  # Ensure unique numbering
+            headers[i] = f'Unnamed_{next_num}'
+            existing_numbers.add(next_num)
 
     # Reconstruct table
     filled_header_line = '| ' + ' | '.join(headers) + ' |'
@@ -244,15 +258,17 @@ def deduplicate_headers(md_table):
     headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty parts
     separator = lines[1]
 
-    # Deduplicate headers
+    # Deduplicate headers with _0 suffix on first duplicate
     seen = {}
     for i in range(len(headers)):
         headers[i] = headers[i].strip()
         if headers[i] in seen:
             seen[headers[i]] += 1
-            headers[i] = f"{headers[i]}_{seen[headers[i]]}"
         else:
-            seen[headers[i]] = 0  # First occurrence remains unchanged
+            seen[headers[i]] = 0  # First occurrence should get _0
+
+        if seen[headers[i]] > 0:  # Append _0, _1, _2...
+            headers[i] = f"{headers[i]}_{seen[headers[i]]}"
 
     # Reconstruct table
     deduplicated_header_line = '| ' + ' | '.join(headers) + ' |'

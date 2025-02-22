@@ -62,39 +62,3 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     print(display_md_table(return_md_table))
 
     return return_md_table, res, content, usage, truncated
-
-
-# def s_pk_delete_individual_parse(response):
-#     match_end = re.search(r'\[\[END\]\]', response)
-#     match_angle = re.search(r'<<.*?>>', response)
-#
-#     if match_end:
-#         match_start = match_end.start()
-#         period_pos = response.rfind('.', 0, match_start)
-#         if period_pos != -1:
-#             return response[:period_pos + 1], None, None
-#         else:
-#             return response[:match_start], None, None
-#
-#     elif match_angle:
-#         match_start = match_angle.start()
-#         period_pos = response.rfind('.', 0, match_start)
-#         if period_pos != -1:
-#             thought = response[:period_pos + 1]
-#         else:
-#             thought = response[:match_start]
-#
-#         inner_content = match_angle.group()[2:-2]
-#         match_func = re.match(r'\w+\s*\(\s*(\[[^\]]*\])\s*,\s*(\[[^\]]*\])\s*\)', inner_content)
-#
-#         if match_func:
-#             arg1_str = match_func.group(1)
-#             arg2_str = match_func.group(2)
-#             arg1 = ast.literal_eval(arg1_str)
-#             arg2 = ast.literal_eval(arg2_str)
-#             return thought, arg1, arg2
-#         else:
-#             return thought, None, None
-#
-#     else:
-#         raise NotImplementedError
