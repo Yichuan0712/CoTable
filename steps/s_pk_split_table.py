@@ -66,10 +66,10 @@ def adjust_splits(row_groups, col_groups, df_table):
 
         return [list(combined)] if conditions_met else lists
 
-    col_groups = check_lists(col_groups, set(df_table.columns))
-    row_groups = check_lists(row_groups, set(df_table.index))
+    _col_groups = check_lists(col_groups, set(df_table.columns))
+    _row_groups = check_lists(row_groups, set(df_table.index))
 
-    return row_groups, col_groups
+    return _row_groups, _col_groups
 
 
 def s_pk_split_table(md_table, model_name="gemini_15_pro"):
