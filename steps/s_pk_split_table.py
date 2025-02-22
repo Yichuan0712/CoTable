@@ -52,6 +52,10 @@ def s_pk_split_table_parse(content):
 
 
 def adjust_splits(row_groups, col_groups, df_table):
+    """
+    Shit happens.
+    """
+    # overly strict split: 1 + (n-1)
     def check_lists(lists, reference_set):
         if len(lists) != 2:
             return lists
@@ -69,6 +73,10 @@ def adjust_splits(row_groups, col_groups, df_table):
 
     _col_groups = check_lists(col_groups, set(df_table.columns))
     _row_groups = check_lists(row_groups, set(df_table.index))
+
+    for col_list in _col_groups:
+        if False in col_list:
+            _col_groups.remove(col_list)
 
     return _row_groups, _col_groups
 
