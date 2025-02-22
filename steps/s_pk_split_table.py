@@ -59,9 +59,9 @@ def adjust_splits(row_groups, col_groups, df_table):
         combined = set(list1) | set(list2)
 
         conditions_met = (
-            (len(list1) == 1 or len(list2) == 1) and
-            combined == reference_set and
-            len(combined) == len(list1) + len(list2)
+            (len(list1) == 1 or len(list2) == 1)  # and
+            # combined == reference_set and
+            # len(combined) == len(list1) + len(list2)
         )
 
         return [list(combined)] if conditions_met else lists
