@@ -12,9 +12,8 @@ There is now a table related to pharmacokinetics (PK).
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:
 (1) Determine if this table can be further divided into subtables.
-This is the ONLY criterion: Check columns and rows separately to identify if there are highly similar or repeating patterns. If such patterns exist, the table can be split into subtables accordingly. If not, do not split the table.
 (2) If it can be divided, specify whether the division should be by rows, columns, or both.
-Important: If there is any index or descriptor column or row (e.g., "PK parameter") that applies to all groups when splitting by columns or rows, ensure this descriptor is included in every subgroup created from the split.
+If there is any index or descriptor column or row (e.g., "PK parameter") that applies to all groups when splitting by columns or rows, ensure this descriptor is included in every subgroup created from the split.
 If the table cannot be divided into subtables either by rows or columns, return [[END]].
 If it can be divided, please use the following function to create a new table:
 f_split_table(row_groups, col_groups)
@@ -51,6 +50,28 @@ def s_pk_split_table_parse(content):
         raise NotImplementedError
 
 
+def adjust_splits(row_groups, col_groups, df_table):
+    def check_lists(lists, reference_set):
+        if len(lists) != 2:
+            return lists
+
+        list1, list2 = lists
+        combined = set(list1) | set(list2)
+
+        conditions_met = (
+            (len(list1) == 1 or len(list2) == 1) and
+            combined == reference_set and
+            len(combined) == len(list1) + len(list2)
+        )
+
+        return [list(combined)] if conditions_met else lists
+
+    col_groups = check_lists(col_groups, set(df_table.columns))
+    row_groups = check_lists(row_groups, set(df_table.index))
+
+    return row_groups, col_groups
+
+
 def s_pk_split_table(md_table, model_name="gemini_15_pro"):
     msg = s_pk_split_table_prompt(md_table)
 
@@ -63,7 +84,12 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
 
     col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
 
-    df_subtables = f_split_table(row_groups, col_groups, markdown_to_dataframe(md_table))
+    _row_groups, _col_groups = adjust_splits(row_groups, col_groups, markdown_to_dataframe(md_table))
+
+    if _row_groups != row_groups or _col_groups != col_groups:
+        content += "\n\nYICHUAN: ERROR DETECTED AND CORRECTED\n\n"
+
+    df_subtables = f_split_table(_row_groups, _col_groups, markdown_to_dataframe(md_table))
 
     md_subtables = {}
     for key, value in df_subtables.items():
