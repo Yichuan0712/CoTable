@@ -21,7 +21,7 @@ row_groups = [[0, 1, 2], [3, 4]] (example)
 Replace col_groups with column names in the following format:
 col_groups = [["ColumnA", "ColumnB"], ["ColumnC", "ColumnD", "ColumnE"]] (example)
 When returning this, enclose the function call in double angle brackets, like this:
-<<f_split_table([[0, 1, 2], [3, 4]], [["ColumnA", "ColumnB"], ["ColumnC", "ColumnD", "ColumnE"]])>>
+<<f_split_table([[0, 1, 2], [3, 4]], [["ColumnA", "ColumnB"], ["ColumnA", "ColumnC", "ColumnD", "ColumnE"]])>>
 """
 
 
