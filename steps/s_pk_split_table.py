@@ -14,7 +14,7 @@ Carefully examine the table and follow these steps:
 (1) Determine if this table can be split into subtables.
 (2) If it can be split, specify whether the division should be by rows, columns, or both.
 (3) If there is any index or descriptor column or row (e.g., "PK parameter") that applies to all groups when splitting by columns or rows, ensure this descriptor is included in every subgroup created from the split.
-(4) Important note: Pay attention to repeating column names, such as "n," "n_1," and "n_2," which indicates that the columns can certainly be divided into at least three groups.
+(4) Important note: Pay attention to repeating column names, such as "N," "N_1," and "N_2," which indicates that the columns can certainly be divided into at least three groups.
 If the table cannot be divided into subtables either by rows or columns, return [[END]].
 If it can be divided, please use the following function to create a new table:
 f_split_table(row_groups, col_groups)
