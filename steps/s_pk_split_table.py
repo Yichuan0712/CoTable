@@ -59,6 +59,7 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
     row_groups, col_groups = s_pk_split_table_parse(content)
+    col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
     df_subtables = f_split_table(row_groups, col_groups, markdown_to_dataframe(md_table))
 
     md_subtables = {}

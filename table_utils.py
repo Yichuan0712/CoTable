@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
+from difflib import get_close_matches
 
 
 def html_table_to_markdown(html):
@@ -284,6 +285,18 @@ def display_md_table(md_table):
             labeled_lines.append(f"row {i - 2}: {line}")
 
     return '\n'.join(labeled_lines)
+
+
+def fix_col_name(col_name, md_table):
+    df_table = markdown_to_dataframe(md_table)
+    col_names = [col.strip() for col in df_table.columns.tolist()]
+
+    if col_name in col_names:
+        return col_name
+    else:
+        # Find the closest match
+        closest_match = get_close_matches(col_name, col_names, n=1, cutoff=0.6)
+        return closest_match[0] if closest_match else False
 
 
 def get_html_content_from_file(file_path):
