@@ -55,7 +55,8 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     print(content)
 
     row_list, col_list = s_pk_delete_individual_parse(content)
-    col_list = [fix_col_name(item, md_table) for item in col_list]
+    if col_list:
+        col_list = [fix_col_name(item, md_table) for item in col_list]
     df_table = f_select_row_col(row_list, col_list, markdown_to_dataframe(md_table))
     return_md_table = dataframe_to_markdown(df_table)
     print(display_md_table(return_md_table))
