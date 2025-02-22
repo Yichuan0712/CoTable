@@ -21,9 +21,9 @@ f_split_table(row_groups, col_groups)
 Replace row_groups with row indices in the following format:
 row_groups = [[0, 1, 2], [3, 4, 5]] (example)
 Replace col_groups with column names in the following format:
-col_groups = [["ColumnA", "ColumnB", "ColumnC"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF"]] (example)
+col_groups = [["ColumnA", "ColumnB", "ColumnC", "ColumnG"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF", "ColumnG"]] (example)
 When returning this, enclose the function call in double angle brackets, like this:
-<<f_split_table([[0, 1, 2], [3, 4, 5]], [["ColumnA", "ColumnB", "ColumnC"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF"]])>>
+<<f_split_table([[0, 1, 2], [3, 4, 5]], [["ColumnA", "ColumnB", "ColumnC", "ColumnG"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF", "ColumnG"]])>>
 """
 
 
@@ -54,6 +54,7 @@ def s_pk_split_table_parse(content):
 def adjust_splits(row_groups, col_groups, df_table):
     """
     Shit happens.
+    I wipe.
     """
     # overly strict split: 1 + (n-1)
     def check_lists(lists, reference_set):
@@ -102,7 +103,7 @@ def s_pk_split_table(md_table, model_name="gemini_15_pro"):
     _row_groups, _col_groups = adjust_splits(row_groups, col_groups, markdown_to_dataframe(md_table))
 
     if _row_groups != row_groups or _col_groups != col_groups:
-        content += "\n\nYICHUAN: ERROR DETECTED AND CORRECTED\n\n"
+        content += "\n\nYICHUAN: ERROR DETECTED\n\n"
 
     df_subtables = f_split_table(_row_groups, _col_groups, markdown_to_dataframe(md_table))
 
