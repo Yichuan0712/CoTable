@@ -169,7 +169,7 @@ def stack_md_table_headers(md_table):
 
 def remove_empty_col_row(md_table):
     """
-    Removes empty rows and columns from a Markdown table.
+    Removes empty rows and columns from a Markdown table, but retains columns if they have headers.
 
     :param md_table: A string containing the Markdown table.
     :return: A cleaned Markdown table without empty rows and columns.
@@ -179,22 +179,22 @@ def remove_empty_col_row(md_table):
         return md_table  # Not enough lines to form a valid table
 
     # Parse table
-    headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty columns
-    separator = lines[1].split('|')[1:-1]
+    headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty parts
+    separator = lines[1]
     data_rows = [line.split('|')[1:-1] for line in lines[2:]]
 
     # Trim whitespace
     headers = [h.strip() for h in headers]
     data_rows = [[cell.strip() for cell in row] for row in data_rows]
 
-    # Identify valid column indices
-    valid_columns = [i for i in range(len(headers)) if any(row[i] for row in data_rows)]
+    # Identify valid column indices: keep if it has a header or any non-empty data
+    valid_columns = [i for i in range(len(headers)) if headers[i] or any(row[i] for row in data_rows)]
 
     # Reconstruct table
     cleaned_headers = '| ' + ' | '.join(headers[i] for i in valid_columns) + ' |'
-    cleaned_separator = '| ' + ' | '.join(['---'] * len(valid_columns)) + ' |'
+    cleaned_separator = separator  # Keep separator line unchanged
     cleaned_data_rows = ['| ' + ' | '.join(row[i] for i in valid_columns) + ' |' for row in data_rows if
-                         any(row[i] for i in valid_columns)]
+                         any(row)]  # Remove empty rows
 
     # Combine output
     return '\n'.join([cleaned_headers, cleaned_separator] + cleaned_data_rows)
