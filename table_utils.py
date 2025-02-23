@@ -135,7 +135,7 @@ def dataframe_to_markdown(df_table):
 
 def stack_md_table_headers(md_table):
     """
-    Detects multi-line headers in a Markdown table and merges them by column, separating names with ~,
+    Detects multi-line headers in a Markdown table and merges them by column, separating names with ->,
     but keeps the original name if the stacked names are identical.
 
     :param md_table: Markdown table as a string
@@ -156,7 +156,7 @@ def stack_md_table_headers(md_table):
     max_cols = max(len(row) for row in header_matrix)
 
     # Stack header rows by column, keeping the original name if identical
-    stacked_header = [col[0] if all(x == col[0] for x in col) else "~".join(filter(None, col)) for col in
+    stacked_header = [col[0] if all(x == col[0] for x in col) else "->".join(filter(None, col)) for col in
                       zip(*header_matrix)]
 
     # Format stacked header back to Markdown
