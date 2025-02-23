@@ -263,12 +263,10 @@ def deduplicate_headers(md_table):
     for i in range(len(headers)):
         headers[i] = headers[i].strip()
         if headers[i] in seen:
+            headers[i] = f"{headers[i]}_{seen[headers[i]]}"  # Append _0, _1, _2...
             seen[headers[i]] += 1
         else:
-            seen[headers[i]] = 0  # First occurrence should get _0
-
-        if seen[headers[i]] > 0:  # Append _0, _1, _2...
-            headers[i] = f"{headers[i]}_{seen[headers[i]]}"
+            seen[headers[i]] = 1  # First occurrence should get _0
 
     # Reconstruct table
     deduplicated_header_line = '| ' + ' | '.join(headers) + ' |'
