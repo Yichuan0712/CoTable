@@ -245,7 +245,7 @@ def fill_empty_headers(md_table):
 
 def deduplicate_headers(md_table):
     """
-    Detects duplicate column headers in a Markdown table and renames them with _0, _1, ... suffixes.
+    Detects duplicate column headers in a Markdown table and renames them with _0, _1, _2... suffixes.
 
     :param md_table: Markdown table as a string
     :return: Modified Markdown table with unique headers
@@ -258,18 +258,27 @@ def deduplicate_headers(md_table):
     headers = lines[0].split('|')[1:-1]  # Remove leading and trailing empty parts
     separator = lines[1]
 
-    # Deduplicate headers with _0 suffix on first duplicate
+    # Count occurrences to detect duplicates
+    counts = {}
+    for header in headers:
+        header = header.strip()
+        counts[header] = counts.get(header, 0) + 1
+
+    # Rename only duplicate headers
     seen = {}
     new_headers = []
 
     for header in headers:
         header = header.strip()
-        if header in seen:
+        if counts[header] > 1:  # Only rename if it appears more than once
+            if header in seen:
+                seen[header] += 1
+            else:
+                seen[header] = 0  # First appearance gets _0
+
             new_header = f"{header}_{seen[header]}"  # Append _0, _1, _2...
-            seen[header] += 1
         else:
-            new_header = header  # Keep first occurrence unchanged
-            seen[header] = 1  # Next duplicate should get _0
+            new_header = header  # Unique headers remain unchanged
 
         new_headers.append(new_header)
 
@@ -315,8 +324,25 @@ def fix_col_name(col_name, md_table):
     else:
         # Find the closest match
         closest_match = get_close_matches(col_name, col_names, n=1)
-        print("MATCH", col_name, closest_match)
+        print(col_name, "MATCH", closest_match)
         return closest_match[0] if closest_match else False
+
+
+def transpose_markdown_table(md_table):
+    lines = md_table.strip().split('\n')
+
+    header = lines[0].strip('|').split('|')
+    separator = lines[1]
+    rows = [line.strip('|').split('|') for line in lines[2:]]
+
+    transposed = [header] + rows
+    transposed = list(map(list, zip(*transposed)))
+
+    new_header = '| ' + ' | '.join(transposed[0]) + ' |'
+    new_separator = '| ' + ' | '.join(['---'] * len(transposed[0])) + ' |'
+    new_rows = ['| ' + ' | '.join(row) + ' |' for row in transposed[1:]]
+
+    return '\n'.join([new_header, new_separator] + new_rows)
 
 
 def get_html_content_from_file(file_path):
