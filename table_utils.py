@@ -260,16 +260,21 @@ def deduplicate_headers(md_table):
 
     # Deduplicate headers with _0 suffix on first duplicate
     seen = {}
-    for i in range(len(headers)):
-        headers[i] = headers[i].strip()
-        if headers[i] in seen:
-            headers[i] = f"{headers[i]}_{seen[headers[i]]}"  # Append _0, _1, _2...
-            seen[headers[i]] += 1
+    new_headers = []
+
+    for header in headers:
+        header = header.strip()
+        if header in seen:
+            new_header = f"{header}_{seen[header]}"  # Append _0, _1, _2...
+            seen[header] += 1
         else:
-            seen[headers[i]] = 1  # First occurrence should get _0
+            new_header = header  # Keep first occurrence unchanged
+            seen[header] = 1  # Next duplicate should get _0
+
+        new_headers.append(new_header)
 
     # Reconstruct table
-    deduplicated_header_line = '| ' + ' | '.join(headers) + ' |'
+    deduplicated_header_line = '| ' + ' | '.join(new_headers) + ' |'
 
     return '\n'.join([deduplicated_header_line, separator] + lines[2:])
 
