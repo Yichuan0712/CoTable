@@ -41,8 +41,7 @@ def s_pk_align_parameter(md_table, model_name="gemini_15_pro"):
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    print(usage)
-    print(content)
+    print(usage, content)
 
     col_name = s_pk_align_parameter_parse(content)
 

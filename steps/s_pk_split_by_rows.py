@@ -50,8 +50,7 @@ def s_pk_split_by_rows(md_table, model_name="gemini_15_pro"):
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    print(usage)
-    print(content)
+    print(usage, content)
 
     row_groups = s_pk_split_by_rows_parse(content)
     if row_groups is None:

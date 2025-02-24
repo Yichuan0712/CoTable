@@ -42,30 +42,28 @@ def s_pk_split_by_cols_parse(content):
     return data
 
 
-def s_pk_split_by_cols(md_table, model_name="gemini_15_pro"):
+def s_pk_split_by_cols(md_table, md_tables_split_by_rows, model_name="gemini_15_pro"):
     msg = s_pk_split_by_cols_prompt(md_table)
-    # print(msg)
-    # return
 
     messages = [msg, ]
     question = ""
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    print(usage)
-    print(content)
+    print(usage, content)
 
     col_groups = s_pk_split_by_cols_parse(content)
     if col_groups is None:
-        return_md_tables = [md_table, ]
+        return_md_tables = md_tables_split_by_rows
     else:
         col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
-        df_table = f_split_by_cols(col_groups, markdown_to_dataframe(md_table))
         return_md_tables = []
-        for d in df_table:
-            return_md_tables.append(dataframe_to_markdown(d))
+        for mt in md_tables_split_by_rows:
+            df_table = f_split_by_cols(col_groups, markdown_to_dataframe(mt))
+            for d in df_table:
+                return_md_tables.append(dataframe_to_markdown(d))
 
     for m in return_md_tables:
         print(display_md_table(m))
 
-    return return_md_tables, res, content, usage, truncated
+    return return_md_tables, res, content, usage, truncated, col_groups

@@ -1,8 +1,7 @@
-import re
 import ast
 from table_utils import *
 from llm_utils import *
-from operations.f_split_table import *
+from archive.f_split_table import *
 
 
 def s_pk_split_table_prompt(md_table):
