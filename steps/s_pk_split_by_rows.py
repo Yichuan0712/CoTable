@@ -51,9 +51,10 @@ def s_pk_split_by_rows(md_table, model_name="gemini_15_pro"):
 
     row_groups = s_pk_split_by_rows_parse(content)
     if row_groups is None:
-        return md_table, res, content, usage, truncated
-    df_table = f_split_by_rows(row_groups, markdown_to_dataframe(md_table))
-    return_md_tables = dataframe_to_markdown(df_table)
+        return_md_tables = [md_table, ]
+    else:
+        df_table = f_split_by_rows(row_groups, markdown_to_dataframe(md_table))
+        return_md_tables = dataframe_to_markdown(df_table)
 
     for m in return_md_tables:
         print(display_md_table(m))
