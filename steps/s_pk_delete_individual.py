@@ -50,7 +50,7 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     question = ""
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-    print(display_md_table(md_table))
+    # print(display_md_table(md_table))
     print(usage)
     print(content)
 
