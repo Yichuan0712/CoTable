@@ -10,10 +10,10 @@ def s_pk_split_by_cols_prompt(md_table):
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:  
-(1) Review all columns, especially the headers, to check if any sub-tables or nested groups are **explicitly defined by the author** (e.g., clear sectioning, separate labels, or visible groupings).  
-(2) If and only if sub-tables are **explicitly present**, group the columns accordingly.  
-(3) If a descriptor column applies to all groups when splitting, ensure it is included in each subgroup.  
-If the table does not contain **clearly defined** sub-tables, simply return [[END]].  
+(1) Review all columns, especially the headers, to check if any sub-tables, nested groups, or different experimental groups are **explicitly defined** (e.g., clear sectioning, separate labels, or visible groupings).  
+(2) If and only if such sub-tables, nested groups, or experimental groups are present, group the columns accordingly.  
+(3) If a descriptor column applies to all groups when splitting, ensure it is included in each subgroup.   
+If the table does not contain **clearly defined** groupings or experimental groups, simply return [[END]].  
 If division is possible, use the function below (do not over-split based on column categories):  
 f_split_by_cols(col_groups)
 Replace col_groups with column names in the following format:  
