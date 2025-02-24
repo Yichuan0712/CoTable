@@ -24,7 +24,8 @@ When returning this, enclose the function call in double angle brackets, like th
 
 
 def s_pk_split_by_rows_parse(content):
-    content.replace('\n', '')
+    content = content.replace('\n', '')
+    content = content.replace(' ', '')
 
     if '[[END]]' in content:
         return None

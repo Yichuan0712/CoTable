@@ -1,0 +1,71 @@
+import re
+import ast
+from table_utils import *
+from llm_utils import *
+from operations.f_split_by_cols import *
+
+
+def s_pk_split_by_cols_prompt(md_table):
+    return f"""
+There is now a table related to pharmacokinetics (PK). 
+{display_md_table(md_table)}
+Carefully examine the table and follow these steps:  
+(1) Review all columns, especially the headers, to check if any sub-tables or nested groups are **explicitly defined by the author** (e.g., clear sectioning, separate labels, or visible groupings).  
+(2) If and only if sub-tables are **explicitly present**, group the columns accordingly.  
+(3) If a descriptor column applies to all groups when splitting, ensure it is included in each subgroup.  
+If the table does not contain **clearly defined** sub-tables, simply return [[END]].  
+If division is possible, use the function below (do not over-split based on column categories):  
+f_split_by_cols(col_groups)
+Replace col_groups with column names in the following format:  
+col_groups = [["ColumnA", "ColumnB", "ColumnC", "ColumnG"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF", "ColumnG"]] (example)
+When returning this, enclose the function call in double angle brackets, like this:  
+<<f_split_by_cols([["ColumnA", "ColumnB", "ColumnC", "ColumnG"], ["ColumnA", "ColumnD", "ColumnE", "ColumnF", "ColumnG"]])>>
+"""
+
+
+def s_pk_split_by_cols_parse(content):
+    content = content.replace('\n', '')
+    content = content.replace(' ', '')
+
+    if '[[END]]' in content:
+        return None
+
+    pattern = r'\[\[.*\]\]'
+
+    match = re.search(pattern, content.strip(), flags=re.DOTALL)
+
+    if not match:
+        raise NotImplementedError
+
+    bracket_str = match.group(0).strip()
+    data = ast.literal_eval(bracket_str)
+    return data
+
+
+def s_pk_split_by_cols(md_table, model_name="gemini_15_pro"):
+    msg = s_pk_split_by_cols_prompt(md_table)
+    # print(msg)
+    # return
+
+    messages = [msg, ]
+    question = ""
+
+    res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+    # print(display_md_table(md_table))
+    print(usage)
+    print(content)
+
+    col_groups = s_pk_split_by_cols_parse(content)
+    if col_groups is None:
+        return_md_tables = [md_table, ]
+    else:
+        col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
+        df_table = f_split_by_cols(col_groups, markdown_to_dataframe(md_table))
+        return_md_tables = []
+        for d in df_table:
+            return_md_tables.append(dataframe_to_markdown(d))
+
+    for m in return_md_tables:
+        print(display_md_table(m))
+
+    return return_md_tables, res, content, usage, truncated

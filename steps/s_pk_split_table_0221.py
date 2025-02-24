@@ -27,7 +27,9 @@ When returning this, enclose the function call in double angle brackets, like th
 
 
 def s_pk_split_table_parse(content):
-    content.replace('\n', '')
+    content = content.replace('\n', '')
+    content = content.replace(' ', '')
+
     match_end = re.search(r'\[\[END\]\]', content)
     match_angle = re.search(r'<<.*?>>', content)
 

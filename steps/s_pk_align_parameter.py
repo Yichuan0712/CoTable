@@ -18,7 +18,9 @@ If the PK parameter type is represented as column headers, return [[COL]].
 
 
 def s_pk_align_parameter_parse(content):
-    content.replace('\n', '')
+    content = content.replace('\n', '')
+    content = content.replace(' ', '')
+
     match_col = re.search(r'\[\[COL\]\]', content)
     match_angle = re.search(r'<<.*?>>', content)
 
