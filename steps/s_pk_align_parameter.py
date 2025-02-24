@@ -11,7 +11,7 @@ There is now a table related to pharmacokinetics (PK).
 {display_md_table(md_table)}
 Carefully examine the pharmacokinetics (PK) table below and follow these steps to determine how the PK parameter type is represented:
 (1) Identify how the PK parameter type (e.g., Cmax, tmax, t1/2, etc.) is structured in the table:
-If the PK parameter type serves as the row header or is listed under a specific column, return <<the_col_name>>, replacing the_col_name with the actual column name.
+If the PK parameter type serves as the row header or is listed under a specific column, return <<the_col_name>>, replacing the_col_name with the actual column name, and enclose the name in double angle brackets.
 If the PK parameter type is represented as column headers, return [[COL]].
 (2) Ensure a thorough analysis of the table structure before selecting your answer.
 """
