@@ -57,7 +57,7 @@ def s_pk_split_by_cols(md_table, model_name="gemini_15_pro", previous_col_groups
     msg = s_pk_split_by_cols_prompt(md_table)
 
     messages = [msg, ]
-    question = ""
+    question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
