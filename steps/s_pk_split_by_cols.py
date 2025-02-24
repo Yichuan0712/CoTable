@@ -66,4 +66,4 @@ def s_pk_split_by_cols(md_table, md_tables_split_by_rows, model_name="gemini_15_
     for m in return_md_tables:
         print(display_md_table(m))
 
-    return return_md_tables, res, content, usage, truncated, col_groups
+    return return_md_tables, res, content, usage, truncated
