@@ -24,17 +24,20 @@ When returning this, enclose the function call in double angle brackets, like th
 
 
 def s_pk_split_by_rows_parse(content):
+    content.replace('\n', '')
+
     if '[[END]]' in content:
         return None
 
-    pattern = r'^f_split_by_rows\s*\(\s*(\[.*\])\s*\)$'
-    match = re.match(pattern, content.strip(), flags=re.DOTALL)
+    pattern = r'\[\[.*\]\]'
+
+    match = re.search(pattern, content.strip(), flags=re.DOTALL)
+
     if not match:
         raise NotImplementedError
 
-    bracket_str = match.group(1).strip()
+    bracket_str = match.group(0).strip()
     data = ast.literal_eval(bracket_str)
-
     return data
 
 
