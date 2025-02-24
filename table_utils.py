@@ -324,7 +324,7 @@ def fix_col_name(col_name, md_table):
     else:
         # Find the closest match
         closest_match = get_close_matches(col_name, col_names, n=1)
-        print(col_name, "MATCH", closest_match)
+        print(col_name, "matches", closest_match)
         return closest_match[0] if closest_match else False
 
 

@@ -12,6 +12,7 @@ There is now a table related to pharmacokinetics (PK).
 Carefully examine the table and follow these steps:  
 (1) Review all rows, especially the headers, to check if any sub-tables or nested groups are **explicitly defined by the author** (e.g., clear sectioning, separate labels, or visible groupings).  
 (2) If and only if sub-tables are **explicitly present**, group the rows accordingly.  
+(2a) If multiple heading rows appear in the same section—each indicating a new set of data (e.g., each has its own “n=” count or heading text)—treat them as separate sub-tables rather than merging them.
 (3) If a descriptor row applies to all groups when splitting, ensure it is included in each subgroup.  
 If the table does not contain **clearly defined** sub-tables, simply return [[END]].  
 If division is possible, use the function below (do not over-split based on row categories):  
