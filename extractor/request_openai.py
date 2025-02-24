@@ -140,7 +140,8 @@ def request_to_chatgpt_4o(prompts: List[Any], question: str):
         while _is_incompleted_response(content) and loops < MAX_LOOP:
             if content is not None:
                 prompts.append({"role": "assistant", "content": content})
-            prompts.append({"role": "user", "content": "The JSON table above is incomplete. Continue generating the remaining JSON table content without adding any explanations, comments, or extra text—only the JSON data."})
+            # Yichuan: Remove this.
+            # prompts.append({"role": "user", "content": "The JSON table above is incomplete. Continue generating the remaining JSON table content without adding any explanations, comments, or extra text—only the JSON data."})
             res = client_4o.generate(messages=[prompts])
             content = res.generations[0][0].text
             token_usage = res.llm_output.get("token_usage")
