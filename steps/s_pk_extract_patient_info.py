@@ -3,6 +3,7 @@ import ast
 from table_utils import *
 from llm_utils import *
 from operations.f_transpose import *
+import pandas as pd
 
 
 def s_pk_extract_patient_info_prompt(md_table, caption):
@@ -27,6 +28,7 @@ def s_pk_extract_patient_info_parse(content):
 
     if match_angle:
         match_list = match_angle.group()[2:-2]
+        match_list = ast.literal_eval(match_list)
         return match_list
     else:
         raise NotImplementedError
@@ -48,7 +50,6 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
         df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
         return_md_table = dataframe_to_markdown(df_table)
         print(display_md_table(return_md_table))
+        return return_md_table, res, content, usage, truncated
     else:
         NotImplementedError
-
-    return return_md_table, res, content, usage, truncated
