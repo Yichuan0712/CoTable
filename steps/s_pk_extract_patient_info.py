@@ -49,6 +49,8 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
 
     match_list = s_pk_extract_patient_info_parse(content)
 
+    match_list = list(map(list, set(map(tuple, match_list))))
+
     if match_list:
         df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
         return_md_table = dataframe_to_markdown(df_table)
