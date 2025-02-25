@@ -19,7 +19,7 @@ Pregnancy stage is the pregnancy stages of patients mentioned in the study.
 Subject N is the number of subjects that correspond to the specific parameter.
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
 (3) Verify the source of each [Population, Pregnancy Stage, Subject N] combination before including it in your answer.  
-(4) If any information is missing, use "N/A" as a placeholder.  
+(4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred. 
 """
 
 

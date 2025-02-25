@@ -6,7 +6,6 @@ from operations.f_transpose import *
 import pandas as pd
 
 
-
 def s_pk_extract_drug_info_prompt(md_table, caption):
     return f"""
 The following table contains pharmacokinetics (PK) data:  
@@ -21,7 +20,7 @@ Specimen is the type of sample.
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["Lorazepam", "Lorazepam", "Plasma"], ["Lorazepam", "Lorazepam", "Urine"]]>> (example)  
 (3) Verify the source of each [Drug Name, Analyte, Specimen] combination before including it in your answer.  
-(4) If any information is missing, use "N/A" as a placeholder.  
+(4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
 """
 
 
@@ -52,7 +51,7 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
     match_list = s_pk_extract_drug_info_parse(content)
 
     if match_list:
-        df_table = pd.DataFrame(match_list, columns=["Drug Name", "Analyte", "Specimen"])
+        df_table = pd.DataFrame(match_list, columns=["Drug name", "Analyte", "Specimen"])
         return_md_table = dataframe_to_markdown(df_table)
         print(display_md_table(return_md_table))
         return return_md_table, res, content, usage, truncated
