@@ -33,8 +33,8 @@ def s_pk_extract_drug_info_parse(content):
         raise NotImplementedError
 
 
-def s_pk_extract_drug_info(md_table, model_name="gemini_15_pro"):
-    msg = s_pk_extract_drug_info_prompt(md_table)
+def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
+    msg = s_pk_extract_drug_info_prompt(md_table, caption)
 
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."

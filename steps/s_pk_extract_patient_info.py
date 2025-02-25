@@ -32,8 +32,8 @@ def s_pk_extract_patient_info_parse(content):
         raise NotImplementedError
 
 
-def s_pk_extract_patient_info(md_table, model_name="gemini_15_pro"):
-    msg = s_pk_extract_patient_info_prompt(md_table)
+def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
+    msg = s_pk_extract_patient_info_prompt(md_table, caption)
 
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
@@ -45,7 +45,7 @@ def s_pk_extract_patient_info(md_table, model_name="gemini_15_pro"):
     match_list = s_pk_extract_patient_info_parse(content)
 
     if match_list:
-        df_table = pd.DataFrame(match_list, columns=["Drug Name", "Analyte", "Specimen"])
+        df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
         return_md_table = dataframe_to_markdown(df_table)
         print(display_md_table(return_md_table))
     else:
