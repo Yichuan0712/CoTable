@@ -14,8 +14,8 @@ Here is the table caption:
 {caption}
 Carefully analyze the table and follow these steps:  
 (1) Identify how many unique [Population, Pregnancy Stage, Subject N] combinations are present in the table.  
-Population is the patient age group, such as 'Pediatric,' 'Adults,' 'Older Adults,' 'Maternal,' 'Fetal,' 'Neonate,' etc.
-Pregnancy stage is the pregnancy stages of patients mentioned in the paper, such as 'Before Pregnancy,' '1st Trimester,' 'Delivery,' 'Postpartum,' etc.
+Population is the patient age group.
+Pregnancy stage is the pregnancy stages of patients mentioned in the study.
 Subject N is the number of subjects that correspond to the specific parameter.
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
 (3) Verify the source of each [Population, Pregnancy Stage, Subject N] combination before including it in your answer.  
