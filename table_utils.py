@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 from difflib import get_close_matches
+import json
 
 
 def html_table_to_markdown(html):
@@ -349,4 +350,11 @@ def get_html_content_from_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
 
+
+def get_caption_and_footnote_from_file(json_file_path):
+    with open(json_file_path, 'r', encoding='utf-8') as file:
+        data = json.load(file)
+        caption = data.get("caption")
+        footnote = data.get("footnote")
+        return caption, footnote
 
