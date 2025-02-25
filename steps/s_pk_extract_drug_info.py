@@ -15,7 +15,7 @@ Here is the table caption:
 Carefully analyze the table and follow these steps:  
 (1) Identify how many unique [Drug name, Analyte, Specimen] combinations are present in the table.  
 Drug name is the name of the drug mentioned in the study.
-Analyte is the substance measured in the study, which can be the primary drug, its metabolite, or another drug it affects, etc.
+Analyte is the substance measured in the study, which can be the primary drug, its metabolite, or another drug it affects, etc. When filling in "Analyte," only enter the name of the substance.
 Specimen is the type of sample.
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["Lorazepam", "Lorazepam", "Plasma"], ["Lorazepam", "Lorazepam", "Urine"]]>> (example)  
