@@ -24,7 +24,7 @@ def s_pk_align_parameter_parse(content):
     match_col = re.search(r'\[\[COL\]\]', content)
     # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
-    match_angle = matches[-1]
+    match_angle = matches[-1] if matches else None
 
     if match_col:
         return None

@@ -30,7 +30,7 @@ def s_pk_extract_drug_info_parse(content):
 
     # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
-    match_angle = matches[-1]
+    match_angle = matches[-1] if matches else None
 
     if match_angle:
         match_list = match_angle[2:-2]

@@ -25,7 +25,7 @@ def s_pk_delete_individual_parse(content):
     match_end = re.search(r'\[\[END\]\]', content)
     # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
-    match_angle = matches[-1]
+    match_angle = matches[-1] if matches else None
 
     if match_end:
         return None, None
