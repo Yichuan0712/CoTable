@@ -13,13 +13,14 @@ The following table contains pharmacokinetics (PK) data:
 {display_md_table(md_table)}
 Carefully analyze the table and follow these steps:  
 (1) Examine all column headers and categorize each one into one of the following groups:  
+   - **"Parameter type"**: Columns that describe the type of pharmacokinetic parameter.  
+   - **"Parameter unit"**: Columns that specify the unit of the parameter type.  
    - **"Parameter value"**: Columns that contain numerical parameter values.  
    - **"P value"**: Columns that represent statistical P values.  
-   - **"Parameter type"**: Columns that describe the type of pharmacokinetic parameter.  
-   - **"Parameter type's unit"**: Columns that specify the unit of the parameter type.  
    - **"Uncategorized"**: Columns that do not fit into any of the above categories. 
 (2) Return a dictionary where each key is a column header, and the corresponding value is its assigned category. Your dictionary should be enclosed in double angle brackets <<>>. 
 """
+
 
 def s_pk_get_col_mapping_parse(content):
     content = content.replace('\n', '')
@@ -51,10 +52,13 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     match_dict = s_pk_get_col_mapping_parse(content)
 
     match_dict = {fix_col_name(k, md_table): get_close_matches(v, ["Parameter value", "P value", "Parameter type",
-                                                                   "Parameter type's unit", "Uncategorized"], n=1) for
+                                                                   "Parameter unit", "Uncategorized"], n=1)[0] for
                   k, v in match_dict.items()}
 
     if match_dict:
+        parameter_type_count = list(match_dict.values()).count("Parameter type")
+        if parameter_type_count != 1:
+            raise ValueError
         print(match_dict)
         return match_dict, res, content, usage, truncated
     else:
