@@ -24,15 +24,15 @@ Carefully analyze the table and follow these steps:
 
 def s_pk_get_col_mapping_parse(content):
     content = content.replace('\n', '')
-    content = content.replace(' ', '')
+    # content = content.replace(' ', '')
 
-    match_col = re.search(r'\[\[COL\]\]', content)
-    match_angle = re.search(r'<<.*?>>', content)
+    # match_col = re.search(r'\[\[COL\]\]', content)
+    # match_angle = re.search(r'<<.*?>>', content)
+    matches = re.findall(r'<<.*?>>', content)
+    match_angle = matches[-1]
 
-    if match_col:
-        return None
-    elif match_angle:
-        match_dict = match_angle.group()[2:-2]
+    if match_angle:
+        match_dict = match_angle[2:-2]
         match_dict = ast.literal_eval(match_dict)
         return match_dict
     else:

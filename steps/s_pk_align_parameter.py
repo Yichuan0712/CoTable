@@ -22,12 +22,14 @@ def s_pk_align_parameter_parse(content):
     # content = content.replace(' ', '')
 
     match_col = re.search(r'\[\[COL\]\]', content)
-    match_angle = re.search(r'<<.*?>>', content)
+    # match_angle = re.search(r'<<.*?>>', content)
+    matches = re.findall(r'<<.*?>>', content)
+    match_angle = matches[-1]
 
     if match_col:
         return None
     elif match_angle:
-        match_name = match_angle.group()[2:-2]
+        match_name = match_angle[2:-2]
         return match_name
     else:
         raise NotImplementedError

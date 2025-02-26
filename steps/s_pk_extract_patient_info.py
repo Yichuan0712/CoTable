@@ -27,10 +27,12 @@ def s_pk_extract_patient_info_parse(content):
     content = content.replace('\n', '')
     # content = content.replace(' ', '')
 
-    match_angle = re.search(r'<<.*?>>', content)
+    # match_angle = re.search(r'<<.*?>>', content)
+    matches = re.findall(r'<<.*?>>', content)
+    match_angle = matches[-1]
 
     if match_angle:
-        match_list = match_angle.group()[2:-2]
+        match_list = match_angle[2:-2]
         match_list = ast.literal_eval(match_list)
         return match_list
     else:

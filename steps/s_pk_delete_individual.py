@@ -23,13 +23,15 @@ def s_pk_delete_individual_parse(content):
     # content = content.replace(' ', '')
 
     match_end = re.search(r'\[\[END\]\]', content)
-    match_angle = re.search(r'<<.*?>>', content)
+    # match_angle = re.search(r'<<.*?>>', content)
+    matches = re.findall(r'<<.*?>>', content)
+    match_angle = matches[-1]
 
     if match_end:
         return None, None
 
     elif match_angle:
-        inner_content = match_angle.group()[2:-2]
+        inner_content = match_angle[2:-2]
         match_func = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)', inner_content)
 
         if match_func:
