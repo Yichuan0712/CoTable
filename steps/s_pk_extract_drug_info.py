@@ -26,7 +26,7 @@ Specimen is the type of sample.
 
 def s_pk_extract_drug_info_parse(content):
     content = content.replace('\n', '')
-    content = content.replace(' ', '')
+    # content = content.replace(' ', '')
 
     match_angle = re.search(r'<<.*?>>', content)
 

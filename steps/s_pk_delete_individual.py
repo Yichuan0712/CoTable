@@ -20,7 +20,7 @@ When returning this, enclose the function call in double angle brackets.
 
 def s_pk_delete_individual_parse(content):
     content = content.replace('\n', '')
-    content = content.replace(' ', '')
+    # content = content.replace(' ', '')
 
     match_end = re.search(r'\[\[END\]\]', content)
     match_angle = re.search(r'<<.*?>>', content)

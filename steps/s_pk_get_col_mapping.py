@@ -60,6 +60,7 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     else:
         NotImplementedError
 
+# 检查是否包含所有列标题
 
 # 三种情况 多个parameter type (似乎不太可能出现), 多个, pvalue, unit如果有应该和type一样多
 # 必须解决unit问题

@@ -25,7 +25,7 @@ Subject N is the number of subjects that correspond to the specific parameter.
 
 def s_pk_extract_patient_info_parse(content):
     content = content.replace('\n', '')
-    content = content.replace(' ', '')
+    # content = content.replace(' ', '')
 
     match_angle = re.search(r'<<.*?>>', content)
 
