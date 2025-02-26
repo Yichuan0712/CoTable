@@ -38,7 +38,7 @@ def s_pk_get_col_mapping_parse(content):
         raise NotImplementedError
 
 
-def s_pk_get_col_mapping_info(md_table, model_name="gemini_15_pro"):
+def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     msg = s_pk_get_col_mapping_prompt(md_table)
 
     messages = [msg, ]
