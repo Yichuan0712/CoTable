@@ -79,14 +79,14 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_drug)
     print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_drug))
     print(COLOR_START+"Reasoning:\n"+COLOR_END, content_drug)
-    print("\n"*1)
+    # print("\n"*1)
     """
-    Step 2: Extract Population Information
+    Step 2-1: Extract Population Information (Round 1)
     """
     print("=" * 64)
-    step_name = "Extract Population Information"
+    step_name = "Extract Population Information (Round 1)"
     print(COLOR_START+step_name+COLOR_END)
-    patient_info = run_with_retry(
+    patient_info_1 = run_with_retry(
         s_pk_extract_patient_info,
         md_table,
         description,
@@ -94,18 +94,53 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         max_retries=max_retries,
         base_delay=base_delay,
     )
-    if patient_info is None:
+    if patient_info_1 is None:
         return None
-    md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
+    md_table_patient_1, res_patient_1, content_patient_1, usage_patient_1, truncated_patient_1 = patient_info_1
     step_list.append(step_name)
-    res_list.append(res_patient)
-    content_list.append(content_patient)
-    usage_list.append(usage_patient)
-    truncated_list.append(truncated_patient)
-    print(COLOR_START+"Usage:"+COLOR_END, usage_patient)
-    print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_patient))
-    print(COLOR_START+"Reasoning:\n"+COLOR_END, content_patient)
-    print("\n"*1)
+    res_list.append(res_patient_1)
+    content_list.append(content_patient_1)
+    usage_list.append(usage_patient_1)
+    truncated_list.append(truncated_patient_1)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_patient_1)
+    print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_patient_1))
+    print(COLOR_START+"Reasoning:\n"+COLOR_END, content_patient_1)
+    # print("\n"*1)
+    """
+    Step 2-2: Extract Population Information (Round 2)
+    """
+    time.sleep(6)
+    print("=" * 64)
+    step_name = "Extract Population Information (Round 2)"
+    print(COLOR_START+step_name+COLOR_END)
+    patient_info_2 = run_with_retry(
+        s_pk_extract_patient_info,
+        md_table,
+        description,
+        llm,
+        max_retries=max_retries,
+        base_delay=base_delay,
+    )
+    if patient_info_2 is None:
+        return None
+    md_table_patient_2, res_patient_2, content_patient_2, usage_patient_2, truncated_patient_2 = patient_info_2
+    step_list.append(step_name)
+    res_list.append(res_patient_2)
+    content_list.append(content_patient_2)
+    usage_list.append(usage_patient_2)
+    truncated_list.append(truncated_patient_2)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_patient_2)
+    print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_patient_2))
+    print(COLOR_START+"Reasoning:\n"+COLOR_END, content_patient_2)
+    # print("\n"*1)
+    """
+    Step 2-3: Extract Population Information (Keep The Longest Table)
+    """
+    if len(md_table_patient_1) >= len(md_table_patient_2):
+        patient_info = patient_info_1
+    else:
+        patient_info = patient_info_2
+    md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
     """
     Step 3: Extract Population Information
     """
@@ -119,7 +154,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         max_retries=max_retries,
         base_delay=base_delay,
     )
-    if patient_info is None:
+    if summary_only_info is None:
         return None
     md_table_summary, res_summary, content_summary, usage_summary, truncated_summary = summary_only_info
     step_list.append(step_name)
@@ -130,7 +165,32 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_summary)
     print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_summary))
     print(COLOR_START+"Reasoning:\n"+COLOR_END, content_summary)
-    print("\n"*1)
+    # print("\n"*1)
+    """
+    Step 4: Align Parameter Type
+    """
+    print("=" * 64)
+    step_name = "Delete Individual Data"
+    print(COLOR_START+step_name+COLOR_END)
+    aligned_info = run_with_retry(
+        s_pk_align_parameter,
+        md_table,
+        llm,
+        max_retries=max_retries,
+        base_delay=base_delay,
+    )
+    if aligned_info is None:
+        return None
+    md_table_aligned, res_aligned, content_aligned, usage_aligned, truncated_aligned = aligned_info
+    step_list.append(step_name)
+    res_list.append(res_aligned)
+    content_list.append(content_aligned)
+    usage_list.append(usage_aligned)
+    truncated_list.append(truncated_aligned)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_aligned)
+    print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_aligned))
+    print(COLOR_START+"Reasoning:\n"+COLOR_END, content_aligned)
+    # print("\n"*1)
     return
 
 
