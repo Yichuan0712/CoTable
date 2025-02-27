@@ -48,7 +48,7 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    print(usage, content)
+    # print(usage, content)
 
     match_list = s_pk_extract_drug_info_parse(content)
 
@@ -57,7 +57,7 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
     if match_list:
         df_table = pd.DataFrame(match_list, columns=["Drug name", "Analyte", "Specimen"])
         return_md_table = dataframe_to_markdown(df_table)
-        print(display_md_table(return_md_table))
+        # print(display_md_table(return_md_table))
         return return_md_table, res, content, usage, truncated
     else:
         NotImplementedError
