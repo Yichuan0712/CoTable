@@ -50,7 +50,7 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    # print(usage, content)
+    print(usage, content)
 
     match_dict = s_pk_get_col_mapping_parse(content)
 
