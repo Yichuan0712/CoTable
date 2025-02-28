@@ -23,7 +23,9 @@ Carefully analyze the table and follow these steps:
     - The first list should contain the extracted "Parameter type" values.  
     - The second list should contain the corresponding "Parameter unit" values.  
 (3) If a value is not a valid pharmacokinetic parameter type (e.g., it is a drug name or another non-parameter entry), assign "ERROR" to the corresponding "Parameter unit".  
-(4) The returned list should be enclosed within double angle brackets, like this:  
+(4) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}".**  
+    - The number of processed rows must **exactly match** the number of rows in the original table—no more, no less.  
+(5) The returned list should be enclosed within double angle brackets, like this:  
     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>  
 """
 
@@ -60,7 +62,7 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
 
         match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
 
-        # assert len(match_tuple[0]) == len(match_tuple[1]) == markdown_to_dataframe(md_table).shape[0] - 1
+        assert len(match_tuple[0]) == len(match_tuple[1]) == markdown_to_dataframe(md_table).shape[0]
 
         if match_tuple is None:
             raise NotImplementedError
