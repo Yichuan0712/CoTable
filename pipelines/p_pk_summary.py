@@ -386,8 +386,17 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         cols_to_drop = [col for col in df.columns if col_mapping.get(col) == "Uncategorized"]
         df.drop(columns=cols_to_drop, inplace=True)
         _md_table_list.append(dataframe_to_markdown(df))
-    md_table_list = _md_table_list
-
+    # md_table_list = _md_table_list
+    __md_table_list = []
+    for md in _md_table_list:
+        df = markdown_to_dataframe(md)
+        cols_to_split = [col for col in df.columns if col_mapping.get(col) == "Parameter value"]
+        common_cols = [col for col in df.columns if col not in cols_to_split]
+        for col in cols_to_split:
+            if col in df.columns:
+                selected_cols = [c for c in df.columns if c in common_cols or c == col]
+                __md_table_list.append(dataframe_to_markdown(df[selected_cols].copy()))
+    md_table_list = __md_table_list
     print(COLOR_START + "Usage:" + COLOR_END)
     print(usage_split)
     print(COLOR_START + "Result:" + COLOR_END)
@@ -401,8 +410,54 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     """
     # 首先检查有哪些列需要进行extraction
     # 然后分别处理
-    # for md in md_table_list:
-
+    type_unit_list = []
+    type_unit_cache = {}
+    round = 1
+    for md in md_table_list:
+        df = markdown_to_dataframe(md)
+        col_name_of_parameter_type = [col for col in df.columns if col_mapping.get(col) == "Parameter type"][0]
+        col_name_of_parameter_unit_list = [col for col in df.columns if col_mapping.get(col) == "Parameter unit"]
+        if col_name_of_parameter_type in type_unit_cache.keys():
+            type_unit_list.append(type_unit_cache[col_name_of_parameter_type])
+        else:
+            if len(col_name_of_parameter_unit_list) == 1:
+                selected_cols = [col_name_of_parameter_type, col_name_of_parameter_unit_list[0]]
+                type_unit_list.append(
+                    dataframe_to_markdown(df[selected_cols].copy().rename(
+                        columns={col_name_of_parameter_type: "Parameter type", col_name_of_parameter_unit_list: "Parameter unit"}, inplace=True
+                    )))
+            else:
+                print("=" * 64)
+                step_name = "Unit Extraction" + f" (Round {str(round)})"
+                round += 1
+                print(COLOR_START + step_name + COLOR_END)
+                unit_info = run_with_retry(
+                    s_pk_get_parameter_type_and_unit,
+                    col_mapping,
+                    md,
+                    description,
+                    llm,
+                    max_retries=max_retries,
+                    base_delay=base_delay,
+                )
+                if unit_info is None:
+                    return None
+                tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
+                md_type_unit = dataframe_to_markdown(pd.DataFrame([tuple_type_unit[0], tuple_type_unit[1]], index=["Parameter type", "Parameter unit"]).T)
+                type_unit_list.append(md_type_unit)
+                step_list.append(step_name)
+                res_list.append(res_type_unit)
+                content_list.append(content_type_unit)
+                content_list_clean.append(clean_llm_reasoning(content_type_unit))
+                usage_list.append(usage_type_unit)
+                truncated_list.append(truncated_type_unit)
+                print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+                print(COLOR_START + "Result:" + COLOR_END)
+                print(display_md_table(md_type_unit))
+                content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+                print(COLOR_START + "Reasoning:" + COLOR_END)
+                print(content_to_print)
+            type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
     return
 
 
