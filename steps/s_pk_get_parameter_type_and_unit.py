@@ -59,6 +59,9 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
         print(usage, content)
 
         match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
+
+        assert len(match_tuple[0]) == len(match_tuple[1]) == markdown_to_dataframe(md_table).shape[1]
+
         if match_tuple is None:
             raise NotImplementedError
         else:
