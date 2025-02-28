@@ -47,7 +47,7 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    print(usage, content)
+    # print(usage, content)
 
     match_dict = s_pk_get_col_mapping_parse(content)
 
@@ -59,7 +59,7 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
         parameter_type_count = list(match_dict.values()).count("Parameter type")
         if parameter_type_count != 1:
             raise ValueError
-        print(match_dict)
+        # print(match_dict)
         return match_dict, res, content, usage, truncated
     else:
         NotImplementedError

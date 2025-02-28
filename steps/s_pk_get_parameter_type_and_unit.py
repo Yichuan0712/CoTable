@@ -10,8 +10,8 @@ from difflib import get_close_matches
 def s_pk_get_parameter_type_and_unit_prompt(match_dict, md_table, caption):
     # md_table = re.sub(r'[^\x00-\x7F]+', '', md_table)
     parameter_type_count = list(match_dict.values()).count("Parameter type")
-    parameter_unit_count = list(match_dict.values()).count("Parameter unit")
-    if parameter_type_count == 1 and parameter_unit_count == 0:
+    # parameter_unit_count = list(match_dict.values()).count("Parameter unit")
+    if parameter_type_count == 1:
         key_with_parameter_type = [key for key, value in match_dict.items() if value == "Parameter type"][0]
         return f"""
 The following table contains pharmacokinetic (PK) data:  

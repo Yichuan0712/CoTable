@@ -9,6 +9,7 @@ from steps.s_pk_get_col_mapping import *
 from steps.s_pk_get_parameter_type_and_unit import *
 from steps.s_pk_match_drug_info import *
 from steps.s_pk_match_patient_info import *
+from steps.s_pk_split_by_cols import *
 
 
 def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
@@ -142,7 +143,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         patient_info = patient_info_2
     md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
     """
-    Step 3: Extract Population Information
+    Step 3: Delete Individual Data
     """
     print("=" * 64)
     step_name = "Delete Individual Data"
@@ -170,11 +171,11 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     Step 4: Align Parameter Type
     """
     print("=" * 64)
-    step_name = "Delete Individual Data"
+    step_name = "Align Parameter Type"
     print(COLOR_START+step_name+COLOR_END)
     aligned_info = run_with_retry(
         s_pk_align_parameter,
-        md_table,
+        md_table_summary,
         llm,
         max_retries=max_retries,
         base_delay=base_delay,
@@ -191,6 +192,88 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Result:\n"+COLOR_END, display_md_table(md_table_aligned))
     print(COLOR_START+"Reasoning:\n"+COLOR_END, content_aligned)
     # print("\n"*1)
+    """
+    Step 5: Categorize Column Headers
+    """
+    print("=" * 64)
+    step_name = "Categorize Column Headers"
+    print(COLOR_START+step_name+COLOR_END)
+    mapping_info = run_with_retry(
+        s_pk_get_col_mapping,
+        md_table_aligned,
+        llm,
+        max_retries=max_retries,
+        base_delay=base_delay,
+    )
+    if mapping_info is None:
+        return None
+    col_mapping, res_mapping, content_mapping, usage_mapping, truncated_mapping = mapping_info
+    step_list.append(step_name)
+    res_list.append(res_mapping)
+    content_list.append(content_mapping)
+    usage_list.append(usage_mapping)
+    truncated_list.append(truncated_mapping)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_mapping)
+    print(COLOR_START+"Result:\n"+COLOR_END, col_mapping)
+    print(COLOR_START+"Reasoning:\n"+COLOR_END, content_mapping)
+    # print("\n"*1)
+    """
+    Step 6: Diagnose & Decide (Unseen to Users)
+    """
+    parameter_type_count = list(col_mapping.values()).count("Parameter type")
+    parameter_unit_count = list(col_mapping.values()).count("Parameter unit")
+    parameter_value_count = list(col_mapping.values()).count("Parameter value")
+    parameter_pvalue_count = list(col_mapping.values()).count("P value")
+    need_get_unit = True
+    need_split_col = False
+    need_match_drug = True
+    need_match_patient = True
+    if parameter_value_count == 0:
+        return
+    if parameter_type_count == 0:
+        return
+    if parameter_type_count > 1 or parameter_pvalue_count > 1:
+        need_split_col = True
+    if parameter_unit_count == 1:
+        need_get_unit = False
+    if markdown_to_dataframe(md_table_drug).shape[0] == 1:
+        need_match_drug = False
+    if markdown_to_dataframe(md_table_patient).shape[0] == 1:
+        need_match_patient = False
+    """
+    Step 7: Split into Sub-tables
+    """
+    print("=" * 64)
+    step_name = "Split into Sub-tables"
+    print(COLOR_START + step_name + COLOR_END)
+    if need_split_col:
+        split_returns = run_with_retry(
+            s_pk_split_by_cols,
+            md_table_aligned,
+            col_mapping,
+            llm,
+            max_retries=max_retries,
+            base_delay=base_delay,
+        )
+        if split_returns is None:
+            return None
+        md_table_list, res_split, content_split, usage_split, truncated_split = split_returns
+        step_list.append(step_name)
+        res_list.append(res_split)
+        content_list.append(content_split)
+        usage_list.append(usage_split)
+        truncated_list.append(truncated_split)
+        # print("\n"*1)
+    else:
+        usage_split = 0
+        content_split = "There is no need to divide the table.\n"
+        md_table_list = [md_table_aligned, ]
+    print(COLOR_START + "Usage:" + COLOR_END, usage_split)
+    print(COLOR_START + "Result:" + COLOR_END)
+    for i in range(len(md_table_list)):
+        print("Index -", i)
+        print(display_md_table(md_table_list[i]))
+    print(COLOR_START + "Reasoning:\n" + COLOR_END, content_split)
     return
 
 
