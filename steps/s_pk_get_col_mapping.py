@@ -8,9 +8,12 @@ from difflib import get_close_matches
 
 
 def s_pk_get_col_mapping_prompt(md_table):
+    df = markdown_to_dataframe(md_table)  # Assuming this is your DataFrame
+    column_headers_str = 'These are all its column headers: ' + ", ".join(f'"{col}"' for col in df.columns)
     return f"""
 The following table contains pharmacokinetics (PK) data:  
 {display_md_table(md_table)}
+{column_headers_str}
 Carefully analyze the table and follow these steps:  
 (1) Examine all column headers and categorize each one into one of the following groups:  
    - **"Parameter type"**: Columns that describe the type of pharmacokinetic parameter.  
