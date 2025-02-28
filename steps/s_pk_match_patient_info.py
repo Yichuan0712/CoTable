@@ -25,8 +25,8 @@ Additionally, I have compiled Subtable 2, where each row represents a unique com
 Carefully analyze the tables and follow these steps:  
 (1) For each row in Subtable 1, find a matching row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
 (2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
-(3) Format the final list within double angle brackets, like this:  
-   <<[1,1,2,2,3,3]>>
+(3) Format the final list within double angle brackets without removing duplicates or sorting, like this:
+    <<[1,1,2,2,3,3]>>
 """
 
 
@@ -60,6 +60,7 @@ def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_p
     if match_list is None:
         raise NotImplementedError
     else:
+        assert len(match_list) == markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
         return match_list, res, content, usage, truncated
 
 # md_table_aligned_with_1_param_type_and_value_list = get_1_param_type_and_value_sub_md_table_list(col_mapping, md_table_aligned)
