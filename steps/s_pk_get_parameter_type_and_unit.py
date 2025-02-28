@@ -62,6 +62,14 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
 
         match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
 
+        print("**********************")
+        print(match_tuple[0])
+        print(match_tuple[1])
+        print(markdown_to_dataframe(md_table).shape)
+        print(display_md_table(md_table))
+
+        print("**********************")
+
         assert len(match_tuple[0]) == len(match_tuple[1]) == markdown_to_dataframe(md_table).shape[0]
 
         if match_tuple is None:
