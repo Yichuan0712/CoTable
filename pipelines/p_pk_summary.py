@@ -219,7 +219,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     else:
         patient_info = patient_info_2
     print("=" * 64)
-    step_name = "Population Information Extraction (Final Decision)"
+    step_name = "Population Information Extraction (Final)"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
@@ -408,8 +408,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     """
     Step 8: Unit Extraction
     """
-    # 首先检查有哪些列需要进行extraction
-    # 然后分别处理
     type_unit_list = []
     type_unit_cache = {}
     round = 1
@@ -428,7 +426,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                     )))
             else:
                 print("=" * 64)
-                step_name = "Unit Extraction" + f" (Round {str(round)})"
+                step_name = "Unit Extraction" + f" (Trial {str(round)})"
                 round += 1
                 print(COLOR_START + step_name + COLOR_END)
                 unit_info = run_with_retry(
@@ -458,6 +456,21 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 print(COLOR_START + "Reasoning:" + COLOR_END)
                 print(content_to_print)
             type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
+
+
+    """
+    Step 9: Unit Extraction (Final)
+    """
+    print("=" * 64)
+    step_name = "Unit Extraction (Final)"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    for i in range(len(type_unit_list)):
+        print(f"Index [{i}]:")
+        print(display_md_table(type_unit_list[i]))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Auto-processed.\n")
     return
 
 
