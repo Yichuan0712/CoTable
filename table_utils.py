@@ -359,7 +359,7 @@ def get_caption_and_footnote_from_file(json_file_path):
         return caption, footnote
 
 
-def get_1_param_type_and_value_sub_md_table_list(col_mapping, md_table_aligned):
+def get_1_param_type_and_value_sub_md_table_list(col_mapping, md_table):
     pt_list = []
     pv_list = []
     for k, v in col_mapping.items():
@@ -370,5 +370,5 @@ def get_1_param_type_and_value_sub_md_table_list(col_mapping, md_table_aligned):
     assert len(pt_list) == 1
     md_table_aligned_with_1_param_type_and_value_list = []
     for pv in pv_list:
-        md_table_aligned_with_1_param_type_and_value_list.append(dataframe_to_markdown(markdown_to_dataframe(md_table_aligned).iloc[:][[pt_list[0], pv]].reset_index(drop=True)))
+        md_table_aligned_with_1_param_type_and_value_list.append(dataframe_to_markdown(markdown_to_dataframe(md_table).iloc[:][[pt_list[0], pv]].reset_index(drop=True)))
     return md_table_aligned_with_1_param_type_and_value_list

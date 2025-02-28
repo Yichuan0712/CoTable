@@ -419,11 +419,23 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
             type_unit_list.append(type_unit_cache[col_name_of_parameter_type])
         else:
             if len(col_name_of_parameter_unit_list) == 1:
+                # print(col_name_of_parameter_unit_list)
                 selected_cols = [col_name_of_parameter_type, col_name_of_parameter_unit_list[0]]
-                type_unit_list.append(
-                    dataframe_to_markdown(df[selected_cols].copy().rename(
-                        columns={col_name_of_parameter_type: "Parameter type", col_name_of_parameter_unit_list: "Parameter unit"}, inplace=True
-                    )))
+                # print(selected_cols)
+                # type_unit_list.append(
+                #     dataframe_to_markdown(df[selected_cols].copy().rename(
+                #         columns={col_name_of_parameter_type: "Parameter type", col_name_of_parameter_unit_list[0]: "Parameter unit"}, inplace=True
+                #     )))
+                df_selected = df[selected_cols].copy()
+                if df_selected is None or df_selected.empty:
+                    raise ValueError(
+                        "df_selected is None or empty. Please check the input DataFrame and selected columns.")
+                df_selected = df_selected.rename(
+                    columns={col_name_of_parameter_type: "Parameter type",
+                             col_name_of_parameter_unit_list[0]: "Parameter unit"}
+                )
+
+                type_unit_list.append(dataframe_to_markdown(df_selected))
             else:
                 print("=" * 64)
                 step_name = "Unit Extraction" + f" (Trial {str(round)})"
@@ -456,8 +468,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 print(COLOR_START + "Reasoning:" + COLOR_END)
                 print(content_to_print)
             type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
-
-
     """
     Step 9: Unit Extraction (Final)
     """
@@ -469,6 +479,63 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     for i in range(len(type_unit_list)):
         print(f"Index [{i}]:")
         print(display_md_table(type_unit_list[i]))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Auto-processed.\n")
+    """
+    Step 10: Drug Matching
+    """
+    drug_list = []
+    round = 1
+    if need_match_drug is False:
+        for md in md_table_list:
+            df = markdown_to_dataframe(md)
+            row_num = df.shape[0]
+            df_expanded = pd.concat([markdown_to_dataframe(md_table_drug)] * row_num, ignore_index=True)
+            drug_list.append(dataframe_to_markdown(df_expanded))
+    else:
+        for md in md_table_list:
+            print("=" * 64)
+            step_name = "Drug Matching" + f" (Trial {str(round)})"
+            round += 1
+            print(COLOR_START + step_name + COLOR_END)
+            drug_match_info = run_with_retry(
+                s_pk_match_drug_info,
+                md_table_aligned,
+                description,
+                md,
+                md_table_drug,
+                llm,
+                max_retries=max_retries,
+                base_delay=base_delay,
+            )
+            if drug_match_info is None:
+                return None
+            drug_match_list, res_drug_match, content_drug_match, usage_drug_match, truncated_drug_match = drug_match_info
+            df_table_drug = markdown_to_dataframe(md_table_drug)
+            df_table_drug_reordered = df_table_drug.iloc[drug_match_list].reset_index(drop=True)
+            drug_list.append(dataframe_to_markdown(df_table_drug_reordered))
+            # type_unit_list.append(md_type_unit)
+            step_list.append(step_name)
+            res_list.append(res_drug_match)
+            content_list.append(content_drug_match)
+            content_list_clean.append(clean_llm_reasoning(content_drug_match))
+            usage_list.append(usage_drug_match)
+            truncated_list.append(truncated_drug_match)
+            print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+            print(COLOR_START + "Result:" + COLOR_END)
+            print(display_md_table(drug_list[-1]))
+            content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+            print(COLOR_START + "Reasoning:" + COLOR_END)
+            print(content_to_print)
+
+    print("=" * 64)
+    step_name = "Drug Matching (Final)"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    for i in range(len(drug_list)):
+        print(f"Index [{i}]:")
+        print(display_md_table(drug_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print("Auto-processed.\n")
     return
