@@ -118,7 +118,13 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("Description:")
     print(description)
     print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Auto-processed.\n")
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
 
     """
     Step 1: Drug Information Extraction
@@ -225,8 +231,14 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Result:"+COLOR_END)
     print(display_md_table(patient_info[0]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Auto-processed.\n")
+    print("Automatic execution.\n")
     md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
     """
     Step 3: Individual Data Deletion
     """
@@ -349,7 +361,13 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(f"LLM Execution: {', '.join(active_tasks) if active_tasks else 'None'}")
     print(f"Auto Execution: {', '.join(canceled_tasks) if canceled_tasks else 'None'}")
     print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Auto-processed.\n")
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
     """
     Step 7: Sub-table Creation
     """
@@ -377,7 +395,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         # print("\n"*1)
     else:
         usage_split = 0
-        content_split = "Auto-processed.\n"
+        content_split = "Automatic execution.\n"
         md_table_list = [md_table_aligned, ]
 
     _md_table_list = []
@@ -480,7 +498,13 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         print(f"Index [{i}]:")
         print(display_md_table(type_unit_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Auto-processed.\n")
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
     """
     Step 10: Drug Matching
     """
@@ -537,8 +561,13 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         print(f"Index [{i}]:")
         print(display_md_table(drug_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Auto-processed.\n")
-
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
     """
     Step 11: Population Matching
     """
@@ -595,7 +624,14 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         print(f"Index [{i}]:")
         print(display_md_table(patient_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Auto-processed.\n")
-    return
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
+
+    return step_list, res_list, content_list, content_list_clean, usage_list, truncated_list
 
 
