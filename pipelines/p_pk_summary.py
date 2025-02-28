@@ -151,10 +151,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(content_to_print)
     # print("\n"*1)
     """
-    Step 2-1: Population Information Extraction (Round 1)
+    Step 2-1: Population Information Extraction (Trial 1)
     """
     print("=" * 64)
-    step_name = "Population Information Extraction (Round 1)"
+    step_name = "Population Information Extraction (Trial 1)"
     print(COLOR_START+step_name+COLOR_END)
     patient_info_1 = run_with_retry(
         s_pk_extract_patient_info,
@@ -181,11 +181,11 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(content_to_print)
     # print("\n"*1)
     """
-    Step 2-2: Population Information Extraction (Round 2)
+    Step 2-2: Population Information Extraction (Trial 2)
     """
     time.sleep(6)
     print("=" * 64)
-    step_name = "Population Information Extraction (Round 1)"
+    step_name = "Population Information Extraction (Trial 2)"
     print(COLOR_START+step_name+COLOR_END)
     patient_info_2 = run_with_retry(
         s_pk_extract_patient_info,
@@ -218,6 +218,14 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         patient_info = patient_info_1
     else:
         patient_info = patient_info_2
+    print("=" * 64)
+    step_name = "Population Information Extraction (Final Decision)"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    print(display_md_table(patient_info[0]))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Auto-processed.\n")
     md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
     """
     Step 3: Individual Data Deletion
