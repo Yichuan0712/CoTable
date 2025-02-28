@@ -5,12 +5,27 @@ from llm_utils import *
 from operations.f_select_row_col import *
 
 
+# def s_pk_delete_individual_prompt(md_table):
+#     return f"""
+# There is now a table related to pharmacokinetics (PK).
+# {display_md_table(md_table)}
+# Carefully examine the table and follow these steps:
+# (1) Remove any information that is specific to an individual.
+# If the table already meets this requirement, return [[END]].
+# If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
+# Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement.
+# When returning this, enclose the function call in double angle brackets.
+# """
+"""The table presents pharmacokinetic data comparing two groups of patients: those without and those with "ARC->GM".  The table provides the median concentration (Cmid) and trough concentration (Ctrough) along with their 95% confidence intervals for each group.  It also provides the number of patients (N) in each group for two different treatments (EI and IB).  Since the prompt asks to remove individual-specific information, we need to remove the 'N=' values associated with each group.  This means rows 0 and 3 should be removed."""
+
+
 def s_pk_delete_individual_prompt(md_table):
     return f"""
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:
-(1) Remove any information that is specific to an individual.
+(1) Remove any information that pertains to **specific individuals**, such as individual-level results or personally identifiable data.
+(2) **Do not remove** summary statistics, aggregated values, or group-level information such as 'N=' values, as these are not individual-specific.
 If the table already meets this requirement, return [[END]].
 If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
 Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement. 
