@@ -56,7 +56,7 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
 
         res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-        print(usage, content)
+        # print(usage, content)
 
         match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
 
