@@ -55,6 +55,8 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
                                                                    "Parameter unit", "Uncategorized"], n=1)[0] for
                   k, v in match_dict.items()}
 
+    assert len(match_dict[0]) == len(match_dict[1]) == markdown_to_dataframe(md_table).shape[1]
+
     if match_dict:
         parameter_type_count = list(match_dict.values()).count("Parameter type")
         if parameter_type_count != 1:

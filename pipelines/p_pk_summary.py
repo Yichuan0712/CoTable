@@ -75,7 +75,7 @@ def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
     return None
 
 
-def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base_delay=10, use_color=True, clean_reasonig=True):
+def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base_delay=10, use_color=True, clean_reasoning=True):
     """
     PK Summary Pipeline 250227
     Summarizes pharmacokinetic (PK) data from a given markdown table.
@@ -86,7 +86,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     :param max_retries: Maximum number of retries before failing.
     :param base_delay: Initial delay before retrying (in seconds), which doubles on each failure.
     :param use_color: Better-looking print output.
-    :param clean_reasonig: When printing output, hide the parsing-related parts in the reasoning.
+    :param clean_reasoning: When printing output, hide the parsing-related parts in the reasoning.
     :return:
     """
     if use_color:
@@ -146,7 +146,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
     print(display_md_table(md_table_drug))
-    content_to_print = content_list_clean[-1] if clean_reasonig else content_list[-1]
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     # print("\n"*1)
@@ -176,7 +176,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
     print(display_md_table(md_table_patient_1))
-    content_to_print = content_list_clean[-1] if clean_reasonig else content_list[-1]
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     # print("\n"*1)
@@ -207,7 +207,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
     print(display_md_table(md_table_patient_2))
-    content_to_print = content_list_clean[-1] if clean_reasonig else content_list[-1]
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:\n" + COLOR_END)
     print(content_to_print)
     # print("\n"*1)
@@ -252,7 +252,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
     print(display_md_table(md_table_summary))
-    content_to_print = content_list_clean[-1] if clean_reasonig else content_list[-1]
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     # print("\n"*1)
@@ -281,7 +281,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
     print(display_md_table(md_table_aligned))
-    content_to_print = content_list_clean[-1] if clean_reasonig else content_list[-1]
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     # print("\n"*1)
@@ -310,12 +310,12 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
     print(col_mapping)
-    content_to_print = content_list_clean[-1] if clean_reasonig else content_list[-1]
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     # print("\n"*1)
     """
-    Step 6: Task Allocation (Preferably hidden from Users)
+    Step 6: Rough Task Allocation (Preferably hidden from Users)
     """
     parameter_type_count = list(col_mapping.values()).count("Parameter type")
     parameter_unit_count = list(col_mapping.values()).count("Parameter unit")
@@ -338,7 +338,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     if markdown_to_dataframe(md_table_patient).shape[0] == 1:
         need_match_patient = False
     print("=" * 64)
-    step_name = "Task Allocation"
+    step_name = "Rough Task Allocation"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
@@ -397,8 +397,12 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
     """
-    Step 8: Sub-table Creation
+    Step 8: Unit Extraction
     """
+    # 首先检查有哪些列需要进行extraction
+    # 然后分别处理
+    # for md in md_table_list:
+
     return
 
 
