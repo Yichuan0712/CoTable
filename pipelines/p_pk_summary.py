@@ -379,6 +379,15 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         usage_split = 0
         content_split = "Auto-processed.\n"
         md_table_list = [md_table_aligned, ]
+
+    _md_table_list = []
+    for md in md_table_list:
+        df = markdown_to_dataframe(md)
+        cols_to_drop = [col for col in df.columns if col_mapping.get(col) == "Uncategorized"]
+        df.drop(columns=cols_to_drop, inplace=True)
+        _md_table_list.append(dataframe_to_markdown(df))
+    md_table_list = _md_table_list
+
     print(COLOR_START + "Usage:" + COLOR_END)
     print(usage_split)
     print(COLOR_START + "Result:" + COLOR_END)
@@ -387,6 +396,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         print(display_md_table(md_table_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
+    """
+    Step 8: Sub-table Creation
+    """
     return
 
 
