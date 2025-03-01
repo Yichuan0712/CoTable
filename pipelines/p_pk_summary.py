@@ -692,7 +692,42 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    """
+    Step 14: Assembly and Post-Processing
+    """
+    df_list = []
+    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list)
+    for i in range(len(drug_list)):
+        df_drug = markdown_to_dataframe(drug_list[i])
+        df_table_patient = markdown_to_dataframe(patient_list[i])
+        df_type_unit = markdown_to_dataframe(type_unit_list[i])
+        df_value = markdown_to_dataframe(value_list[i])
+        df_combined = pd.concat([df_drug, df_table_patient, df_type_unit, df_value], axis=1)
+        df_list.append(df_combined)
+    df_combined = pd.concat(df_list, ignore_index=True)
+    column_mapping = {
+        "Parameter unit": "Unit",
+        "Main value": "Value",
+        "Statistics type": "Summary Statistics",
+    }
+    df_combined = df_combined.rename(columns=column_mapping)
+    df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
 
-    return step_list, res_list, content_list, content_list_clean, usage_list, truncated_list
+    print("=" * 64)
+    step_name = "Assembly and Post-Processing"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    print(display_md_table(dataframe_to_markdown(df_combined)))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
+
+    return df_combined, step_list, res_list, content_list, content_list_clean, usage_list, truncated_list
 
 

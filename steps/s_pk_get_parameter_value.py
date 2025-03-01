@@ -28,6 +28,7 @@ Subtable 2 should have the following column headers only:
 An interval consisting of two numbers must be placed separately into the Low limit and High limit fields; it is prohibited to place it in the Variation value field.
 For values that do not need to be filled, enter "N/A".
 **Important:** Please solve this problem using code and return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
+**Absolutely no calculations are allowed—every value must be taken directly from Subtable 1 without any modifications.**  
 Format the final list within double angle brackets <<>>.
 """
 
