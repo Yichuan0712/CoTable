@@ -536,6 +536,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 return None
             drug_match_list, res_drug_match, content_drug_match, usage_drug_match, truncated_drug_match = drug_match_info
             df_table_drug = markdown_to_dataframe(md_table_drug)
+            df_table_drug = pd.concat(
+                [df_table_drug, pd.DataFrame([{'Drug name': 'ERROR', 'Analyte': 'ERROR', 'Specimen': 'ERROR'}])],
+                ignore_index=True)
             df_table_drug_reordered = df_table_drug.iloc[drug_match_list].reset_index(drop=True)
             drug_list.append(dataframe_to_markdown(df_table_drug_reordered))
             # type_unit_list.append(md_type_unit)
@@ -599,6 +602,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 return None
             patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
             df_table_patient = markdown_to_dataframe(md_table_patient)
+            df_table_drug = pd.concat(
+                [df_table_drug, pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Subject N': 'ERROR'}])],
+                ignore_index=True)
             df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
             patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
             # type_unit_list.append(md_type_unit)
@@ -623,6 +629,59 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     for i in range(len(patient_list)):
         print(f"Index [{i}]:")
         print(display_md_table(patient_list[i]))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
+    """
+    Step 12: Parameter Value Extraction
+    """
+    value_list = []
+    round = 1
+    for md in md_table_list:
+        print("=" * 64)
+        step_name = "Parameter Value Extraction" + f" (Trial {str(round)})"
+        round += 1
+        print(COLOR_START + step_name + COLOR_END)
+        value_info = run_with_retry(
+            md_table_aligned,
+            description,
+            md,
+            llm,
+            max_retries=max_retries,
+            base_delay=base_delay,
+        )
+        if value_info is None:
+            return None
+        md_value, res_value, content_value, usage_value, truncated_value = value_info
+        value_list.append(md_value)
+        step_list.append(step_name)
+        res_list.append(res_value)
+        content_list.append(content_value)
+        content_list_clean.append(clean_llm_reasoning(content_value))
+        usage_list.append(usage_value)
+        truncated_list.append(truncated_value)
+        print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+        print(COLOR_START + "Result:" + COLOR_END)
+        print(display_md_table(md_value))
+        content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+        print(COLOR_START + "Reasoning:" + COLOR_END)
+        print(content_to_print)
+    """
+    Step 13: Parameter Value Extraction (Final)
+    """
+    print("=" * 64)
+    step_name = "Parameter Value Extraction (Final)"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    for i in range(len(value_list)):
+        print(f"Index [{i}]:")
+        print(display_md_table(value_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print("Automatic execution.\n")
     step_list.append(step_name)
