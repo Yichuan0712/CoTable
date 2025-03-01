@@ -712,6 +712,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     }
     df_combined = df_combined.rename(columns=column_mapping)
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
+    df_combined.loc[
+        (df_combined["Lower limit"] == "N/A") & (df_combined["Lower limit"] == "N/A"), "Interval type"] = "N/A"
+    df_combined.loc[
+        (df_combined["Variation value"] == "N/A") & (df_combined["Lower limit"] == "N/A"), "Variation type"] = "N/A"
 
     print("=" * 64)
     step_name = "Assembly and Post-Processing"

@@ -24,7 +24,7 @@ Below is Subtable 1:
 {display_md_table(md_table_aligned_with_1_param_type_and_value)}
 Please review the information in Subtable 1 row by row and complete Subtable 2.
 Subtable 2 should have the following column headers only:  
-**Main value, Statistics type, Variation value, Variation type, Interval type, Lower limit, High limit, P value**  
+**Main value, Statistics type, Variation type, Variation value, Interval type, Lower limit, High limit, P value**  
 An interval consisting of two numbers must be placed separately into the Low limit and High limit fields; it is prohibited to place it in the Variation value field.
 For values that do not need to be filled, enter "N/A".
 **Important:** Please solve this problem using code and return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
@@ -65,7 +65,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
     match_list = list(map(list, set(map(tuple, match_list))))
 
     if match_list:
-        df_table = pd.DataFrame(match_list, columns=['Main value', 'Statistics type', 'Variation value', 'Variation type', 'Interval type', 'Lower limit', 'High limit', 'P value'])
+        df_table = pd.DataFrame(match_list, columns=['Main value', 'Statistics type', 'Variation type', 'Variation value', 'Interval type', 'Lower limit', 'High limit', 'P value'])
         return_md_table = dataframe_to_markdown(df_table)
         # print(display_md_table(return_md_table))
         assert df_table.shape[0] == markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
