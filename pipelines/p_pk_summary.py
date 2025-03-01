@@ -603,8 +603,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 return None
             patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
             df_table_patient = markdown_to_dataframe(md_table_patient)
-            df_table_drug = pd.concat(
-                [df_table_drug, pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Subject N': 'ERROR'}])],
+            df_table_patient = pd.concat(
+                [df_table_patient, pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Subject N': 'ERROR'}])],
                 ignore_index=True)
             df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
             patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
