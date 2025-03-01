@@ -10,6 +10,7 @@ from steps.s_pk_get_parameter_type_and_unit import *
 from steps.s_pk_match_drug_info import *
 from steps.s_pk_match_patient_info import *
 from steps.s_pk_split_by_cols import *
+from steps.s_pk_get_parameter_value import *
 import re
 
 
@@ -648,6 +649,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         round += 1
         print(COLOR_START + step_name + COLOR_END)
         value_info = run_with_retry(
+            s_pk_get_parameter_value,
             md_table_aligned,
             description,
             md,
