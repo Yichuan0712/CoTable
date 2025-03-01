@@ -54,7 +54,7 @@ def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_p
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-    # print(usage, content)
+    print(usage, content)
 
     match_list = s_pk_match_patient_info_parse(content)
     if match_list is None:
