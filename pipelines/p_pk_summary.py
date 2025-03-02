@@ -737,6 +737,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined.loc[
         (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
     df_combined = df_combined.reset_index(drop=True)
+    df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
 
     print("=" * 64)
     step_name = "Post-Processing"
