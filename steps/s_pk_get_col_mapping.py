@@ -21,8 +21,7 @@ Carefully analyze the table and follow these steps:
    - **"Parameter value"**: Columns that contain numerical parameter values.  
    - **"P value"**: Columns that represent statistical P values.  
    - **"Uncategorized"**: Columns that do not fit into any of the above categories.  
-(2) **Important:** Any column only referring to the **number of samples or subjects** must be classified under **"Uncategorized"** and **must not** be assigned to **"Parameter value."**  
-(3) Return a dictionary where each key is a column header, and the corresponding value is its assigned category. Your dictionary should be enclosed in double angle brackets <<>>.  
+(2) Return a dictionary where each key is a column header, and the corresponding value is its assigned category. Your dictionary should be enclosed in double angle brackets <<>>.  
 """
 
 
