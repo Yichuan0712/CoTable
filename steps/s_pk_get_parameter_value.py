@@ -75,7 +75,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
 
     match_list = s_pk_get_parameter_value_parse(content)
 
-    match_list = list(map(list, set(map(tuple, match_list))))
+    # match_list = list(map(list, set(map(tuple, match_list))))
 
     if match_list:
         df_table = pd.DataFrame(match_list, columns=['Main value', 'Statistics type', 'Variation type', 'Variation value', 'Interval type', 'Lower limit', 'High limit', 'P value'])
