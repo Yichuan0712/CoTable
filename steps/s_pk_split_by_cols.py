@@ -58,11 +58,15 @@ def s_pk_split_by_cols_parse(content):
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_list = match_angle[2:-2]
-        match_list = ast.literal_eval(match_list)
-        return match_list
+        try:
+            match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
+            if not isinstance(match_list, list) or not all(isinstance(group, list) for group in match_list):
+                raise ValueError(f"Parsed content is not a valid list of column groups: {match_list}")
+            return match_list
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Failed to parse column groups: {e}") from e
     else:
-        raise NotImplementedError
+        raise ValueError("No valid column groups found in content.")  # Clearer error message
 
 
 def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro"):
@@ -75,21 +79,21 @@ def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro"):
     # print(display_md_table(md_table))
     # print(usage, content)
 
-    col_groups = s_pk_split_by_cols_parse(content)
-    if col_groups is None:
-        NotImplementedError
-        # return_md_tables = [md_table, ]
-    else:
-        col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
-        df_table = f_split_by_cols(col_groups, markdown_to_dataframe(md_table))
-        return_md_table_list = []
-        for d in df_table:
-            return_md_table_list.append(dataframe_to_markdown(d))
+    try:
+        col_groups = s_pk_split_by_cols_parse(content)  # Parse extracted column groups
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_split_by_cols_parse: {e}") from e
 
-    # for m in return_md_table_list:
-        # print(display_md_table(m))
+    if not col_groups:
+        raise ValueError("Column splitting failed: No valid column groups found.")  # Ensures the function does not return None
+
+    # Fix column names before using them
+    col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
+
+    # Perform the actual column splitting
+    df_table = f_split_by_cols(col_groups, markdown_to_dataframe(md_table))
+
+    # Convert the resulting DataFrames to markdown
+    return_md_table_list = [dataframe_to_markdown(d) for d in df_table]
 
     return return_md_table_list, res, content, usage, truncated
-
-
-# s_pk_split_by_cols(md_table_aligned, col_mapping, model_name="chatgpt_4o")

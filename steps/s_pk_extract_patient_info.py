@@ -25,23 +25,21 @@ Subject N is the number of subjects that correspond to the specific parameter.
 
 def s_pk_extract_patient_info_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
-
-    # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_list = match_angle[2:-2]
-        match_list = ast.literal_eval(match_list)
-        return match_list
+        try:
+            match_list = ast.literal_eval(match_angle[2:-2])
+            return match_list
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Failed to parse extracted patient info: {e}") from e
     else:
-        raise NotImplementedError
+        raise ValueError("No matching patient info found in content.")
 
 
 def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
     msg = s_pk_extract_patient_info_prompt(md_table, caption)
-
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -49,14 +47,17 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
     # print(display_md_table(md_table))
     # print(usage, content)
 
-    match_list = s_pk_extract_patient_info_parse(content)
+    try:
+        match_list = s_pk_extract_patient_info_parse(content)
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_extract_patient_info_parse: {e}") from e
 
     match_list = list(map(list, set(map(tuple, match_list))))
 
-    if match_list:
-        df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
-        return_md_table = dataframe_to_markdown(df_table)
-        # print(display_md_table(return_md_table))
-        return return_md_table, res, content, usage, truncated
-    else:
-        NotImplementedError
+    if not match_list:
+        raise ValueError("Patient info extraction failed: match_list is empty!")
+
+    df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
+    return_md_table = dataframe_to_markdown(df_table)
+
+    return return_md_table, res, content, usage, truncated

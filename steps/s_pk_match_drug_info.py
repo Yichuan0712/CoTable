@@ -32,17 +32,19 @@ Carefully analyze the tables and follow these steps:
 
 def s_pk_match_drug_info_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
-    # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_list = match_angle[2:-2]
-        match_list = ast.literal_eval(match_list)
-        return match_list
+        try:
+            match_list = ast.literal_eval(match_angle[2:-2])
+            if not isinstance(match_list, list):
+                raise ValueError(f"Parsed content is not a valid list: {match_list}")
+            return match_list
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Failed to parse matched drug info: {e}") from e
     else:
-        return None
+        raise ValueError("No valid matched drug information found in content.")
 
 
 def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table, model_name="gemini_15_pro"):
@@ -56,13 +58,22 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
 
     # print(usage, content)
 
-    match_list = s_pk_match_drug_info_parse(content)
-    if match_list is None:
-        raise NotImplementedError
-    else:
-        assert len(match_list) == markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
-        return match_list, res, content, usage, truncated
+    try:
+        match_list = s_pk_match_drug_info_parse(content)  # Parse extracted matches
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_match_drug_info_parse: {e}") from e
 
+    if not match_list:
+        raise ValueError("Drug information matching failed: No valid matches found.")  # Ensures the function does not return None
+
+    # Validate row count against `md_table_aligned_with_1_param_type_and_value`
+    expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
+    if len(match_list) != expected_rows:
+        raise ValueError(
+            f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
+        )
+
+    return match_list, res, content, usage, truncated
 # md_table_aligned_with_1_param_type_and_value_list = get_1_param_type_and_value_sub_md_table_list(col_mapping, md_table_aligned)
 # print(s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value_list[1], md_table_drug))
 

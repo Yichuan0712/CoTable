@@ -27,24 +27,24 @@ Carefully analyze the table and follow these steps:
 
 def s_pk_get_col_mapping_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
 
-    # match_col = re.search(r'\[\[COL\]\]', content)
-    # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_dict = match_angle[2:-2]
-        match_dict = ast.literal_eval(match_dict)
-        return match_dict
+        try:
+            match_dict = ast.literal_eval(match_angle[2:-2])
+            if not isinstance(match_dict, dict):
+                raise ValueError(f"Parsed content is not a dictionary: {match_dict}")
+            return match_dict
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Failed to parse column mapping: {e}") from e
     else:
-        raise NotImplementedError
+        raise ValueError("No valid column mapping found in content.")
 
 
 def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     msg = s_pk_get_col_mapping_prompt(md_table)
-
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -52,28 +52,29 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     # print(display_md_table(md_table))
     # print(usage, content)
 
-    match_dict = s_pk_get_col_mapping_parse(content)
+    try:
+        match_dict = s_pk_get_col_mapping_parse(content)  # Parse the extracted mapping
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_get_col_mapping_parse: {e}") from e
 
-    match_dict = {fix_col_name(k, md_table): get_close_matches(v, ["Parameter value", "P value", "Parameter type",
-                                                                   "Parameter unit", "Uncategorized"], n=1)[0] for
-                  k, v in match_dict.items()}
+    # Fix column names and match them to predefined categories
+    predefined_categories = ["Parameter value", "P value", "Parameter type", "Parameter unit", "Uncategorized"]
+    match_dict = {
+        fix_col_name(k, md_table): get_close_matches(v, predefined_categories, n=1)[0] if get_close_matches(v, predefined_categories, n=1) else "Uncategorized"
+        for k, v in match_dict.items()
+    }
 
-    assert len(match_dict.keys()) == markdown_to_dataframe(md_table).shape[1]
+    if not match_dict:
+        raise ValueError("Column mapping extraction failed: No mappings found.")  # Ensures the function does not return None
 
-    if match_dict:
-        parameter_type_count = list(match_dict.values()).count("Parameter type")
-        if parameter_type_count != 1:
-            raise ValueError
-        # print(match_dict)
-        return match_dict, res, content, usage, truncated
-    else:
-        NotImplementedError
+    # Ensure column count matches the table
+    expected_columns = markdown_to_dataframe(md_table).shape[1]
+    if len(match_dict.keys()) != expected_columns:
+        raise ValueError(f"Mismatch: Expected {expected_columns} columns, but got {len(match_dict.keys())} in match_dict.")
 
-# 检查是否包含所有列标题
+    # Ensure exactly one "Parameter type" column exists
+    parameter_type_count = list(match_dict.values()).count("Parameter type")
+    if parameter_type_count != 1:
+        raise ValueError(f"Invalid mapping: Expected 1 'Parameter type' column, but found {parameter_type_count}.")
 
-# 三种情况 多个parameter type (似乎不太可能出现), 多个, pvalue, unit如果有应该和type一样多
-# 必须解决unit问题
-# count = sum(1 for v in match_dict.values() if v == "Parameter type")
-#
-# if count > 1:
-#     raise ValueError(f'Error: "Parameter type" appears {count} times in match_dict!')
+    return match_dict, res, content, usage, truncated

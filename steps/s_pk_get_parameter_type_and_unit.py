@@ -29,19 +29,22 @@ Carefully analyze the table and follow these steps:
 """
 # (3) If a value is not a valid pharmacokinetic parameter type (e.g., it is a drug name or another non-parameter entry), assign "ERROR" to the corresponding "Parameter unit".
 
+
 def s_pk_get_parameter_type_and_unit_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
-    # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_tuple = match_angle[2:-2]
-        match_tuple = ast.literal_eval(match_tuple)
-        return match_tuple
+        try:
+            match_tuple = ast.literal_eval(match_angle[2:-2])  # Extract tuple from `<<(...)>>`
+            if not isinstance(match_tuple, tuple) or len(match_tuple) != 2:
+                raise ValueError(f"Parsed content is not a valid (type, unit) tuple: {match_tuple}")
+            return match_tuple
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Failed to parse parameter type and unit: {e}") from e
     else:
-        return None
+        raise ValueError("No valid match_angle.")
 
 
 def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="gemini_15_pro"):
@@ -58,8 +61,10 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
         res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
         # print(usage, content)
-
-        match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
+        try:
+            match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
+        except Exception as e:
+            raise RuntimeError(f"Error in s_pk_get_parameter_type_and_unit_parse: {e}") from e
 
         # print("**********************")
         # print(match_tuple[0])
@@ -69,12 +74,15 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
         #
         # print("**********************")
 
-        assert len(match_tuple[0]) == len(match_tuple[1]) == markdown_to_dataframe(md_table).shape[0]
-
         if match_tuple is None:
-            raise NotImplementedError
-        else:
-            return match_tuple, res, content, usage, truncated
+            raise ValueError("Parameter type and unit extraction failed: No valid tuple found.")
+        expected_rows = markdown_to_dataframe(md_table).shape[0]
+        if len(match_tuple[0]) != expected_rows or len(match_tuple[1]) != expected_rows:
+            raise ValueError(
+                f"Mismatch: Expected {expected_rows} rows, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units)."
+            )
+
+        return match_tuple, res, content, usage, truncated
     else:
-        raise NotImplementedError
+        raise ValueError(f"Invalid column configuration: {parameter_type_count} 'Parameter type' columns and {parameter_unit_count} 'Parameter unit' columns found.")
 

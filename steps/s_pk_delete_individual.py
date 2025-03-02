@@ -35,10 +35,7 @@ When returning this, enclose the function call in double angle brackets.
 
 def s_pk_delete_individual_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
-
     match_end = re.search(r'\[\[END\]\]', content)
-    # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
@@ -50,21 +47,22 @@ def s_pk_delete_individual_parse(content):
         match_func = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)', inner_content)
 
         if match_func:
-            arg1_str = match_func.group(1)
-            arg2_str = match_func.group(2)
-            arg1 = ast.literal_eval(arg1_str)
-            arg2 = ast.literal_eval(arg2_str)
-            return arg1, arg2
+            try:
+                arg1 = ast.literal_eval(match_func.group(1))
+                arg2 = ast.literal_eval(match_func.group(2))
+                return arg1, arg2
+            except (SyntaxError, ValueError) as e:
+                raise ValueError(f"Failed to parse row/col data: {e}") from e
         else:
-            return None, None
+            raise ValueError(f"Invalid format in extracted content: {inner_content}")
 
     else:
-        raise NotImplementedError
+        raise ValueError(
+            "No valid deletion parameters found in content.")
 
 
 def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     msg = s_pk_delete_individual_prompt(md_table)
-
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -72,9 +70,14 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     # print(display_md_table(md_table))
     # print(usage, content)
 
-    row_list, col_list = s_pk_delete_individual_parse(content)
+    try:
+        row_list, col_list = s_pk_delete_individual_parse(content)
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_delete_individual_parse: {e}") from e
+
     if col_list:
         col_list = [fix_col_name(item, md_table) for item in col_list]
+
     df_table = f_select_row_col(row_list, col_list, markdown_to_dataframe(md_table))
     return_md_table = dataframe_to_markdown(df_table)
     # print(display_md_table(return_md_table))

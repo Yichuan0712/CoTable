@@ -26,18 +26,17 @@ Specimen is the type of sample.
 
 def s_pk_extract_drug_info_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
-
-    # match_angle = re.search(r'<<.*?>>', content)
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_list = match_angle[2:-2]
-        match_list = ast.literal_eval(match_list)
-        return match_list
+        try:
+            match_list = ast.literal_eval(match_angle[2:-2])
+            return match_list
+        except Exception as e:
+            raise ValueError(f"Failed to parse extracted data: {e}") from e
     else:
-        raise NotImplementedError
+        raise ValueError("No matching drug info found in content.")
 
 
 def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
@@ -50,14 +49,18 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
     # print(display_md_table(md_table))
     # print(usage, content)
 
-    match_list = s_pk_extract_drug_info_parse(content)
+    try:
+        match_list = s_pk_extract_drug_info_parse(content)  # 这里可能抛出异常
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_extract_drug_info_parse: {e}") from e  # 让错误信息更清晰
 
     match_list = list(map(list, set(map(tuple, match_list))))
 
-    if match_list:
-        df_table = pd.DataFrame(match_list, columns=["Drug name", "Analyte", "Specimen"])
-        return_md_table = dataframe_to_markdown(df_table)
-        # print(display_md_table(return_md_table))
-        return return_md_table, res, content, usage, truncated
-    else:
-        NotImplementedError
+    if not match_list:
+        raise ValueError("Drug info extraction failed: match_list is empty!")  # 让 run_with_retry 捕获
+
+    df_table = pd.DataFrame(match_list, columns=["Drug name", "Analyte", "Specimen"])
+    return_md_table = dataframe_to_markdown(df_table)
+    # print(display_md_table(return_md_table))
+    return return_md_table, res, content, usage, truncated
+

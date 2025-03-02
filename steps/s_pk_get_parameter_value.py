@@ -48,18 +48,19 @@ Please Note:
 
 def s_pk_get_parameter_value_parse(content):
     content = content.replace('\n', '')
-    # content = content.replace(' ', '')
-
-    # match_angle = re.search(r'<<.*?>>', content)
-    matches = re.findall(r'<<.*?>', content)
+    matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
-        match_list = match_angle[2:-1]
-        match_list = ast.literal_eval(match_list)
-        return match_list
+        try:
+            match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
+            if not isinstance(match_list, list):
+                raise ValueError(f"Parsed content is not a valid list: {match_list}")
+            return match_list
+        except (SyntaxError, ValueError) as e:
+            raise ValueError(f"Failed to parse parameter values: {e}") from e
     else:
-        raise NotImplementedError
+        raise ValueError("No valid parameter values found in content.")  # Clearer error message
 
 
 def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro"):
@@ -71,20 +72,31 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
-    print(usage, content)
+    # print(usage, content)
 
-    match_list = s_pk_get_parameter_value_parse(content)
+    try:
+        match_list = s_pk_get_parameter_value_parse(content)  # Parse extracted values
+    except Exception as e:
+        raise RuntimeError(f"Error in s_pk_get_parameter_value_parse: {e}") from e
 
-    # match_list = list(map(list, set(map(tuple, match_list))))
+    if not match_list:
+        raise ValueError(
+            "Parameter value extraction failed: No valid values found.")  # Ensures the function does not return None
 
-    if match_list:
-        df_table = pd.DataFrame(match_list, columns=['Main value', 'Statistics type', 'Variation type', 'Variation value', 'Interval type', 'Lower limit', 'High limit', 'P value'])
-        return_md_table = dataframe_to_markdown(df_table)
-        # print(display_md_table(return_md_table))
-        assert df_table.shape[0] == markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
-        return return_md_table, res, content, usage, truncated
-    else:
-        NotImplementedError
+    df_table = pd.DataFrame(match_list, columns=[
+        'Main value', 'Statistics type', 'Variation type', 'Variation value',
+        'Interval type', 'Lower limit', 'High limit', 'P value'
+    ])
+
+    expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
+    if df_table.shape[0] != expected_rows:
+        raise ValueError(
+            f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values."
+        )
+
+    return_md_table = dataframe_to_markdown(df_table)
+
+    return return_md_table, res, content, usage, truncated
 
 # print(s_pk_get_parameter_value_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value))
 # s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro")
