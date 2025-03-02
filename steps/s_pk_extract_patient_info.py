@@ -25,12 +25,12 @@ Subject N is the number of subjects that correspond to the specific parameter.
 
 def s_pk_extract_patient_info_parse(content, usage):
     content = content.replace('\n', '')
-    matches = re.findall(r'<<.*?>>', content)
+    matches = re.findall(r'<<.*?>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
         try:
-            match_list = ast.literal_eval(match_angle[2:-2])
+            match_list = ast.literal_eval(match_angle[2:-1])
             return match_list
         except (SyntaxError, ValueError) as e:
             raise ValueError(f"Failed to parse extracted patient info: {e}", f"\n{content}", f"\n<<{usage}>>") from e

@@ -20,13 +20,13 @@ If the PK parameter type is represented as column headers, return [[COL]].
 def s_pk_align_parameter_parse(content, usage):
     content = content.replace('\n', '')
     match_col = re.search(r'\[\[COL\]\]', content)
-    matches = re.findall(r'<<.*?>>', content)
+    matches = re.findall(r'<<.*?>', content)
     match_angle = matches[-1] if matches else None
 
     if match_col:
         return None
     elif match_angle:
-        match_name = match_angle[2:-2]
+        match_name = match_angle[2:-1]
         return match_name
     else:
         raise ValueError("No valid alignment parameter found in content.", f"\n{content}", f"\n<<{usage}>>")
