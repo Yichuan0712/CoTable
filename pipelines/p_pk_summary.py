@@ -76,6 +76,33 @@ def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
     return None
 
 
+def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
+    delay = base_delay
+    last_matched_number = 0
+
+    for attempt in range(max_retries):
+        try:
+            result = func(*args, **kwargs)
+            if isinstance(result, (list, tuple)) and len(result) >= 2:
+                modified_result = list(result)
+                modified_result[-2] += last_matched_number
+                return tuple(modified_result) if isinstance(result, tuple) else modified_result
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            matches = re.findall(r'<<(\d+)>>', str(e))
+            if matches:
+                last_matched_number += int(matches[-1])
+
+            if attempt < max_retries - 1:
+                print(f"Retrying in {delay} seconds...")
+                time.sleep(delay)
+                delay *= 2
+            else:
+                print("Max retries reached. Returning None.")
+                return None
+    return None
+
+
 def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base_delay=10, use_color=True, clean_reasoning=True):
     """
     PK Summary Pipeline 250227
