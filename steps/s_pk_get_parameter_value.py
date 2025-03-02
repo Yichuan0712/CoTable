@@ -66,8 +66,8 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
     msg = s_pk_get_parameter_value_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value)
 
     messages = [msg, ]
-    # question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
-    question = "When writing code to solve a problem, do not give the final result immediately. First, explain your thought process in detail, including how you analyze the problem, choose an algorithm or approach, and implement key steps. Then, provide the final code solution."
+    question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
+    # question = "When writing code to solve a problem, do not give the final result immediately. First, explain your thought process in detail, including how you analyze the problem, choose an algorithm or approach, and implement key steps. Then, provide the final code solution."
 
     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
     # print(display_md_table(md_table))
