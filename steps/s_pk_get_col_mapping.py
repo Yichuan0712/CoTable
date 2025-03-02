@@ -25,7 +25,7 @@ Carefully analyze the table and follow these steps:
 """
 
 
-def s_pk_get_col_mapping_parse(content):
+def s_pk_get_col_mapping_parse(content, usage):
     content = content.replace('\n', '')
 
     matches = re.findall(r'<<.*?>>', content)
@@ -35,12 +35,12 @@ def s_pk_get_col_mapping_parse(content):
         try:
             match_dict = ast.literal_eval(match_angle[2:-2])
             if not isinstance(match_dict, dict):
-                raise ValueError(f"Parsed content is not a dictionary: {match_dict}")
+                raise ValueError(f"Parsed content is not a dictionary: {match_dict}", f"\n{content}", f"\n<<{usage}>>")
             return match_dict
         except (SyntaxError, ValueError) as e:
-            raise ValueError(f"Failed to parse column mapping: {e}") from e
+            raise ValueError(f"Failed to parse column mapping: {e}", f"\n{content}", f"\n<<{usage}>>") from e
     else:
-        raise ValueError("No valid column mapping found in content.")
+        raise ValueError("No valid column mapping found in content.", f"\n{content}", f"\n<<{usage}>>")
 
 
 def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
@@ -53,9 +53,9 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        match_dict = s_pk_get_col_mapping_parse(content)  # Parse the extracted mapping
+        match_dict = s_pk_get_col_mapping_parse(content, usage)  # Parse the extracted mapping
     except Exception as e:
-        raise RuntimeError(f"Error in s_pk_get_col_mapping_parse: {e}") from e
+        raise RuntimeError(f"Error in s_pk_get_col_mapping_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
     # Fix column names and match them to predefined categories
     predefined_categories = ["Parameter value", "P value", "Parameter type", "Parameter unit", "Uncategorized"]
@@ -65,16 +65,16 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     }
 
     if not match_dict:
-        raise ValueError("Column mapping extraction failed: No mappings found.")  # Ensures the function does not return None
+        raise ValueError("Column mapping extraction failed: No mappings found.", f"\n{content}", f"\n<<{usage}>>")  # Ensures the function does not return None
 
     # Ensure column count matches the table
     expected_columns = markdown_to_dataframe(md_table).shape[1]
     if len(match_dict.keys()) != expected_columns:
-        raise ValueError(f"Mismatch: Expected {expected_columns} columns, but got {len(match_dict.keys())} in match_dict.")
+        raise ValueError(f"Mismatch: Expected {expected_columns} columns, but got {len(match_dict.keys())} in match_dict.", f"\n{content}", f"\n<<{usage}>>")
 
     # Ensure exactly one "Parameter type" column exists
     parameter_type_count = list(match_dict.values()).count("Parameter type")
     if parameter_type_count != 1:
-        raise ValueError(f"Invalid mapping: Expected 1 'Parameter type' column, but found {parameter_type_count}.")
+        raise ValueError(f"Invalid mapping: Expected 1 'Parameter type' column, but found {parameter_type_count}.", f"\n{content}", f"\n<<{usage}>>")
 
     return match_dict, res, content, usage, truncated

@@ -24,7 +24,7 @@ Specimen is the type of sample.
 """
 
 
-def s_pk_extract_drug_info_parse(content):
+def s_pk_extract_drug_info_parse(content, usage):
     content = content.replace('\n', '')
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
@@ -34,9 +34,9 @@ def s_pk_extract_drug_info_parse(content):
             match_list = ast.literal_eval(match_angle[2:-2])
             return match_list
         except Exception as e:
-            raise ValueError(f"Failed to parse extracted data: {e}") from e
+            raise ValueError(f"Failed to parse extracted data: {e}", f"\n{content}", f"\n<<{usage}>>") from e
     else:
-        raise ValueError("No matching drug info found in content.")
+        raise ValueError("No matching drug info found in content.", f"\n{content}", f"\n<<{usage}>>")
 
 
 def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
@@ -50,14 +50,14 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        match_list = s_pk_extract_drug_info_parse(content)  # 这里可能抛出异常
+        match_list = s_pk_extract_drug_info_parse(content, usage)
     except Exception as e:
-        raise RuntimeError(f"Error in s_pk_extract_drug_info_parse: {e}") from e  # 让错误信息更清晰
+        raise RuntimeError(f"Error in s_pk_extract_drug_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
     match_list = list(map(list, set(map(tuple, match_list))))
 
     if not match_list:
-        raise ValueError("Drug info extraction failed: match_list is empty!")  # 让 run_with_retry 捕获
+        raise ValueError("Drug info extraction failed: match_list is empty!", f"\n{content}", f"\n<<{usage}>>")
 
     df_table = pd.DataFrame(match_list, columns=["Drug name", "Analyte", "Specimen"])
     return_md_table = dataframe_to_markdown(df_table)

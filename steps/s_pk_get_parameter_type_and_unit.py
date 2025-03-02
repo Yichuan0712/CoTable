@@ -30,7 +30,7 @@ Carefully analyze the table and follow these steps:
 # (3) If a value is not a valid pharmacokinetic parameter type (e.g., it is a drug name or another non-parameter entry), assign "ERROR" to the corresponding "Parameter unit".
 
 
-def s_pk_get_parameter_type_and_unit_parse(content):
+def s_pk_get_parameter_type_and_unit_parse(content, usage):
     content = content.replace('\n', '')
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
@@ -39,12 +39,12 @@ def s_pk_get_parameter_type_and_unit_parse(content):
         try:
             match_tuple = ast.literal_eval(match_angle[2:-2])  # Extract tuple from `<<(...)>>`
             if not isinstance(match_tuple, tuple) or len(match_tuple) != 2:
-                raise ValueError(f"Parsed content is not a valid (type, unit) tuple: {match_tuple}")
+                raise ValueError(f"Parsed content is not a valid (type, unit) tuple: {match_tuple}", f"\n{content}", f"\n<<{usage}>>")
             return match_tuple
         except (SyntaxError, ValueError) as e:
-            raise ValueError(f"Failed to parse parameter type and unit: {e}") from e
+            raise ValueError(f"Failed to parse parameter type and unit: {e}", f"\n{content}", f"\n<<{usage}>>") from e
     else:
-        raise ValueError("No valid match_angle.")
+        raise ValueError("No valid match_angle.", f"\n{content}", f"\n<<{usage}>>")
 
 
 def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="gemini_15_pro"):
@@ -62,9 +62,9 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
 
         # print(usage, content)
         try:
-            match_tuple = s_pk_get_parameter_type_and_unit_parse(content)
+            match_tuple = s_pk_get_parameter_type_and_unit_parse(content, usage)
         except Exception as e:
-            raise RuntimeError(f"Error in s_pk_get_parameter_type_and_unit_parse: {e}") from e
+            raise RuntimeError(f"Error in s_pk_get_parameter_type_and_unit_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
         # print("**********************")
         # print(match_tuple[0])
@@ -75,11 +75,11 @@ def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="ge
         # print("**********************")
 
         if match_tuple is None:
-            raise ValueError("Parameter type and unit extraction failed: No valid tuple found.")
+            raise ValueError("Parameter type and unit extraction failed: No valid tuple found.", f"\n{content}", f"\n<<{usage}>>")
         expected_rows = markdown_to_dataframe(md_table).shape[0]
         if len(match_tuple[0]) != expected_rows or len(match_tuple[1]) != expected_rows:
             raise ValueError(
-                f"Mismatch: Expected {expected_rows} rows, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units)."
+                f"Mismatch: Expected {expected_rows} rows, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units).", f"\n{content}", f"\n<<{usage}>>"
             )
 
         return match_tuple, res, content, usage, truncated

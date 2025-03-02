@@ -17,7 +17,7 @@ If the PK parameter type is represented as column headers, return [[COL]].
 """
 
 
-def s_pk_align_parameter_parse(content):
+def s_pk_align_parameter_parse(content, usage):
     content = content.replace('\n', '')
     match_col = re.search(r'\[\[COL\]\]', content)
     matches = re.findall(r'<<.*?>>', content)
@@ -29,7 +29,7 @@ def s_pk_align_parameter_parse(content):
         match_name = match_angle[2:-2]
         return match_name
     else:
-        raise ValueError("No valid alignment parameter found in content.")
+        raise ValueError("No valid alignment parameter found in content.", f"\n{content}", f"\n<<{usage}>>")
 
 
 def s_pk_align_parameter(md_table, model_name="gemini_15_pro"):
@@ -42,9 +42,9 @@ def s_pk_align_parameter(md_table, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        col_name = s_pk_align_parameter_parse(content)
+        col_name = s_pk_align_parameter_parse(content, usage)
     except Exception as e:
-        raise RuntimeError(f"Error in s_pk_align_parameter_parse: {e}") from e
+        raise RuntimeError(f"Error in s_pk_align_parameter_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
     if col_name:
         df_table = markdown_to_dataframe(md_table)

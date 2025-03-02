@@ -33,7 +33,7 @@ When returning this, enclose the function call in double angle brackets.
 """
 
 
-def s_pk_delete_individual_parse(content):
+def s_pk_delete_individual_parse(content, usage):
     content = content.replace('\n', '')
     match_end = re.search(r'\[\[END\]\]', content)
     matches = re.findall(r'<<.*?>>', content)
@@ -52,13 +52,12 @@ def s_pk_delete_individual_parse(content):
                 arg2 = ast.literal_eval(match_func.group(2))
                 return arg1, arg2
             except (SyntaxError, ValueError) as e:
-                raise ValueError(f"Failed to parse row/col data: {e}") from e
+                raise ValueError(f"Failed to parse row/col data: {e}", f"\n{content}", f"\n<<{usage}>>") from e
         else:
-            raise ValueError(f"Invalid format in extracted content: {inner_content}")
+            raise ValueError(f"Invalid format in extracted content: {inner_content}", f"\n{content}", f"\n<<{usage}>>")
 
     else:
-        raise ValueError(
-            "No valid deletion parameters found in content.")
+        raise ValueError("No valid deletion parameters found in content.", f"\n{content}", f"\n<<{usage}>>")
 
 
 def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
@@ -71,9 +70,9 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        row_list, col_list = s_pk_delete_individual_parse(content)
+        row_list, col_list = s_pk_delete_individual_parse(content, usage)
     except Exception as e:
-        raise RuntimeError(f"Error in s_pk_delete_individual_parse: {e}") from e
+        raise RuntimeError(f"Error in s_pk_delete_individual_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
     if col_list:
         col_list = [fix_col_name(item, md_table) for item in col_list]

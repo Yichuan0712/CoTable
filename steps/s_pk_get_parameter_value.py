@@ -46,7 +46,7 @@ Please Note:
 """
 
 
-def s_pk_get_parameter_value_parse(content):
+def s_pk_get_parameter_value_parse(content, usage):
     content = content.replace('\n', '')
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
@@ -55,12 +55,12 @@ def s_pk_get_parameter_value_parse(content):
         try:
             match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
             if not isinstance(match_list, list):
-                raise ValueError(f"Parsed content is not a valid list: {match_list}")
+                raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}", f"\n<<{usage}>>")
             return match_list
         except (SyntaxError, ValueError) as e:
-            raise ValueError(f"Failed to parse parameter values: {e}") from e
+            raise ValueError(f"Failed to parse parameter values: {e}", f"\n{content}", f"\n<<{usage}>>") from e
     else:
-        raise ValueError("No valid parameter values found in content.")  # Clearer error message
+        raise ValueError("No valid parameter values found in content.", f"\n{content}", f"\n<<{usage}>>")  # Clearer error message
 
 
 def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro"):
@@ -75,13 +75,13 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
     # print(usage, content)
 
     try:
-        match_list = s_pk_get_parameter_value_parse(content)  # Parse extracted values
+        match_list = s_pk_get_parameter_value_parse(content, usage)  # Parse extracted values
     except Exception as e:
-        raise RuntimeError(f"Error in s_pk_get_parameter_value_parse: {e}") from e
+        raise RuntimeError(f"Error in s_pk_get_parameter_value_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
     if not match_list:
         raise ValueError(
-            "Parameter value extraction failed: No valid values found.")  # Ensures the function does not return None
+            "Parameter value extraction failed: No valid values found.", f"\n{content}", f"\n<<{usage}>>")  # Ensures the function does not return None
 
     df_table = pd.DataFrame(match_list, columns=[
         'Main value', 'Statistics type', 'Variation type', 'Variation value',
@@ -91,7 +91,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
     expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
     if df_table.shape[0] != expected_rows:
         raise ValueError(
-            f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values."
+            f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values.", f"\n{content}", f"\n<<{usage}>>"
         )
 
     return_md_table = dataframe_to_markdown(df_table)

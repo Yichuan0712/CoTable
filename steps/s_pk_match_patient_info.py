@@ -30,7 +30,7 @@ Carefully analyze the tables and follow these steps:
 """
 
 
-def s_pk_match_patient_info_parse(content):
+def s_pk_match_patient_info_parse(content, usage):
     content = content.replace('\n', '')
     matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
@@ -39,12 +39,12 @@ def s_pk_match_patient_info_parse(content):
         try:
             match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
             if not isinstance(match_list, list):
-                raise ValueError(f"Parsed content is not a valid list: {match_list}")
+                raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}", f"\n<<{usage}>>")
             return match_list
         except (SyntaxError, ValueError) as e:
-            raise ValueError(f"Failed to parse matched patient info: {e}") from e
+            raise ValueError(f"Failed to parse matched patient info: {e}", f"\n{content}", f"\n<<{usage}>>") from e
     else:
-        raise ValueError("No valid matched patient information found in content.")  # Clearer error message
+        raise ValueError("No valid matched patient information found in content.", f"\n{content}", f"\n<<{usage}>>")  # Clearer error message
 
 
 def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table, model_name="gemini_15_pro"):
@@ -59,18 +59,18 @@ def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_p
     # print(usage, content)
 
     try:
-        match_list = s_pk_match_patient_info_parse(content)  # Parse extracted matches
+        match_list = s_pk_match_patient_info_parse(content, usage)  # Parse extracted matches
     except Exception as e:
-        raise RuntimeError(f"Error in s_pk_match_patient_info_parse: {e}") from e
+        raise RuntimeError(f"Error in s_pk_match_patient_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
     if not match_list:
-        raise ValueError("Patient information matching failed: No valid matches found.")  # Ensures the function does not return None
+        raise ValueError("Patient information matching failed: No valid matches found.", f"\n{content}", f"\n<<{usage}>>")  # Ensures the function does not return None
 
     # Validate row count against `md_table_aligned_with_1_param_type_and_value`
     expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
     if len(match_list) != expected_rows:
         raise ValueError(
-            f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
+            f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches.", f"\n{content}", f"\n<<{usage}>>"
         )
 
     return match_list, res, content, usage, truncated
