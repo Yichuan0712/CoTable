@@ -24,12 +24,24 @@ Below is Subtable 1:
 {display_md_table(md_table_aligned_with_1_param_type_and_value)}
 Please review the information in Subtable 1 row by row and complete Subtable 2.
 Subtable 2 should have the following column headers only:  
-**Main value, Statistics type, Variation type, Variation value, Interval type, Lower limit, High limit, P value**  
-An interval consisting of two numbers must be placed separately into the Low limit and High limit fields; it is prohibited to place it in the Variation value field.
-For values that do not need to be filled, enter "N/A".
-**Important:** Please solve this problem using code and return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
-**Absolutely no calculations are allowed—every value must be taken directly from Subtable 1 without any modifications.**  
-Format the final list within double angle brackets <<>>.
+
+**Main value, Statistics type, Variation type, Variation value, Interval type, Lower bound, Upper bound, P value** 
+
+Main value: the value of main parameter (not a range). 
+Statistics type: the statistics method to summary the Main value, like 'mean', 'median', etc.
+Variation type: the variability measure (describes how spread out the data is) associated with the Main value, like 'standard deviation (SD),' 'CV%,' etc.
+Variation value: the value (not a range) that corresponds to the specific variation.
+Interval type: the type of interval that is being used to describe uncertainty or variability around a measure or estimate, like '95% CI,' 'range,' etc.
+Lower bound: the lower bound value of the interval.
+Upper bound: is the upper bound value of the interval.
+P value: P-value.
+
+Please Note:
+(1) An interval consisting of two numbers must be placed separately into the Low limit and High limit fields; it is prohibited to place it in the Variation value field.
+(2) For values that do not need to be filled, enter "N/A".
+(3) **Important:** Please solve this problem using code and return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
+(4) **Absolutely no calculations are allowed—every value must be taken directly from Subtable 1 without any modifications.**  
+(5) Format the final list within double angle brackets <<>>.
 """
 
 
