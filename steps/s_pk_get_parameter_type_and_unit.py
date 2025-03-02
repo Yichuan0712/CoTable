@@ -22,13 +22,12 @@ Carefully analyze the table and follow these steps:
 (2) Return a tuple containing two lists:  
     - The first list should contain the extracted "Parameter type" values.  
     - The second list should contain the corresponding "Parameter unit" values.  
-(3) If a value is not a valid pharmacokinetic parameter type (e.g., it is a drug name or another non-parameter entry), assign "ERROR" to the corresponding "Parameter unit".  
-(4) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}".**  
+(3) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}".**  
     - The number of processed rows must **exactly match** the number of rows in the original table—no more, no less.  
-(5) The returned list should be enclosed within double angle brackets, like this:  
+(4) The returned list should be enclosed within double angle brackets, like this:  
     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>  
 """
-
+# (3) If a value is not a valid pharmacokinetic parameter type (e.g., it is a drug name or another non-parameter entry), assign "ERROR" to the corresponding "Parameter unit".
 
 def s_pk_get_parameter_type_and_unit_parse(content):
     content = content.replace('\n', '')

@@ -41,7 +41,8 @@ Please Note:
 (2) For values that do not need to be filled, enter "N/A".
 (3) **Important:** Please solve this problem using code and return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
 (4) **Absolutely no calculations are allowed—every value must be taken directly from Subtable 1 without any modifications.**  
-(5) Format the final list within double angle brackets <<>>.
+(5) Format the final list within double angle brackets, like this:
+<<[["0.162", "Mean", "SD", "0.090", "N/A", "N/A", "N/A", ".67"], ["0.428", "Mean", "SD", "0.162", "N/A", "N/A", "N/A", ".015"]]>>
 """
 
 

@@ -693,7 +693,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 14: Assembly and Post-Processing
+    Step 14: Assembly
     """
     df_list = []
     assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list)
@@ -705,6 +705,24 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         df_combined = pd.concat([df_drug, df_table_patient, df_type_unit, df_value], axis=1)
         df_list.append(df_combined)
     df_combined = pd.concat(df_list, ignore_index=True)
+    print("=" * 64)
+    step_name = "Assembly"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    print(display_md_table(dataframe_to_markdown(df_combined)))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
+
+    """
+    Step 15: Post-Processing
+    """
     column_mapping = {
         "Parameter unit": "Unit",
         "Main value": "Value",
@@ -718,9 +736,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         (df_combined["Lower limit"] == "N/A") & (df_combined["Lower limit"] == "N/A"), "Interval type"] = "N/A"
     df_combined.loc[
         (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
+    df_combined = df_combined.reset_index(drop=True)
 
     print("=" * 64)
-    step_name = "Assembly and Post-Processing"
+    step_name = "Post-Processing"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
