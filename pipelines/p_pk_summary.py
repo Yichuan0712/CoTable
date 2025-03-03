@@ -796,6 +796,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     """
     Step 15: Post-Processing
     """
+    """Rename col names"""
     column_mapping = {
         "Parameter unit": "Unit",
         "Main value": "Value",
@@ -804,23 +805,21 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         "Upper bound": "High limit",
     }
     df_combined = df_combined.rename(columns=column_mapping)
+    """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
+    """if Lower limit & High limit == "N/A", Interval type must be "N/A"。"""
     df_combined.loc[
-        (df_combined["Lower limit"] == "N/A") & (df_combined["Lower limit"] == "N/A"), "Interval type"] = "N/A"
+        (df_combined["Lower limit"] == "N/A") & (df_combined["High limit"] == "N/A"), "Interval type"] = "N/A"
+    """if Variation value == "N/A", Variation type must be "N/A"。"""
     df_combined.loc[
         (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
     df_combined = df_combined.reset_index(drop=True)
+    """replace empty by N/A"""
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
 
     """Remove non-digit rows"""
-
-    # print("********************")
-    #
-    # print(dataframe_to_markdown(df_combined))
-
     columns_to_check = ["Value", "Summary Statistics", "Variation type", "Variation value",
                         "Interval type", "Lower limit", "High limit", "P value"]
-
     def contains_number(s):
         return any(char.isdigit() for char in s)
 
@@ -879,6 +878,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """Remove duplicate"""
     df_combined = df_combined.drop_duplicates()
+    df_combined = df_combined.reset_index(drop=True)
+
+    """delete 'fill in subject N as value error', still looking for better solutions"""
+    df_combined = df_combined[df_combined["Subject N"] != df_combined["Value"]]
     df_combined = df_combined.reset_index(drop=True)
 
     print("=" * 64)
