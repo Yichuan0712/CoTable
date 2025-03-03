@@ -24,7 +24,9 @@ Additionally, I have compiled Subtable 2, where each row represents a unique com
 {display_md_table(drug_md_table)}
 Carefully analyze the tables and follow these steps:  
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
-(2) Format the final list within double angle brackets, like this:  
+(2) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1.**  
+    - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
+(3) Format the final list within double angle brackets, like this:  
    <<[1,1,2,2,3,3]>>
 """
 

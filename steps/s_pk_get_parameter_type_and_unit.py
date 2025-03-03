@@ -49,7 +49,7 @@ Carefully analyze the table and follow these steps:
     - The first list should contain the extracted "Parameter type" values.  
     - The second list should contain the corresponding "Parameter unit" values.  
 (3) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}".**  
-    - The number of processed rows must **exactly match** the number of rows in the original table—no more, no less.  
+    - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
 (4) The returned list should be enclosed within double angle brackets, like this:  
     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>  
 """
