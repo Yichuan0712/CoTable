@@ -862,6 +862,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_merged.fillna("N/A", inplace=True)
 
     df_combined = df_merged
+    df_combined = df_combined.reset_index(drop=True)
     """"""
 
     print("=" * 64)
