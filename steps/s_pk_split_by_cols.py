@@ -54,12 +54,12 @@ Enclose the final list within double angle brackets (<< >>) like this:
 def s_pk_split_by_cols_parse(content, usage):
     content = content.replace('\n', '')
 
-    matches = re.findall(r'<<.*?>', content)
+    matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
         try:
-            match_list = ast.literal_eval(match_angle[2:-1])  # Extract list from `<<(...)>>`
+            match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
             if not isinstance(match_list, list) or not all(isinstance(group, list) for group in match_list):
                 raise ValueError(f"Parsed content is not a valid list of column groups: {match_list}", f"\n{content}", f"\n<<{usage}>>")
             return match_list

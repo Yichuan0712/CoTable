@@ -29,12 +29,12 @@ Carefully analyze the table and follow these steps:
 def s_pk_get_col_mapping_parse(content, usage):
     content = content.replace('\n', '')
 
-    matches = re.findall(r'<<.*?>', content)
+    matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
         try:
-            match_dict = ast.literal_eval(match_angle[2:-1])
+            match_dict = ast.literal_eval(match_angle[2:-2])
             if not isinstance(match_dict, dict):
                 raise ValueError(f"Parsed content is not a dictionary: {match_dict}", f"\n{content}", f"\n<<{usage}>>")
             return match_dict

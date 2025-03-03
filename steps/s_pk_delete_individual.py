@@ -36,14 +36,14 @@ When returning this, enclose the function call in double angle brackets.
 def s_pk_delete_individual_parse(content, usage):
     content = content.replace('\n', '')
     match_end = re.search(r'\[\[END\]\]', content)
-    matches = re.findall(r'<<.*?>', content)
+    matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_end:
         return None, None
 
     elif match_angle:
-        inner_content = match_angle[2:-1]
+        inner_content = match_angle[2:-2]
         match_func = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)', inner_content)
 
         if match_func:

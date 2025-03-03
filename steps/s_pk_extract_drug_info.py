@@ -26,12 +26,12 @@ Specimen is the type of sample.
 
 def s_pk_extract_drug_info_parse(content, usage):
     content = content.replace('\n', '')
-    matches = re.findall(r'<<.*?>', content)
+    matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
         try:
-            match_list = ast.literal_eval(match_angle[2:-1])
+            match_list = ast.literal_eval(match_angle[2:-2])
             return match_list
         except Exception as e:
             raise ValueError(f"Failed to parse extracted data: {e}", f"\n{content}", f"\n<<{usage}>>") from e

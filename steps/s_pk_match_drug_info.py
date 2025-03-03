@@ -32,12 +32,12 @@ Carefully analyze the tables and follow these steps:
 
 def s_pk_match_drug_info_parse(content, usage):
     content = content.replace('\n', '')
-    matches = re.findall(r'<<.*?>', content)
+    matches = re.findall(r'<<.*?>>', content)
     match_angle = matches[-1] if matches else None
 
     if match_angle:
         try:
-            match_list = ast.literal_eval(match_angle[2:-1])
+            match_list = ast.literal_eval(match_angle[2:-2])
             if not isinstance(match_list, list):
                 raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}", f"\n<<{usage}>>")
             return match_list
