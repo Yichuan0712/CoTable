@@ -58,23 +58,23 @@ def clean_llm_reasoning(text: str) -> str:
     return result if result.endswith("\n") else result + "\n"
 
 
-def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
-    delay = base_delay
-    for attempt in range(max_retries):
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            if attempt < max_retries - 1:
-                print(f"Retrying in {delay} seconds...")
-                time.sleep(delay)
-                delay *= 2
-            else:
-                print("Max retries reached. Returning None.")
-                return None
-
-    # it will not get here
-    return None
+# def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
+#     delay = base_delay
+#     for attempt in range(max_retries):
+#         try:
+#             return func(*args, **kwargs)
+#         except Exception as e:
+#             print(f"Attempt {attempt + 1} failed: {e}")
+#             if attempt < max_retries - 1:
+#                 print(f"Retrying in {delay} seconds...")
+#                 time.sleep(delay)
+#                 delay *= 2
+#             else:
+#                 print("Max retries reached. Returning None.")
+#                 return None
+#
+#     # it will not get here
+#     return None
 
 
 def run_with_retry(func, *args, max_retries=5, base_delay=5, **kwargs):
@@ -104,7 +104,7 @@ def run_with_retry(func, *args, max_retries=5, base_delay=5, **kwargs):
     return None
 
 
-def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base_delay=10, use_color=True, clean_reasoning=True):
+def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base_delay=1, use_color=True, clean_reasoning=True):
     """
     PK Summary Pipeline 250227
     Summarizes pharmacokinetic (PK) data from a given markdown table.
