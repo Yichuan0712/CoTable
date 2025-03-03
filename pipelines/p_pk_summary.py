@@ -814,9 +814,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """Remove non-digit rows"""
 
-    print("********************")
-
-    print(dataframe_to_markdown(df_combined))
+    # print("********************")
+    #
+    # print(dataframe_to_markdown(df_combined))
 
     columns_to_check = ["Value", "Summary Statistics", "Variation type", "Variation value",
                         "Interval type", "Lower limit", "High limit", "P value"]
