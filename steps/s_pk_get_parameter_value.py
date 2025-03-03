@@ -28,7 +28,7 @@ Subtable 2 should have the following column headers only:
 **Main value, Statistics type, Variation type, Variation value, Interval type, Lower bound, Upper bound, P value** 
 
 Main value: the value of main parameter (not a range). 
-Statistics type: the statistics method to summary the Main value, like 'Mean,' 'Median,' etc. **This column is required and must be filled in.**
+Statistics type: the statistics method to summary the Main value, like 'Mean,' 'Median,' 'Count,' etc. **This column is required and must be filled in.**
 Variation type: the variability measure (describes how spread out the data is) associated with the Main value, like 'Standard Deviation (SD),' 'CV%,' etc.
 Variation value: the value (not a range) that corresponds to the specific variation.
 Interval type: the type of interval that is being used to describe uncertainty or variability around a measure or estimate, like '95% CI,' 'Range,' 'IQR,' etc.
