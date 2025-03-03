@@ -365,6 +365,26 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     need_split_col = False
     need_match_drug = True
     need_match_patient = True
+    unit_auto_parse = False
+    # 0302 unit parse speedup!
+    if parameter_unit_count == 0 and parameter_type_count == 1:
+        parameter_type_key = None
+        for key, value in col_mapping.items():
+            if value == "Parameter type":
+                parameter_type_key = key
+                break
+        md_table_aligned["Parameter unit"] = md_table_aligned[parameter_type_key].str.extract(r'\((.*?)\)')[0].fillna(
+            "N/A")
+        md_table_aligned[parameter_type_key] = md_table_aligned[parameter_type_key].str.replace(r'\(.*?\)', '',
+                                                                                                regex=True).str.strip()
+        matched_count = (md_table_aligned["Parameter unit"] != "N/A").sum()
+        total_count = len(md_table_aligned)
+        if matched_count <= total_count / 2:
+            md_table_aligned.drop(columns=["Parameter unit"], inplace=True)
+        else:
+            col_mapping["Parameter unit"] = "Parameter unit"
+            parameter_unit_count += 1
+            unit_auto_parse = True
     if parameter_value_count == 0:
         return
     if parameter_type_count == 0:
@@ -388,6 +408,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     canceled_tasks = [task for task, status in zip(tasks, statuses) if not status]
     print(f"LLM Execution: {', '.join(active_tasks) if active_tasks else 'None'}")
     print(f"Auto Execution: {', '.join(canceled_tasks) if canceled_tasks else 'None'}")
+    if unit_auto_parse:
+        print("Auto unit parse.")
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print("Automatic execution.\n")
     step_list.append(step_name)
@@ -467,11 +489,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
             if len(col_name_of_parameter_unit_list) == 1:
                 # print(col_name_of_parameter_unit_list)
                 selected_cols = [col_name_of_parameter_type, col_name_of_parameter_unit_list[0]]
-                # print(selected_cols)
-                # type_unit_list.append(
-                #     dataframe_to_markdown(df[selected_cols].copy().rename(
-                #         columns={col_name_of_parameter_type: "Parameter type", col_name_of_parameter_unit_list[0]: "Parameter unit"}, inplace=True
-                #     )))
                 df_selected = df[selected_cols].copy()
                 if df_selected is None or df_selected.empty:
                     raise ValueError(
