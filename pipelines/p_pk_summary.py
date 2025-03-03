@@ -829,8 +829,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """ Merge """
 
-    columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-               "Unit", "Value", "Summary Statistics"]
     df = df_combined.copy()
 
     df.replace("N/A", pd.NA, inplace=True)
@@ -879,7 +877,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_merged
     df_combined = df_combined.reset_index(drop=True)
 
-
+    """Remove duplicate"""
+    df_combined = df_combined.drop_duplicates()
+    df_combined = df_combined.reset_index(drop=True)
 
     print("=" * 64)
     step_name = "Post-Processing"
