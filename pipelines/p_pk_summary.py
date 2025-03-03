@@ -404,14 +404,14 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
+    if unit_auto_parse:
+        print("Auto unit parsing is complete!")
     tasks = ["Unit Extraction", "Sub-table Creation", "Drug Matching", "Population Matching"]
     statuses = [need_get_unit, need_split_col, need_match_drug, need_match_patient]
     active_tasks = [task for task, status in zip(tasks, statuses) if status]
     canceled_tasks = [task for task, status in zip(tasks, statuses) if not status]
     print(f"LLM Execution: {', '.join(active_tasks) if active_tasks else 'None'}")
     print(f"Auto Execution: {', '.join(canceled_tasks) if canceled_tasks else 'None'}")
-    if unit_auto_parse:
-        print("Auto unit parse.")
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print("Automatic execution.\n")
     step_list.append(step_name)
