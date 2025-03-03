@@ -56,7 +56,7 @@ Carefully analyze the table and follow these steps:
 
 
 def s_pk_get_parameter_type_and_unit_parse(content, usage):
-    content = content.replace('\n', '')
+    content = content.replace('\n', '').replace('\r', '')
     matches = re.findall(r'<<.*?>', content)
     match_angle = matches[-1] if matches else None
 
