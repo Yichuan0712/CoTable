@@ -24,11 +24,10 @@ Additionally, I have compiled Subtable 2, where each row represents a unique com
 {display_md_table(patient_md_table)}
 Carefully analyze the tables and follow these steps:  
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
-(2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
-(3) Format the final list within double angle brackets without removing duplicates or sorting, like this:
+(2) Format the final list within double angle brackets without removing duplicates or sorting, like this:
     <<[1,1,2,2,3,3]>>
 """
-
+# (2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
 
 def s_pk_match_patient_info_parse(content, usage):
     content = content.replace('\n', '')
