@@ -7,18 +7,44 @@ import pandas as pd
 from difflib import get_close_matches
 
 
-def s_pk_get_parameter_type_and_unit_prompt(match_dict, md_table, caption):
+# def s_pk_get_parameter_type_and_unit_prompt(match_dict, md_table, caption):
+#     # md_table = re.sub(r'[^\x00-\x7F]+', '', md_table)
+#     parameter_type_count = list(match_dict.values()).count("Parameter type")
+#     # parameter_unit_count = list(match_dict.values()).count("Parameter unit")
+#     if parameter_type_count == 1:
+#         key_with_parameter_type = [key for key, value in match_dict.items() if value == "Parameter type"][0]
+#         return f"""
+# The following table contains pharmacokinetic (PK) data:
+# {display_md_table(md_table)}
+# Please note that the column "{key_with_parameter_type}" represents the parameter type.
+# Carefully analyze the table and follow these steps:
+# (1) Split the column "{key_with_parameter_type}" into two separate lists: one for "Parameter type" and another for "Parameter unit".
+# (2) Return a tuple containing two lists:
+#     - The first list should contain the extracted "Parameter type" values.
+#     - The second list should contain the corresponding "Parameter unit" values.
+# (3) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}".**
+#     - The number of processed rows must **exactly match** the number of rows in the original table—no more, no less.
+# (4) The returned list should be enclosed within double angle brackets, like this:
+#     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>
+# """
+
+def s_pk_get_parameter_type_and_unit_prompt(md_table_aligned, match_dict, md_table, caption):
     # md_table = re.sub(r'[^\x00-\x7F]+', '', md_table)
     parameter_type_count = list(match_dict.values()).count("Parameter type")
     # parameter_unit_count = list(match_dict.values()).count("Parameter unit")
     if parameter_type_count == 1:
         key_with_parameter_type = [key for key, value in match_dict.items() if value == "Parameter type"][0]
         return f"""
-The following table contains pharmacokinetic (PK) data:  
+The following main table contains pharmacokinetics (PK) data:  
+{display_md_table(md_table_aligned)}
+Here is the table caption:  
+{caption}
+From the main table above, I have extracted some columns to create Subtable 1:  
+Below is Subtable 1:
 {display_md_table(md_table)}
-Please note that the column "{key_with_parameter_type}" represents the parameter type.
+Please note that the column "{key_with_parameter_type}" in Subtable 1 roughly represents the parameter type.
 Carefully analyze the table and follow these steps:  
-(1) Split the column "{key_with_parameter_type}" into two separate lists: one for "Parameter type" and another for "Parameter unit".  
+(1) Refer to the "{key_with_parameter_type}" column in Subtable 1 to construct two separate lists: one for a new "Parameter type" and another for "Parameter unit". If the information in Subtable 1 is too coarse or ambiguous, you may need to refer to the main table and its caption to refine and clarify your summarized "Parameter type" and "Parameter unit".
 (2) Return a tuple containing two lists:  
     - The first list should contain the extracted "Parameter type" values.  
     - The second list should contain the corresponding "Parameter unit" values.  
@@ -27,8 +53,6 @@ Carefully analyze the table and follow these steps:
 (4) The returned list should be enclosed within double angle brackets, like this:  
     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>  
 """
-# (3) If a value is not a valid pharmacokinetic parameter type (e.g., it is a drug name or another non-parameter entry), assign "ERROR" to the corresponding "Parameter unit".
-
 
 def s_pk_get_parameter_type_and_unit_parse(content, usage):
     content = content.replace('\n', '')
@@ -47,13 +71,13 @@ def s_pk_get_parameter_type_and_unit_parse(content, usage):
         raise ValueError("No valid match_angle.", f"\n{content}", f"\n<<{usage}>>")
 
 
-def s_pk_get_parameter_type_and_unit(col_dict, md_table, caption, model_name="gemini_15_pro"):
+def s_pk_get_parameter_type_and_unit(md_table_aligned, col_dict, md_table, caption, model_name="gemini_15_pro"):
     parameter_type_count = list(col_dict.values()).count("Parameter type")
     parameter_unit_count = list(col_dict.values()).count("Parameter unit")
     if parameter_type_count == 1 and parameter_unit_count == 1:
         return None, True, "Skipped", 0, False
     elif parameter_type_count == 1 and parameter_unit_count == 0:
-        msg = s_pk_get_parameter_type_and_unit_prompt(col_dict, md_table, caption)
+        msg = s_pk_get_parameter_type_and_unit_prompt(md_table_aligned, col_dict, md_table, caption)
 
         messages = [msg, ]
         question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."

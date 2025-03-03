@@ -534,6 +534,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 print(COLOR_START + step_name + COLOR_END)
                 unit_info = run_with_retry(
                     s_pk_get_parameter_type_and_unit,
+                    md_table_aligned,
                     col_mapping,
                     md,
                     description,
@@ -879,8 +880,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.drop_duplicates()
     df_combined = df_combined.reset_index(drop=True)
 
-    """delete 'fill in subject N as value error', still looking for better solutions"""
-    df_combined = df_combined[df_combined["Subject N"] != df_combined["Value"]]
+    """delete 'fill in subject N as value error', this implementation is bad, still looking for better solutions"""
+    # df_combined = df_combined[df_combined["Subject N"] != df_combined["Value"]]
+    df_combined = df_combined[~df_combined["Value"].isin(md_table_patient["Subject N"].to_list())]
     df_combined = df_combined.reset_index(drop=True)
 
     print("=" * 64)
