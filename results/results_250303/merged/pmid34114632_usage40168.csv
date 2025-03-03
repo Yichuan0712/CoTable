@@ -1,0 +1,30 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,AUC0–12,h*µg /mL,145.0,Mean,SD,44,N/A,N/A,N/A,0.26
+1,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,AUC0–12,h*µg /mL,167.0,Mean,SD,45.6,N/A,N/A,N/A,0.26
+2,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,AUC0–12,h*µg /mL,316.5,Mean,SD,108.4,N/A,N/A,N/A,0.88
+3,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,AUC0–12,h*µg /mL,290.9,Median,N/A,N/A,Range,176.14,405.59,N/A
+4,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Cmax,µg/mL,24.8,Mean,SD,8.3,N/A,N/A,N/A,0.07
+5,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Cmax,µg/mL,19.19,Mean,SD,4.12,N/A,N/A,N/A,0.07
+6,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Cmax,µg/mL,35.12,Mean,SD,10.54,N/A,N/A,N/A,0.001
+7,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Cmax,µg/mL,36.11,Median,N/A,N/A,Range,27.58,44.64,N/A
+8,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Ctrough,µg/mL,8.4,Mean,SD,3.8,N/A,N/A,N/A,0.34
+9,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Ctrough,µg/mL,9.99,Mean,SD,3.86,N/A,N/A,N/A,0.34
+10,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Ctrough,µg/mL,19.25,Mean,SD,8.48,N/A,N/A,N/A,0.22
+11,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Ctrough,µg/mL,13.03,Median,N/A,N/A,Range,2.98,23.07,N/A
+12,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Tmax,N/A,1.5,Median,N/A,N/A,Range,1.5,2.5,-
+13,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Tmax,N/A,2.5,Median,N/A,N/A,Range,2.0,3.3,–
+14,Levetiracetam,Levetiracetam,Plasma,Current Study,N/A,N/A,Tmax,N/A,1.5,Median,N/A,N/A,Range,1.5,1.5,N/A
+15,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,AUC0–12,h*µg /mL,322.0,Mean,SD,71,N/A,N/A,N/A,0.88
+16,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,AUC0–12,h*µg /mL,433.0,Mean,SD,94,N/A,N/A,N/A,–
+17,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,Cmax,µg/mL,57.1,Mean,SD,14.9,N/A,N/A,N/A,0.001
+18,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,Cmax,µg/mL,73.2,Mean,SD,19.2,N/A,N/A,N/A,–
+19,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,Ctrough,µg/mL,15.6,Mean,SD,5.3,N/A,N/A,N/A,0.22
+20,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,Ctrough,µg/mL,20.6,Mean,SD,5.8,N/A,N/A,N/A,–
+21,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,Tmax,N/A,0.5,Median,N/A,N/A,Range,0.5,3.0,–
+22,Levetiracetam,Levetiracetam,Plasma,Historical Data,N/A,N/A,Tmax,N/A,0.5,Median,N/A,N/A,Range,0.5,3,–
+23,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,14/19,AUC0–12,h*μg/mL,220.0,Median,N/A,N/A,IQR,157.5,355.4,0.9
+24,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,14/19,Cmax,μg/mL,23.8,Median,N/A,N/A,IQR,18.8,41.3,0.84
+25,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,14/19,Tmax,h,1.5,Median,N/A,N/A,IQR,1.5,2.5,0.46
+26,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,5/19,AUC0–12,h*μg/mL,213.8,Median,N/A,N/A,IQR,154.0,348.8,0.9
+27,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,5/19,Cmax,μg/mL,26.4,Median,N/A,N/A,IQR,19.3,34.2,0.84
+28,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,5/19,Tmax,h,2.5,Median,N/A,N/A,IQR,1.5,2.9,0.46
