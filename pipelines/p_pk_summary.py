@@ -863,7 +863,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     df_combined = df_merged
     df_combined = df_combined.reset_index(drop=True)
-    """"""
+
+    """Remove non-digit rows"""
 
     columns_to_check = ["Value", "Summary Statistics", "Variation type", "Variation value",
                         "Interval type", "Lower limit", "High limit", "P value"]
