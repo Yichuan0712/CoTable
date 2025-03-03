@@ -12,7 +12,7 @@ The following table contains pharmacokinetics (PK) data:
 {display_md_table(md_table)}
 Here is the table caption:  
 {caption}
-Carefully analyze the table, **row by row**, and follow these steps:  
+Carefully analyze the table, **row by row and column by column**, and follow these steps:  
 (1) Identify how many unique [Population, Pregnancy stage, Subject N] combinations are present in the table.  
 Population is the patient age group.
 Pregnancy stage is the pregnancy stages of patients mentioned in the study.
