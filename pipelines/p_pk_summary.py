@@ -12,7 +12,7 @@ from steps.s_pk_match_patient_info import *
 from steps.s_pk_split_by_cols import *
 from steps.s_pk_get_parameter_value import *
 import re
-
+import itertools
 
 def clean_llm_reasoning(text: str) -> str:
     """
@@ -811,6 +811,58 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
     df_combined = df_combined.reset_index(drop=True)
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
+
+    """ Merge """
+
+    columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
+               "Unit", "Value", "Summary Statistics"]
+    df = df_combined.copy()
+
+    df.replace("N/A", pd.NA, inplace=True)
+
+    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
+                     "Unit"]
+    grouped = df.groupby(group_columns, dropna=False)
+
+    merged_rows = []
+    for _, group in grouped:
+        group = group.reset_index(drop=True)
+        used_indices = set()
+
+        for i, j in itertools.combinations(range(len(group)), 2):
+            if i in used_indices or j in used_indices:
+                continue
+
+            row1, row2 = group.iloc[i].copy(), group.iloc[j].copy()
+            can_merge = True
+
+            for col in df.columns:
+                val1, val2 = row1[col], row2[col]
+                if pd.notna(val1) and pd.notna(val2) and val1 != val2:
+                    can_merge = False
+                    break
+                elif pd.isna(val1) and pd.notna(val2):
+                    row1[col] = val2
+                elif pd.notna(val1) and pd.isna(val2):
+                    row2[col] = val1
+
+            if can_merge:
+                used_indices.add(i)
+                used_indices.add(j)
+                merged_rows.append(row1)
+            else:
+                merged_rows.append(row1)
+                merged_rows.append(row2)
+
+        for i in range(len(group)):
+            if i not in used_indices:
+                merged_rows.append(group.iloc[i])
+
+    df_merged = pd.DataFrame(merged_rows, columns=df.columns)
+    df_merged.fillna("N/A", inplace=True)
+
+    df_combined = df_merged
+    """"""
 
     print("=" * 64)
     step_name = "Post-Processing"
