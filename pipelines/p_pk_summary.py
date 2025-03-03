@@ -865,6 +865,15 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.reset_index(drop=True)
     """"""
 
+    columns_to_check = ["Value", "Summary Statistics", "Variation type", "Variation value",
+                        "Interval type", "Lower limit", "High limit", "P value"]
+
+    def contains_number(s):
+        return any(char.isdigit() for char in s)
+
+    df_combined = df_combined[df_combined[columns_to_check].apply(lambda row: any(contains_number(str(cell)) for cell in row), axis=1)]
+    df_combined = df_combined.reset_index(drop=True)
+
     print("=" * 64)
     step_name = "Post-Processing"
     print(COLOR_START+step_name+COLOR_END)
