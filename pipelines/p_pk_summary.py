@@ -14,6 +14,7 @@ from steps.s_pk_get_parameter_value import *
 import re
 import itertools
 
+
 def clean_llm_reasoning(text: str) -> str:
     """
     Cleans the LLM inference string by removing content after the last occurrence
@@ -76,7 +77,7 @@ def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
     return None
 
 
-def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
+def run_with_retry(func, *args, max_retries=5, base_delay=5, **kwargs):
     delay = base_delay
     last_matched_number = 0
 
