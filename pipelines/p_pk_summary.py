@@ -185,12 +185,12 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print(content_to_print)
     # print("\n"*1)
     """
-    Step 2-1: Population Information Extraction (Trial 1)
+    Step 2: Population Information Extraction
     """
     print("=" * 64)
-    step_name = "Population Information Extraction (Trial 1)"
+    step_name = "Population Information Extraction"
     print(COLOR_START+step_name+COLOR_END)
-    patient_info_1 = run_with_retry(
+    patient_info = run_with_retry(
         s_pk_extract_patient_info,
         md_table,
         description,
@@ -198,75 +198,102 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         max_retries=max_retries,
         base_delay=base_delay,
     )
-    if patient_info_1 is None:
+    if patient_info is None:
         return None
-    md_table_patient_1, res_patient_1, content_patient_1, usage_patient_1, truncated_patient_1 = patient_info_1
+    md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
     step_list.append(step_name)
-    res_list.append(res_patient_1)
-    content_list.append(content_patient_1)
-    content_list_clean.append(clean_llm_reasoning(content_patient_1))
-    usage_list.append(usage_patient_1)
-    truncated_list.append(truncated_patient_1)
+    res_list.append(res_patient)
+    content_list.append(content_patient)
+    content_list_clean.append(clean_llm_reasoning(content_patient))
+    usage_list.append(usage_patient)
+    truncated_list.append(truncated_patient)
     print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
     print(COLOR_START+"Result:"+COLOR_END)
-    print(display_md_table(md_table_patient_1))
+    print(display_md_table(md_table_patient))
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    # print("\n"*1)
+    """
+    Step 2-1: Population Information Extraction (Trial 1)
+    """
+    # print("=" * 64)
+    # step_name = "Population Information Extraction (Trial 1)"
+    # print(COLOR_START+step_name+COLOR_END)
+    # patient_info_1 = run_with_retry(
+    #     s_pk_extract_patient_info,
+    #     md_table,
+    #     description,
+    #     llm,
+    #     max_retries=max_retries,
+    #     base_delay=base_delay,
+    # )
+    # if patient_info_1 is None:
+    #     return None
+    # md_table_patient_1, res_patient_1, content_patient_1, usage_patient_1, truncated_patient_1 = patient_info_1
+    # step_list.append(step_name)
+    # res_list.append(res_patient_1)
+    # content_list.append(content_patient_1)
+    # content_list_clean.append(clean_llm_reasoning(content_patient_1))
+    # usage_list.append(usage_patient_1)
+    # truncated_list.append(truncated_patient_1)
+    # print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
+    # print(COLOR_START+"Result:"+COLOR_END)
+    # print(display_md_table(md_table_patient_1))
+    # content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    # print(COLOR_START + "Reasoning:" + COLOR_END)
+    # print(content_to_print)
     """
     Step 2-2: Population Information Extraction (Trial 2)
     """
-    time.sleep(6)
-    print("=" * 64)
-    step_name = "Population Information Extraction (Trial 2)"
-    print(COLOR_START+step_name+COLOR_END)
-    patient_info_2 = run_with_retry(
-        s_pk_extract_patient_info,
-        md_table,
-        description,
-        llm,
-        max_retries=max_retries,
-        base_delay=base_delay,
-    )
-    if patient_info_2 is None:
-        return None
-    md_table_patient_2, res_patient_2, content_patient_2, usage_patient_2, truncated_patient_2 = patient_info_2
-    step_list.append(step_name)
-    res_list.append(res_patient_2)
-    content_list.append(content_patient_2)
-    content_list_clean.append(clean_llm_reasoning(content_patient_2))
-    usage_list.append(usage_patient_2)
-    truncated_list.append(truncated_patient_2)
-    print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
-    print(COLOR_START+"Result:"+COLOR_END)
-    print(display_md_table(md_table_patient_2))
-    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-    print(COLOR_START + "Reasoning:\n" + COLOR_END)
-    print(content_to_print)
-    # print("\n"*1)
+    # time.sleep(6)
+    # print("=" * 64)
+    # step_name = "Population Information Extraction (Trial 2)"
+    # print(COLOR_START+step_name+COLOR_END)
+    # patient_info_2 = run_with_retry(
+    #     s_pk_extract_patient_info,
+    #     md_table,
+    #     description,
+    #     llm,
+    #     max_retries=max_retries,
+    #     base_delay=base_delay,
+    # )
+    # if patient_info_2 is None:
+    #     return None
+    # md_table_patient_2, res_patient_2, content_patient_2, usage_patient_2, truncated_patient_2 = patient_info_2
+    # step_list.append(step_name)
+    # res_list.append(res_patient_2)
+    # content_list.append(content_patient_2)
+    # content_list_clean.append(clean_llm_reasoning(content_patient_2))
+    # usage_list.append(usage_patient_2)
+    # truncated_list.append(truncated_patient_2)
+    # print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
+    # print(COLOR_START+"Result:"+COLOR_END)
+    # print(display_md_table(md_table_patient_2))
+    # content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    # print(COLOR_START + "Reasoning:\n" + COLOR_END)
+    # print(content_to_print)
     """
     Step 2-3: Population Information Extraction (Keep The Longest Table)
     """
-    if len(md_table_patient_1) >= len(md_table_patient_2):
-        patient_info = patient_info_1
-    else:
-        patient_info = patient_info_2
-    print("=" * 64)
-    step_name = "Population Information Extraction (Final)"
-    print(COLOR_START+step_name+COLOR_END)
-    print(COLOR_START+"Usage:"+COLOR_END, 0)
-    print(COLOR_START+"Result:"+COLOR_END)
-    print(display_md_table(patient_info[0]))
-    print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Automatic execution.\n")
-    md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
-    step_list.append(step_name)
-    res_list.append(True)
-    content_list.append("Automatic execution.\n")
-    content_list_clean.append("Automatic execution.\n")
-    usage_list.append(0)
-    truncated_list.append(False)
+    # if len(md_table_patient_1) >= len(md_table_patient_2):
+    #     patient_info = patient_info_1
+    # else:
+    #     patient_info = patient_info_2
+    # print("=" * 64)
+    # step_name = "Population Information Extraction (Final)"
+    # print(COLOR_START+step_name+COLOR_END)
+    # print(COLOR_START+"Usage:"+COLOR_END, 0)
+    # print(COLOR_START+"Result:"+COLOR_END)
+    # print(display_md_table(patient_info[0]))
+    # print(COLOR_START + "Reasoning:" + COLOR_END)
+    # print("Automatic execution.\n")
+    # md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
+    # step_list.append(step_name)
+    # res_list.append(True)
+    # content_list.append("Automatic execution.\n")
+    # content_list_clean.append("Automatic execution.\n")
+    # usage_list.append(0)
+    # truncated_list.append(False)
     """
     Step 3: Individual Data Deletion
     """
@@ -367,26 +394,26 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     need_match_patient = True
     unit_auto_parse = False
     # 0302 unit parse speedup!
-    if parameter_unit_count == 0 and parameter_type_count == 1:
-        parameter_type_key = None
-        for key, value in col_mapping.items():
-            if value == "Parameter type":
-                parameter_type_key = key
-                break
-        df_table_aligned = markdown_to_dataframe(md_table_aligned)
-        df_table_aligned["Parameter unit"] = df_table_aligned[parameter_type_key].str.extract(r'\((.*?)\)')[0].fillna(
-            "N/A")
-        df_table_aligned[parameter_type_key] = df_table_aligned[parameter_type_key].str.replace(r'\(.*?\)', '',
-                                                                                                regex=True).str.strip()
-        matched_count = (df_table_aligned["Parameter unit"] != "N/A").sum()
-        total_count = len(df_table_aligned)
-        if matched_count <= total_count / 2:
-            df_table_aligned.drop(columns=["Parameter unit"], inplace=True)
-        else:
-            col_mapping["Parameter unit"] = "Parameter unit"
-            parameter_unit_count += 1
-            unit_auto_parse = True
-        md_table_aligned = dataframe_to_markdown(df_table_aligned)
+    # if parameter_unit_count == 0 and parameter_type_count == 1:
+    #     parameter_type_key = None
+    #     for key, value in col_mapping.items():
+    #         if value == "Parameter type":
+    #             parameter_type_key = key
+    #             break
+    #     df_table_aligned = markdown_to_dataframe(md_table_aligned)
+    #     df_table_aligned["Parameter unit"] = df_table_aligned[parameter_type_key].str.extract(r'\((.*?)\)')[0].fillna(
+    #         "N/A")
+    #     df_table_aligned[parameter_type_key] = df_table_aligned[parameter_type_key].str.replace(r'\(.*?\)', '',
+    #                                                                                             regex=True).str.strip()
+    #     matched_count = (df_table_aligned["Parameter unit"] != "N/A").sum()
+    #     total_count = len(df_table_aligned)
+    #     if matched_count <= total_count / 2:
+    #         df_table_aligned.drop(columns=["Parameter unit"], inplace=True)
+    #     else:
+    #         col_mapping["Parameter unit"] = "Parameter unit"
+    #         parameter_unit_count += 1
+    #         unit_auto_parse = True
+    #     md_table_aligned = dataframe_to_markdown(df_table_aligned)
     if parameter_value_count == 0:
         return
     if parameter_type_count == 0:
