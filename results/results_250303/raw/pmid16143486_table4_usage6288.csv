@@ -1,0 +1,5 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Lorazepam,Lorazepam,Plasma,Women of childbearing age,Delivery/Labor,8,Collection time,min,293.4,Mean,N/A,N/A,95% CI,163.2,423,N/A
+1,Lorazepam,Lorazepam,Plasma,Women of childbearing age,Delivery/Labor,8,Cord blood,ng/ml,6.78,Mean,N/A,N/A,95% CI,5.39,8.17,N/A
+2,Lorazepam,Lorazepam,Plasma,Women of childbearing age,Delivery/Labor,8,Cord blood/maternal blood,N/A,0.73,Mean,N/A,N/A,95% CI,0.52,0.94,N/A
+3,Lorazepam,Lorazepam,Plasma,Women of childbearing age,Delivery/Labor,8,Maternal blood,ng/ml,9.91,Mean,N/A,N/A,95% CI,7.68,12.14,N/A

@@ -1,0 +1,7 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,14/19,AUC0–12,h*μg/mL,220,Median,N/A,N/A,IQR,157.5,355.4,0.90
+1,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,14/19,Cmax,μg/mL,23.8,Median,N/A,N/A,IQR,18.8,41.3,0.84
+2,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,14/19,Tmax,h,1.5,Median,N/A,N/A,IQR,1.5,2.5,0.46
+3,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,5/19,AUC0–12,h*μg/mL,213.8,Median,N/A,N/A,IQR,154.0,348.8,0.90
+4,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,5/19,Cmax,μg/mL,26.4,Median,N/A,N/A,IQR,19.3,34.2,0.84
+5,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,5/19,Tmax,h,2.5,Median,N/A,N/A,IQR,1.5,2.9,0.46
