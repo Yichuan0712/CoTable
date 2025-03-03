@@ -54,6 +54,7 @@ Carefully analyze the table and follow these steps:
     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>  
 """
 
+
 def s_pk_get_parameter_type_and_unit_parse(content, usage):
     content = content.replace('\n', '')
     matches = re.findall(r'<<.*?>', content)
