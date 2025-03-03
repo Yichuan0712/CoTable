@@ -373,18 +373,20 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
             if value == "Parameter type":
                 parameter_type_key = key
                 break
-        md_table_aligned["Parameter unit"] = md_table_aligned[parameter_type_key].str.extract(r'\((.*?)\)')[0].fillna(
+        df_table_aligned = markdown_to_dataframe(md_table_aligned)
+        df_table_aligned["Parameter unit"] = df_table_aligned[parameter_type_key].str.extract(r'\((.*?)\)')[0].fillna(
             "N/A")
-        md_table_aligned[parameter_type_key] = md_table_aligned[parameter_type_key].str.replace(r'\(.*?\)', '',
+        df_table_aligned[parameter_type_key] = df_table_aligned[parameter_type_key].str.replace(r'\(.*?\)', '',
                                                                                                 regex=True).str.strip()
-        matched_count = (md_table_aligned["Parameter unit"] != "N/A").sum()
-        total_count = len(md_table_aligned)
+        matched_count = (df_table_aligned["Parameter unit"] != "N/A").sum()
+        total_count = len(df_table_aligned)
         if matched_count <= total_count / 2:
-            md_table_aligned.drop(columns=["Parameter unit"], inplace=True)
+            df_table_aligned.drop(columns=["Parameter unit"], inplace=True)
         else:
             col_mapping["Parameter unit"] = "Parameter unit"
             parameter_unit_count += 1
             unit_auto_parse = True
+        md_table_aligned = dataframe_to_markdown(df_table_aligned)
     if parameter_value_count == 0:
         return
     if parameter_type_count == 0:
