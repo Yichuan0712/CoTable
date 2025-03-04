@@ -808,6 +808,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.rename(columns=column_mapping)
     """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
+    """if Value == "N/A", Summary Statistics must be "N/A"。"""
+    df_combined.loc[
+        (df_combined["Value"] == "N/A"), "Summary Statistics"] = "N/A"
     """if Lower limit & High limit == "N/A", Interval type must be "N/A"。"""
     df_combined.loc[
         (df_combined["Lower limit"] == "N/A") & (df_combined["High limit"] == "N/A"), "Interval type"] = "N/A"
