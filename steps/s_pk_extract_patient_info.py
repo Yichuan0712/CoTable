@@ -6,7 +6,35 @@ from operations.f_transpose import *
 import pandas as pd
 
 
+def extract_integers(text):
+    """
+    Extract only "pure integers":
+    - Skip numbers with decimal points (including forms like 3.14, 1.0, .99, etc.)
+    - Skip numbers immediately followed (possibly with spaces) by '%' or '％' (e.g., 8%, 8 %)
+    - Keep only integers like 42, 100, etc.
+    - Remove duplicates and exclude 0
+    """
+    # 1) (?<![\d.]) ensures that the left side is not a digit or a dot.
+    # 2) (\d+) matches a sequence of digits.
+    # 3) (?![\d.]| *[%％]) ensures that the right side is not a digit, a dot,
+    #    or zero or more spaces followed by '%' or '％'.
+    pattern = r'(?<![\d.])(\d+)(?![\d.]| *[%％])'
+
+    # Convert matched digit-strings to integers, use a set to remove duplicates,
+    # then remove 0 if present
+    return list(
+        set(
+            int(num_str)
+            for num_str in re.findall(pattern, text)
+        ) - {0}
+    )
+
+
 def s_pk_extract_patient_info_prompt(md_table, caption):
+    int_list = extract_integers(md_table+caption)
+    print("*"*32)
+    print(int_list)
+    print("*"*32)
     return f"""
 The following table contains pharmacokinetics (PK) data:  
 {display_md_table(md_table)}
@@ -19,6 +47,7 @@ Pregnancy stage is the pregnancy stages of patients mentioned in the study.
 Subject N is the number of subjects that correspond to the specific parameter.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
 (3) Verify the source of each [Population, Pregnancy stage, Subject N] combination before including it in your answer.  
+    Make sure to check carefully if this list contains the subject N you need: {int_list} 
 (4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred. 
 """
 
