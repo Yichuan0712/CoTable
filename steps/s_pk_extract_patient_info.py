@@ -47,10 +47,9 @@ Pregnancy stage is the pregnancy stages of patients mentioned in the study.
 Subject N is the number of subjects that correspond to the specific parameter.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
 (3) Verify the source of each [Population, Pregnancy stage, Subject N] combination before including it in your answer.  
-(4) The "Subject N" values within each age group sometimes differ slightly across parameters. 
-This reflects data availability for each specific parameter within that age group.  
-You must include all the Ns for each age group. Specifically, make sure to check every number in this list: {int_list} to determine if it should be counted in Subject N.
-(4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred. 
+(4) The "Subject N" values within each age group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. You must include all the Ns for each age group. 
+Specifically, make sure to check every number in this list: {int_list} to determine if it should be counted in Subject N.
+(5) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred. 
 """
 
 
