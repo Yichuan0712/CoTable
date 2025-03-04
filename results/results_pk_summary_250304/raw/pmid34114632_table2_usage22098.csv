@@ -1,0 +1,25 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Area under the curve from time 0 to 12 h (AUC0–12),h*µg/mL,145,Mean,Standard Deviation (SD),44,N/A,N/A,N/A,0.26
+1,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Area under the curve from time 0 to 12 h (AUC0–12),h*µg/mL,167.0,Mean,Standard Deviation (SD),45.6,N/A,N/A,N/A,0.26
+2,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Area under the curve from time 0 to 12 h (AUC0–12),h*µg/mL,322,Mean,SD,71,N/A,N/A,N/A,0.88
+3,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Area under the curve from time 0 to 12 h (AUC0–12),h*µg/mL,316.5,Mean,SD,108.4,N/A,N/A,N/A,0.88
+4,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Area under the curve from time 0 to 12 h (AUC0–12),h*µg/mL,433,Mean,SD,94,N/A,N/A,N/A,–
+5,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Area under the curve from time 0 to 12 h (AUC0–12),h*µg/mL,290.9,Median,N/A,N/A,Range,176.14,405.59,–
+6,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Maximum plasma concentration (Cmax),µg/mL,24.8,Mean,Standard Deviation (SD),8.3,N/A,N/A,N/A,0.07
+7,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Maximum plasma concentration (Cmax),µg/mL,19.19,Mean,Standard Deviation (SD),4.12,N/A,N/A,N/A,0.07
+8,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Maximum plasma concentration (Cmax),µg/mL,57.1,Mean,SD,14.9,N/A,N/A,N/A,0.001
+9,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Maximum plasma concentration (Cmax),µg/mL,35.12,Mean,SD,10.54,N/A,N/A,N/A,0.001
+10,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Maximum plasma concentration (Cmax),µg/mL,73.2,Mean,SD,19.2,N/A,N/A,N/A,–
+11,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Maximum plasma concentration (Cmax),µg/mL,36.11,Median,N/A,N/A,Range,27.58,44.64,–
+12,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Time to maximum concentration (Tmax),h,0.5,Median,N/A,N/A,Range,0.25,3.0,N/A
+13,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Time to maximum concentration (Tmax),h,1.5,Median,N/A,N/A,Range,1.5,2.5,–
+14,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Time to maximum concentration (Tmax),h,0.5,Median,N/A,N/A,Range,0.5,3.0,–
+15,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Time to maximum concentration (Tmax),h,2.5,Median,N/A,N/A,Range,2.0,3.3,–
+16,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Time to maximum concentration (Tmax),h,0.5,Median,N/A,N/A,Range,0.5,3,–
+17,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Time to maximum concentration (Tmax),h,1.5,Median,N/A,N/A,Range,1.5,1.5,–
+18,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Trough plasma concentration (Ctrough),µg/mL,8.4,Mean,Standard Deviation (SD),3.8,N/A,N/A,N/A,0.34
+19,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Trough plasma concentration (Ctrough),µg/mL,9.99,Mean,Standard Deviation (SD),3.86,N/A,N/A,N/A,0.34
+20,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Trough plasma concentration (Ctrough),µg/mL,15.6,Mean,SD,5.3,N/A,N/A,N/A,0.22
+21,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Trough plasma concentration (Ctrough),µg/mL,19.25,Mean,SD,8.48,N/A,N/A,N/A,0.22
+22,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Trough plasma concentration (Ctrough),µg/mL,20.6,Mean,SD,5.8,N/A,N/A,N/A,–
+23,Levetiracetam,Levetiracetam,Plasma,N/A,N/A,N/A,Trough plasma concentration (Ctrough),µg/mL,13.03,Median,N/A,N/A,Range,2.98,23.07,–

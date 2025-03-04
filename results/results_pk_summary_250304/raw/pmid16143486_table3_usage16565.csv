@@ -1,0 +1,11 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,8.18,Mean,N/A,N/A,95% CI,2.67,13.70,N/A
+1,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.29,Mean,N/A,N/A,95% CI,0.12,0.45,N/A
+2,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.0099,Mean,N/A,N/A,95% CI,0.0049,0.015,N/A
+3,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,12.75,Mean,N/A,N/A,95% CI,10.71,14.79,N/A
+4,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.057,Mean,N/A,N/A,95% CI,0.048,0.065,N/A
+5,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,899.77,Mean,N/A,N/A,95% CI,534.58,1265.0,N/A
+6,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,44.97,Mean,N/A,N/A,95% CI,26.65,63.29,N/A
+7,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,1.12,Mean,N/A,N/A,95% CI,0.69,1.55,N/A
+8,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,11.5,Mean,N/A,N/A,95% CI,6.14,16.86,N/A
+9,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.066,Mean,N/A,N/A,95% CI,0.040,0.093,N/A

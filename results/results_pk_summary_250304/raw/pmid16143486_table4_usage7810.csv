@@ -1,0 +1,5 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Lorazepam,Lorazepam,Cord blood,Women of childbearing age,at delivery,8,Lorazepam concentration in cord blood,ng/ml,6.78,Mean,N/A,N/A,95% CI,5.39,8.17,N/A
+1,Lorazepam,Lorazepam,Maternal blood,Women of childbearing age,at delivery,8,Collection time,min,293.4,Mean,N/A,N/A,95% CI,163.2,423,N/A
+2,Lorazepam,Lorazepam,Maternal blood,Women of childbearing age,at delivery,8,Lorazepam concentration in maternal blood,ng/ml,9.91,Mean,N/A,N/A,95% CI,7.68,12.14,N/A
+3,Lorazepam,Lorazepam,Maternal blood,Women of childbearing age,at delivery,8,Ratio of lorazepam concentration (cord blood/maternal blood),unitless,0.73,Mean,N/A,N/A,95% CI,0.52,0.94,N/A

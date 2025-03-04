@@ -1,0 +1,13 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,N/A,N/A,Plasma,Elective Cohort,N/A,15,Apparent volume of distribution (Vdz),L/kg,1.92,Mean,Standard Deviation (SD),0.84,Range,0.33–4.05,0.33–4.05,N/A
+1,N/A,N/A,Plasma,Elective Cohort,N/A,15,Apparent volume of distribution (Vdz),L/kg,1.94,Median,N/A,N/A,N/A,N/A,N/A,N/A
+2,N/A,N/A,Plasma,Elective Cohort,N/A,15,Area-under-the-curve to infinity (AUC0−∞),N/A,822.5,Mean,Standard Deviation (SD),706.1,Range,253.3–3202.5,253.3–3202.5,N/A
+3,N/A,N/A,Plasma,Elective Cohort,N/A,15,Area-under-the-curve to infinity (AUC0−∞),N/A,601.5,Median,N/A,N/A,N/A,N/A,N/A,N/A
+4,N/A,N/A,Plasma,Elective Cohort,N/A,15,Clearance (CL),mL/min/kg,49.33,Mean,Standard Deviation (SD),30.83,Range,3.33–131.50,3.33–131.50,N/A
+5,N/A,N/A,Plasma,Elective Cohort,N/A,15,Clearance (CL),mL/min/kg,41.50,Median,N/A,N/A,N/A,N/A,N/A,N/A
+6,N/A,N/A,Plasma,Elective Cohort,N/A,15,Clearance (CL),mL/min/m,31.95,Mean,Standard Deviation (SD),13.99,Range,5.5–67.5,5.5–67.5,N/A
+7,N/A,N/A,Plasma,Elective Cohort,N/A,15,Clearance (CL),mL/min/m,32.34,Median,N/A,N/A,N/A,N/A,N/A,N/A
+8,N/A,N/A,Plasma,Elective Cohort,N/A,15,Half-life (T1/2),hr,20.5,Mean,Standard Deviation (SD),10.2,Range,9.5–47.0,9.5–47.0,N/A
+9,N/A,N/A,Plasma,Elective Cohort,N/A,15,Half-life (T1/2),hr,18.1,Median,N/A,N/A,N/A,N/A,N/A,N/A
+10,N/A,N/A,Plasma,Elective Cohort,N/A,15,Maximum concentration (Cmax),ng/mL,56.1,Mean,Standard Deviation (SD),44.9,Range,29.3–209.6,29.3–209.6,N/A
+11,N/A,N/A,Plasma,Elective Cohort,N/A,15,Maximum concentration (Cmax),ng/mL,42.2,Median,N/A,N/A,N/A,N/A,N/A,N/A

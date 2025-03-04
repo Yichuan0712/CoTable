@@ -1,0 +1,9 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Meropenem,Meropenem,Plasma,All,N/A,11,Unbound plasma meropenem concentration at end-dosing interval (Intermittent Bolus),mg/L,0.8,Geometric Mean,N/A,N/A,95% CI,0.4,1.6,0.85
+1,Meropenem,Meropenem,Plasma,All,N/A,11,Unbound plasma meropenem concentration at mid-dosing interval (Intermittent Bolus),mg/L,4.9,Geometric Mean,N/A,N/A,95% CI,2.6,9.2,0.14
+2,Meropenem,Meropenem,Plasma,All,N/A,26,Unbound plasma meropenem concentration at end-dosing interval (Extended Infusion),mg/L,1.6,Geometric Mean,N/A,N/A,95% CI,1.0,2.6,0.04
+3,Meropenem,Meropenem,Plasma,All,N/A,26,Unbound plasma meropenem concentration at mid-dosing interval (Extended Infusion),mg/L,14.8,Geometric Mean,N/A,N/A,95% CI,11.4,19.1,0.20
+4,Meropenem,Meropenem,Plasma,All,N/A,28,Unbound plasma meropenem concentration at end-dosing interval (Extended Infusion),mg/L,3.5,Geometric Mean,N/A,N/A,95% CI,2.0,6.1,0.04
+5,Meropenem,Meropenem,Plasma,All,N/A,28,Unbound plasma meropenem concentration at mid-dosing interval (Extended Infusion),mg/L,19.9,Geometric Mean,N/A,N/A,95% CI,13.5,29.5,0.20
+6,Meropenem,Meropenem,Plasma,All,N/A,7,Unbound plasma meropenem concentration at end-dosing interval (Intermittent Bolus),mg/L,0.9,Geometric Mean,N/A,N/A,95% CI,0.2,4.2,0.85
+7,Meropenem,Meropenem,Plasma,All,N/A,7,Unbound plasma meropenem concentration at mid-dosing interval (Intermittent Bolus),mg/L,1.9,Geometric Mean,N/A,N/A,95% CI,0.4,9.6,0.14
