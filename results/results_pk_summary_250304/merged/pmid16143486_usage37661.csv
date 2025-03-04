@@ -1,0 +1,31 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,8.18,Mean,N/A,N/A,95% CI,2.67,13.7,N/A
+1,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.29,Mean,N/A,N/A,95% CI,0.12,0.45,N/A
+2,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.0099,Mean,N/A,N/A,95% CI,0.0049,0.015,N/A
+3,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,12.75,Mean,N/A,N/A,95% CI,10.71,14.79,N/A
+4,Lorazepam,Lorazepam isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.057,Mean,N/A,N/A,95% CI,0.048,0.065,N/A
+5,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,899.77,Mean,N/A,N/A,95% CI,534.58,1265.0,N/A
+6,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,44.97,Mean,N/A,N/A,95% CI,26.65,63.29,N/A
+7,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,1.12,Mean,N/A,N/A,95% CI,0.69,1.55,N/A
+8,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,11.5,Mean,N/A,N/A,95% CI,6.14,16.86,N/A
+9,Lorazepam,Lorazepam-glucuronide isomeric mixture,Urine,Parturients,Third Trimester,N/A,Amount excreted total,μg,0.066,Mean,N/A,N/A,95% CI,0.04,0.093,N/A
+10,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Absorption rate constant,h⁻¹,0.23,Mean,N/A,N/A,95% CI,0.19,0.28,N/A
+11,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Apparent total clearance,ml/(min·kg),2.61,Mean,N/A,N/A,95% CI,2.34,2.88,N/A
+12,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Apparent volume of distribution,l,178.78,Mean,N/A,N/A,95% CI,146.46,211.1,N/A
+13,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Area under the plasma concentration-time curve,(ng·h)/ml,175.25,Mean,N/A,N/A,95% CI,145.74,204.75,N/A
+14,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Distribution half-life,h,3.16,Mean,N/A,N/A,95% CI,2.62,3.68,N/A
+15,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Elimination half-life,h,10.35,Mean,N/A,N/A,95% CI,9.39,11.32,N/A
+16,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Elimination rate constant,h⁻¹,0.068,Mean,N/A,N/A,95% CI,0.061,0.075,N/A
+17,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Maximum plasma concentration,ng/ml,12.96,Mean,N/A,N/A,95% CI,9.42,16.49,N/A
+18,Lorazepam,Lorazepam isomeric mixture,Plasma,parturients,during labor,N/A,Time to maximum plasma concentration,h,3.1,Mean,N/A,N/A,95% CI,2.57,3.63,N/A
+19,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Absorption rate constant,h⁻¹,0.52,Mean,N/A,N/A,95% CI,0.44,0.59,N/A
+20,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Area under the plasma concentration-time curve,(ng·h)/ml,481.19,Mean,N/A,N/A,95% CI,252.87,709.51,N/A
+21,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Distribution half-life,h,1.37,Mean,N/A,N/A,95% CI,1.15,1.58,N/A
+22,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Elimination half-life,h,18.17,Mean,N/A,N/A,95% CI,14.1,22.23,N/A
+23,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Elimination rate constant,h⁻¹,0.039,Mean,N/A,N/A,95% CI,0.032,0.047,N/A
+24,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Maximum plasma concentration,ng/ml,35.55,Mean,N/A,N/A,95% CI,8.27,62.83,N/A
+25,Lorazepam,Lorazepam-glucuronide isomeric mixture,Plasma,parturients,during labor,N/A,Time to maximum plasma concentration,h,4.33,Mean,N/A,N/A,95% CI,2.9,5.77,N/A
+26,Lorazepam,Lorazepam,Cord blood,Women of childbearing age,at delivery,8,Lorazepam concentration in cord blood,ng/ml,6.78,Mean,N/A,N/A,95% CI,5.39,8.17,N/A
+27,Lorazepam,Lorazepam,Maternal blood,Women of childbearing age,at delivery,8,Collection time,min,293.4,Mean,N/A,N/A,95% CI,163.2,423.0,N/A
+28,Lorazepam,Lorazepam,Maternal blood,Women of childbearing age,at delivery,8,Lorazepam concentration in maternal blood,ng/ml,9.91,Mean,N/A,N/A,95% CI,7.68,12.14,N/A
+29,Lorazepam,Lorazepam,Maternal blood,Women of childbearing age,at delivery,8,Ratio of lorazepam concentration (cord blood/maternal blood),unitless,0.73,Mean,N/A,N/A,95% CI,0.52,0.94,N/A

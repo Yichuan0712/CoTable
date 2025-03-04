@@ -26,7 +26,9 @@ Carefully analyze the tables and follow these steps:
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
 (2) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1.**  
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
-(3) Format the final list within double angle brackets without removing duplicates or sorting, like this:
+(3) The "Subject N" values within each population group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. 
+    - For instance, if the total N is 10 but a specific data point corresponds to 9, the correct Subject N for that row should be 9. It is essential to ensure that each row is matched with the appropriate Subject N accordingly.
+(4) Format the final list within double angle brackets without removing duplicates or sorting, like this:
     <<[1,1,2,2,3,3]>>
 """
 # (2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
