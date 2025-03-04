@@ -1,0 +1,31 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Value,Summary Statistics,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,N/A,N/A,Plasma,13 to < 18 Years,N/A,16,Clearance (CL),mL/min/kg,0.95,Mean,SD,0.32,Range,0.43,1.58,N/A
+1,N/A,N/A,Plasma,13 to < 18 Years,N/A,16,Clearance (CL),mL/min/m²,36.67,Mean,SD,12.00,Range,16.33,60.00,N/A
+2,N/A,N/A,Plasma,13 to < 18 Years,N/A,16,Elimination half-life (T½ Beta),hr,17.8,Mean,SD,7.7,Range,8.2,42.0,N/A
+3,N/A,N/A,Plasma,13 to < 18 Years,N/A,16,Free Fraction,unitless,0.09,Mean,SD,0.02,Range,0.07,0.15,N/A
+4,N/A,N/A,Plasma,13 to < 18 Years,N/A,16,Terminal slope (Beta),hr⁻¹,0.044,Mean,SD,0.016,Range,0.017,0.084,N/A
+5,N/A,N/A,Plasma,13 to < 18 Years,N/A,16,Volume of distribution at steady state (Vdss),L/kg,1.27,Mean,SD,0.17,Range,1.00,1.54,N/A
+6,N/A,N/A,Plasma,3 Month to < 3 Years,N/A,17,Free Fraction,unitless,0.11,Mean,SD,0.10,Range,0.07,0.48,N/A
+7,N/A,N/A,Plasma,3 Month to < 3 Years,N/A,18,Clearance (CL),mL/min/kg,1.57,Mean,SD,1.62,Range,0.63,7.75,N/A
+8,N/A,N/A,Plasma,3 Month to < 3 Years,N/A,18,Clearance (CL),mL/min/m²,32.83,Mean,SD,30.17,Range,12.83,147.17,N/A
+9,N/A,N/A,Plasma,3 Month to < 3 Years,N/A,18,Elimination half-life (T½ Beta),hr,15.8,Mean,SD,6.5,Range,5.9,28.4,N/A
+10,N/A,N/A,Plasma,3 Month to < 3 Years,N/A,18,Terminal slope (Beta),hr⁻¹,0.053,Mean,SD,0.027,Range,0.024,0.118,N/A
+11,N/A,N/A,Plasma,3 Month to < 3 Years,N/A,18,Volume of distribution at steady state (Vdss),L/kg,1.62,Mean,SD,0.59,Range,0.67,3.40,N/A
+12,N/A,N/A,Plasma,3 to < 13 Years,N/A,28,Free Fraction,unitless,0.10,Mean,Standard Deviation (SD),0.02,Range,0.07,0.17,N/A
+13,N/A,N/A,Plasma,3 to < 13 Years,N/A,29,Clearance (CL),mL/min/kg,1.12,Mean,Standard Deviation (SD),0.40,Range,0.30,1.82,N/A
+14,N/A,N/A,Plasma,3 to < 13 Years,N/A,29,Clearance (CL),mL/min/m²,31.83,Mean,Standard Deviation (SD),13.83,Range,6.50,69.17,N/A
+15,N/A,N/A,Plasma,3 to < 13 Years,N/A,29,Elimination half-life (T½ Beta),hr,16.9,Mean,Standard Deviation (SD),7.4,Range,7.5,40.6,N/A
+16,N/A,N/A,Plasma,3 to < 13 Years,N/A,29,Terminal slope (Beta),hr⁻¹,0.048,Mean,Standard Deviation (SD),0.017,Range,0.017,0.092,N/A
+17,N/A,N/A,Plasma,3 to < 13 Years,N/A,29,Volume of distribution at steady state (Vdss),L/kg,1.50,Mean,Standard Deviation (SD),0.61,Range,0.49,3.00,N/A
+18,N/A,N/A,Plasma,Overall,N/A,61,Free Fraction,unitless,0.10,Mean,SD,0.05,Range,0.07,0.48,N/A
+19,N/A,N/A,Plasma,Overall,N/A,61,Free Fraction,unitless,0.09,Median,N/A,N/A,N/A,N/A,N/A,N/A
+20,N/A,N/A,Plasma,Overall,N/A,63,Clearance (CL),mL/min/kg,1.2,Mean,SD,0.93,Range,0.3,7.75,N/A
+21,N/A,N/A,Plasma,Overall,N/A,63,Clearance (CL),mL/min/kg,1.08,Median,N/A,N/A,N/A,N/A,N/A,N/A
+22,N/A,N/A,Plasma,Overall,N/A,63,Clearance (CL),mL/min/m²,33.33,Mean,SD,19.33,Range,6.50,147.17,N/A
+23,N/A,N/A,Plasma,Overall,N/A,63,Clearance (CL),mL/min/m²,29.00,Median,N/A,N/A,N/A,N/A,N/A,N/A
+24,N/A,N/A,Plasma,Overall,N/A,63,Elimination half-life (T½ Beta),hr,16.8,Mean,SD,7.1,Range,5.9,42.0,N/A
+25,N/A,N/A,Plasma,Overall,N/A,63,Elimination half-life (T½ Beta),hr,15.1,Median,N/A,N/A,N/A,N/A,N/A,N/A
+26,N/A,N/A,Plasma,Overall,N/A,63,Terminal slope (Beta),hr⁻¹,0.048,Mean,SD,0.020,Range,0.017,0.118,N/A
+27,N/A,N/A,Plasma,Overall,N/A,63,Terminal slope (Beta),hr⁻¹,0.046,Median,N/A,N/A,N/A,N/A,N/A,N/A
+28,N/A,N/A,Plasma,Overall,N/A,63,Volume of distribution at steady state (Vdss),L/kg,1.48,Mean,SD,0.54,Range,0.49,3.40,N/A
+29,N/A,N/A,Plasma,Overall,N/A,63,Volume of distribution at steady state (Vdss),L/kg,1.37,Median,N/A,N/A,N/A,N/A,N/A,N/A
