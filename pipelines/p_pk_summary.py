@@ -797,23 +797,15 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     """
     Step 15: Post-Processing
     """
-    """Rename col names"""
-    column_mapping = {
-        "Parameter unit": "Unit",
-        "Main value": "Value",
-        "Statistics type": "Summary Statistics",
-        "Lower bound": "Lower limit",
-        "Upper bound": "High limit",
-    }
-    df_combined = df_combined.rename(columns=column_mapping)
+
     """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
-        (df_combined["Value"] == "N/A"), "Summary Statistics"] = "N/A"
+        (df_combined["Value"] == "N/A"), "Statistics type"] = "N/A"
     """if Lower limit & High limit == "N/A", Interval type must be "N/A"。"""
     df_combined.loc[
-        (df_combined["Lower limit"] == "N/A") & (df_combined["High limit"] == "N/A"), "Interval type"] = "N/A"
+        (df_combined["Lower bound"] == "N/A") & (df_combined["Upper bound"] == "N/A"), "Interval type"] = "N/A"
     """if Variation value == "N/A", Variation type must be "N/A"。"""
     df_combined.loc[
         (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
@@ -822,8 +814,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
 
     """Remove non-digit rows"""
-    columns_to_check = ["Value", "Summary Statistics", "Variation type", "Variation value",
-                        "Interval type", "Lower limit", "High limit", "P value"]
+    columns_to_check = ["Main value", "Statistics type", "Variation type", "Variation value",
+                        "Interval type", "Lower bound", "Upper bound", "P value"]
     def contains_number(s):
         return any(char.isdigit() for char in s)
 
@@ -837,7 +829,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df.replace("N/A", pd.NA, inplace=True)
 
     group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-                     "Unit"]
+                     "Parameter unit"]
     grouped = df.groupby(group_columns, dropna=False)
 
     merged_rows = []
@@ -885,7 +877,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.reset_index(drop=True)
 
     """delete 'fill in subject N as value error', this implementation is bad, still looking for better solutions"""
-    df_combined = df_combined[df_combined["Subject N"] != df_combined["Value"]]
+    df_combined = df_combined[df_combined["Subject N"] != df_combined["Parameter value"]]
     # df_combined = df_combined[~df_combined["Value"].isin(markdown_to_dataframe(md_table_patient)["Subject N"].to_list())]
     df_combined = df_combined.reset_index(drop=True)
 
@@ -893,18 +885,28 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     float_pattern = re.compile(r"-?\d+\.\d+")
 
     def extract_limits(row):
-        if row["High limit"] == "N/A":
-            numbers = float_pattern.findall(str(row["Lower limit"]))
+        if row["Upper bound"] == "N/A":
+            numbers = float_pattern.findall(str(row["Lower bound"]))
             if len(numbers) == 2:
                 return pd.Series([str(numbers[0]), str(numbers[1])])
-        if row["Lower limit"] == "N/A":
-            numbers = float_pattern.findall(str(row["High limit"]))
+        if row["Lower bound"] == "N/A":
+            numbers = float_pattern.findall(str(row["Upper bound"]))
             if len(numbers) == 2:
                 return pd.Series([str(numbers[0]), str(numbers[1])])
-        return pd.Series([row["Lower limit"], row["High limit"]])
+        return pd.Series([row["Lower bound"], row["Upper bound"]])
 
-    df_combined[["Lower limit", "High limit"]] = df_combined.apply(extract_limits, axis=1)
+    df_combined[["Lower bound", "Upper bound"]] = df_combined.apply(extract_limits, axis=1)
     df_combined = df_combined.reset_index(drop=True)
+
+    """Rename col names"""
+    column_mapping = {
+        "Parameter unit": "Unit",
+        "Main value": "Value",
+        "Statistics type": "Summary Statistics",
+        "Lower bound": "Lower limit",
+        "Upper bound": "High limit",
+    }
+    df_combined = df_combined.rename(columns=column_mapping)
 
     print("=" * 64)
     step_name = "Post-Processing"
