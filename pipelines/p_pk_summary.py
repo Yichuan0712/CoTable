@@ -802,7 +802,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
-        (df_combined["Parameter value"] == "N/A"), "Statistics type"] = "N/A"
+        (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
     """if Lower limit & High limit == "N/A", Interval type must be "N/A"。"""
     df_combined.loc[
         (df_combined["Lower bound"] == "N/A") & (df_combined["Upper bound"] == "N/A"), "Interval type"] = "N/A"
@@ -877,7 +877,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.reset_index(drop=True)
 
     """delete 'fill in subject N as value error', this implementation is bad, still looking for better solutions"""
-    df_combined = df_combined[df_combined["Subject N"] != df_combined["Parameter value"]]
+    df_combined = df_combined[df_combined["Subject N"] != df_combined["Main value"]]
     # df_combined = df_combined[~df_combined["Value"].isin(markdown_to_dataframe(md_table_patient)["Subject N"].to_list())]
     df_combined = df_combined.reset_index(drop=True)
 
