@@ -1,6 +1,6 @@
 import ast
-from table_utils import *
-from llm_utils import *
+from utils.table_utils import *
+from utils.llm_utils import *
 from archive.f_split_table import *
 
 

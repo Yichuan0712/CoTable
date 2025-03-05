@@ -1,10 +1,6 @@
-import re
 import ast
-from table_utils import *
-from llm_utils import *
+from utils.llm_utils import *
 from operations.f_transpose import *
-import pandas as pd
-from operations.f_select_row_col import *
 
 
 def s_pk_match_drug_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table):

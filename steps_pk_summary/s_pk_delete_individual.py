@@ -1,7 +1,6 @@
-import re
 import ast
-from table_utils import *
-from llm_utils import *
+from utils.table_utils import *
+from utils.llm_utils import *
 from operations.f_select_row_col import *
 
 
@@ -19,13 +18,13 @@ from operations.f_select_row_col import *
 """The table presents pharmacokinetic data comparing two groups of patients: those without and those with "ARC->GM".  The table provides the median concentration (Cmid) and trough concentration (Ctrough) along with their 95% confidence intervals for each group.  It also provides the number of patients (N) in each group for two different treatments (EI and IB).  Since the prompt asks to remove individual-specific information, we need to remove the 'N=' values associated with each group.  This means rows 0 and 3 should be removed."""
 
 
-def s_pk_delete_summary_prompt(md_table):
+def s_pk_delete_individual_prompt(md_table):
     return f"""
 There is now a table related to pharmacokinetics (PK). 
 {display_md_table(md_table)}
 Carefully examine the table and follow these steps:
-(1) Remove any information that pertains to summary statistics, aggregated values, or group-level information such as 'N=' values, as these are not individual-specific.
-(2) **Do not remove** any information that pertains to specific individuals, such as individual-level results or personally identifiable data.
+(1) Remove any information that pertains to **specific individuals**, such as individual-level results or personally identifiable data.
+(2) **Do not remove** summary statistics, aggregated values, or group-level information such as 'N=' values, as these are not individual-specific.
 If the table already meets this requirement, return [[END]].
 If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
 Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement. 
@@ -33,7 +32,7 @@ When returning this, enclose the function call in double angle brackets.
 """
 
 
-def s_pk_delete_summary_parse(content, usage):
+def s_pk_delete_individual_parse(content, usage):
     content = content.replace('\n', '')
     match_end = re.search(r'\[\[END\]\]', content)
     matches = re.findall(r'<<.*?>>', content)
@@ -60,8 +59,8 @@ def s_pk_delete_summary_parse(content, usage):
         raise ValueError("No valid deletion parameters found in content.", f"\n{content}", f"\n<<{usage}>>")
 
 
-def s_pk_delete_summary(md_table, model_name="gemini_15_pro"):
-    msg = s_pk_delete_summary_prompt(md_table)
+def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
+    msg = s_pk_delete_individual_prompt(md_table)
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -70,7 +69,7 @@ def s_pk_delete_summary(md_table, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        row_list, col_list = s_pk_delete_summary_parse(content, usage)
+        row_list, col_list = s_pk_delete_individual_parse(content, usage)
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_delete_individual_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

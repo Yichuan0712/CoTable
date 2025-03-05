@@ -1,4 +1,4 @@
-from table_utils import *
+from utils.table_utils import *
 
 
 def f_transpose(df_table):
