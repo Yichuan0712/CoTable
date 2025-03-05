@@ -889,6 +889,23 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     # df_combined = df_combined[~df_combined["Value"].isin(markdown_to_dataframe(md_table_patient)["Subject N"].to_list())]
     df_combined = df_combined.reset_index(drop=True)
 
+    """fix put range only in lower limit/high limit"""
+    float_pattern = re.compile(r"-?\d+\.\d+")
+
+    def extract_limits(row):
+        if row["High limit"] == "N/A":
+            numbers = float_pattern.findall(str(row["Lower limit"]))
+            if len(numbers) == 2:
+                return pd.Series([str(numbers[0]), str(numbers[1])])
+        if row["Lower limit"] == "N/A":
+            numbers = float_pattern.findall(str(row["High limit"]))
+            if len(numbers) == 2:
+                return pd.Series([str(numbers[0]), str(numbers[1])])
+        return pd.Series([row["Lower limit"], row["High limit"]])
+
+    df_combined[["Lower limit", "High limit"]] = df_combined.apply(extract_limits, axis=1)
+    df_combined = df_combined.reset_index(drop=True)
+
     print("=" * 64)
     step_name = "Post-Processing"
     print(COLOR_START+step_name+COLOR_END)
