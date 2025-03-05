@@ -891,6 +891,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
             numbers = float_pattern.findall(str(row["Upper bound"]))
             if len(numbers) == 2:
                 return pd.Series([str(numbers[0]), str(numbers[1])])
+        if row["Upper bound"] == row["Lower bound"]:
+            numbers = float_pattern.findall(str(row["Upper bound"]))
+            if len(numbers) == 2:
+                return pd.Series([str(numbers[0]), str(numbers[1])])
         return pd.Series([row["Lower bound"], row["Upper bound"]])
 
     df_combined[["Lower bound", "Upper bound"]] = df_combined.apply(extract_limits, axis=1)
