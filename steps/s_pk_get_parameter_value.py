@@ -85,7 +85,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
 
     df_table = pd.DataFrame(match_list, columns=[
         'Main value', 'Statistics type', 'Variation type', 'Variation value',
-        'Interval type', 'Lower limit', 'High limit', 'P value'
+        'Interval type', 'Lower bound', 'Upper bound', 'P value'
     ])
 
     expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
