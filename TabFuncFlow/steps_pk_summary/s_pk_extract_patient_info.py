@@ -42,7 +42,7 @@ Carefully analyze the table, **row by row and column by column**, and follow the
 (1) Identify how many unique [Population, Pregnancy stage, Gestational/pediatric age, Subject N] combinations are present in the table.  
 Population is the patient age group.
 Pregnancy stage is the pregnancy stages of patients mentioned in the study.
-Gestational/pediatric age should only be recorded when a specific numerical time value is provided.
+Gestational/pediatric age is used to record more specific time-related information. Please prioritize placing numerical time values here rather than under Population or Pregnancy Stage.
 Subject N is the number of subjects that correspond to the specific parameter.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
 (3) Verify the source of each [Population, Pregnancy stage, Gestational/pediatric age, Subject N] combination before including it in your answer.  
