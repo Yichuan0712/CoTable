@@ -898,7 +898,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df.replace("N/A", pd.NA, inplace=True)
 
     group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-                     "Parameter unit"]
+                     "Parameter unit", "Gestational/pediatric age", "Time", "Time unit"]
     grouped = df.groupby(group_columns, dropna=False)
 
     merged_rows = []
