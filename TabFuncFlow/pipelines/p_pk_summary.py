@@ -880,6 +880,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
     """replace n/a by N/A"""
     df_combined.replace("n/a", "N/A", inplace=True)
+    """replace Standard Deviation (SD) by SD"""
+    df_combined.replace("Standard Deviation (SD)", "SD", inplace=True)
 
     """Remove non-digit rows"""
     columns_to_check = ["Main value", "Statistics type", "Variation type", "Variation value",
@@ -969,6 +971,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         return pd.Series([row["Lower bound"], row["Upper bound"]])
 
     df_combined[["Lower bound", "Upper bound"]] = df_combined.apply(extract_limits, axis=1)
+    df_combined = df_combined.reset_index(drop=True)
+
+    """col exchange"""
+    df_combined[['Main value', 'Statistics type']] = df_combined[['Statistics type', 'Main value']]
     df_combined = df_combined.reset_index(drop=True)
 
     """Rename col names"""
