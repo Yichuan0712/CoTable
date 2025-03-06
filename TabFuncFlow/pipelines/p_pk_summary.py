@@ -9,6 +9,7 @@ from TabFuncFlow.steps_pk_summary.s_pk_match_drug_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_split_by_cols import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_value import *
+from TabFuncFlow.steps_pk_summary.s_pk_get_time_and_unit import *
 import re
 import itertools
 
@@ -774,16 +775,71 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 14: Assembly
+    Step 14: Time Extraction
+    """
+    time_list = []
+    round = 1
+    for md in md_table_list:
+        print("=" * 64)
+        step_name = "Time Extraction" + f" (Trial {str(round)})"
+        round += 1
+        print(COLOR_START + step_name + COLOR_END)
+        time_info = run_with_retry(
+            s_pk_get_time_and_unit_prompt,
+            md_table_aligned,
+            description,
+            md,
+            llm,
+            max_retries=max_retries,
+            base_delay=base_delay,
+        )
+        if time_info is None:
+            return None
+        md_time, res_time, content_time, usage_time, truncated_time = time_info
+        time_list.append(md_time)
+        step_list.append(step_name)
+        res_list.append(res_time)
+        content_list.append(content_time)
+        content_list_clean.append(clean_llm_reasoning(content_time))
+        usage_list.append(usage_time)
+        truncated_list.append(truncated_time)
+        print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+        print(COLOR_START + "Result:" + COLOR_END)
+        print(display_md_table(md_time))
+        content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+        print(COLOR_START + "Reasoning:" + COLOR_END)
+        print(content_to_print)
+    """
+    Step 15: Time Extraction (Final)
+    """
+    print("=" * 64)
+    step_name = "Time Extraction (Final)"
+    print(COLOR_START+step_name+COLOR_END)
+    print(COLOR_START+"Usage:"+COLOR_END, 0)
+    print(COLOR_START+"Result:"+COLOR_END)
+    for i in range(len(time_list)):
+        print(f"Index [{i}]:")
+        print(display_md_table(time_list[i]))
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print("Automatic execution.\n")
+    step_list.append(step_name)
+    res_list.append(True)
+    content_list.append("Automatic execution.\n")
+    content_list_clean.append("Automatic execution.\n")
+    usage_list.append(0)
+    truncated_list.append(False)
+    """
+    Step 16: Assembly
     """
     df_list = []
-    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list)
+    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list) == len(time_list)
     for i in range(len(drug_list)):
         df_drug = markdown_to_dataframe(drug_list[i])
         df_table_patient = markdown_to_dataframe(patient_list[i])
         df_type_unit = markdown_to_dataframe(type_unit_list[i])
         df_value = markdown_to_dataframe(value_list[i])
-        df_combined = pd.concat([df_drug, df_table_patient, df_type_unit, df_value], axis=1)
+        df_time = markdown_to_dataframe(time_list[i])
+        df_combined = pd.concat([df_drug, df_table_patient, df_time, df_type_unit, df_value], axis=1)
         df_list.append(df_combined)
     df_combined = pd.concat(df_list, ignore_index=True)
     print("=" * 64)
@@ -807,6 +863,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
+    """if Time == "N/A", Time unit must be "N/A"。"""
+    df_combined.loc[
+        (df_combined["Time"] == "N/A"), "Time unit"] = "N/A"
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
         (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
