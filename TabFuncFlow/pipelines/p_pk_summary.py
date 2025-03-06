@@ -900,7 +900,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df.replace("N/A", pd.NA, inplace=True)
 
     group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-                     "Parameter unit", "Gestational/pediatric age", "Time", "Time unit"]
+                     "Parameter unit", "Time", "Time unit"]
     grouped = df.groupby(group_columns, dropna=False)
 
     merged_rows = []
@@ -975,6 +975,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """col exchange"""
     df_combined[['Main value', 'Statistics type']] = df_combined[['Statistics type', 'Main value']]
+    df_combined = df_combined[
+        ["Statistics type" if col == "Main value" else "Main value" if col == "Statistics type" else col for col in
+         df_combined.columns]]
     df_combined = df_combined.reset_index(drop=True)
 
     """Rename col names"""
