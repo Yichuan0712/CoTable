@@ -883,6 +883,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     """replace Standard Deviation (SD) by SD"""
     df_combined.replace("Standard Deviation (SD)", "SD", inplace=True)
 
+    """replace , by empty"""
+    df_combined.replace(",", " ", inplace=True)
+
     """Remove non-digit rows"""
     columns_to_check = ["Main value", "Statistics type", "Variation type", "Variation value",
                         "Interval type", "Lower bound", "Upper bound", "P value"]
@@ -975,9 +978,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """col exchange"""
     df_combined[['Main value', 'Statistics type']] = df_combined[['Statistics type', 'Main value']]
-    df_combined = df_combined[
-        ["Statistics type" if col == "Main value" else "Main value" if col == "Statistics type" else col for col in
-         df_combined.columns]]
+    cols = list(df_combined.columns)
+    i, j = cols.index('Main value'), cols.index('Statistics type')
+    cols[i], cols[j] = cols[j], cols[i]
+    df_combined = df_combined[cols]
     df_combined = df_combined.reset_index(drop=True)
 
     """Rename col names"""

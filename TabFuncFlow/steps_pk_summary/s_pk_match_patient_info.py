@@ -29,6 +29,7 @@ Carefully analyze the tables and follow these steps:
 """
 # (2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
 
+
 def s_pk_match_patient_info_parse(content, usage):
     content = content.replace('\n', '')
     matches = re.findall(r'<<.*?>>', content)
