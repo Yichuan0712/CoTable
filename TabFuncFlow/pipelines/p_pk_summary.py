@@ -785,7 +785,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         round += 1
         print(COLOR_START + step_name + COLOR_END)
         time_info = run_with_retry(
-            s_pk_get_time_and_unit_prompt,
+            s_pk_get_time_and_unit,
             md_table_aligned,
             description,
             md,
