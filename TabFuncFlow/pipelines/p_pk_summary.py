@@ -1,14 +1,14 @@
 import time
-from steps_pk_summary.s_pk_delete_individual import *
-from steps_pk_summary.s_pk_align_parameter import *
-from steps_pk_summary.s_pk_extract_drug_info import *
-from steps_pk_summary.s_pk_extract_patient_info import *
-from steps_pk_summary.s_pk_get_col_mapping import *
-from steps_pk_summary.s_pk_get_parameter_type_and_unit import *
-from steps_pk_summary.s_pk_match_drug_info import *
-from steps_pk_summary.s_pk_match_patient_info import *
-from steps_pk_summary.s_pk_split_by_cols import *
-from steps_pk_summary.s_pk_get_parameter_value import *
+from TabFuncFlow.steps_pk_summary.s_pk_delete_individual import *
+from TabFuncFlow.steps_pk_summary.s_pk_align_parameter import *
+from TabFuncFlow.steps_pk_summary.s_pk_extract_drug_info import *
+from TabFuncFlow.steps_pk_summary.s_pk_extract_patient_info import *
+from TabFuncFlow.steps_pk_summary.s_pk_get_col_mapping import *
+from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_type_and_unit import *
+from TabFuncFlow.steps_pk_summary.s_pk_match_drug_info import *
+from TabFuncFlow.steps_pk_summary.s_pk_match_patient_info import *
+from TabFuncFlow.steps_pk_summary.s_pk_split_by_cols import *
+from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_value import *
 import re
 import itertools
 
@@ -810,10 +810,13 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.reset_index(drop=True)
     """replace empty by N/A"""
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
+    """replace n/a by N/A"""
+    df_combined.replace("n/a", "N/A", inplace=True)
 
     """Remove non-digit rows"""
     columns_to_check = ["Main value", "Statistics type", "Variation type", "Variation value",
                         "Interval type", "Lower bound", "Upper bound", "P value"]
+
     def contains_number(s):
         return any(char.isdigit() for char in s)
 

@@ -1,4 +1,4 @@
-from utils.table_utils import *
+from TabFuncFlow.utils.table_utils import *
 
 
 def f_transpose(df_table):

@@ -1,6 +1,6 @@
 import ast
-from utils.llm_utils import *
-from operations.f_transpose import *
+from TabFuncFlow.utils.llm_utils import *
+from TabFuncFlow.operations.f_transpose import *
 import pandas as pd
 
 

@@ -1,6 +1,6 @@
 import ast
-from utils.llm_utils import *
-from operations.f_transpose import *
+from TabFuncFlow.utils.llm_utils import *
+from TabFuncFlow.operations.f_transpose import *
 
 
 def s_pk_match_drug_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table):

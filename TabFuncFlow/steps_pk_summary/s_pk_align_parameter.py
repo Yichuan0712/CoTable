@@ -1,5 +1,5 @@
-from utils.llm_utils import *
-from operations.f_transpose import *
+from TabFuncFlow.utils.llm_utils import *
+from TabFuncFlow.operations.f_transpose import *
 
 
 def s_pk_align_parameter_prompt(md_table):

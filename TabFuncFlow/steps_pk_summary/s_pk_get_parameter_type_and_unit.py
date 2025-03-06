@@ -1,6 +1,6 @@
 import ast
-from utils.llm_utils import *
-from operations.f_transpose import *
+from TabFuncFlow.utils.llm_utils import *
+from TabFuncFlow.operations.f_transpose import *
 
 
 # def s_pk_get_parameter_type_and_unit_prompt(match_dict, md_table, caption):

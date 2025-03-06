@@ -1,7 +1,7 @@
 import ast
-from utils.table_utils import *
-from utils.llm_utils import *
-from operations.f_select_row_col import *
+from TabFuncFlow.utils.table_utils import *
+from TabFuncFlow.utils.llm_utils import *
+from TabFuncFlow.operations.f_select_row_col import *
 
 
 # def s_pk_delete_individual_prompt(md_table):

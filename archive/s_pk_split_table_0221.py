@@ -1,6 +1,6 @@
 import ast
-from utils.table_utils import *
-from utils.llm_utils import *
+from TabFuncFlow.utils.table_utils import *
+from TabFuncFlow.utils.llm_utils import *
 from archive.f_split_table import *
 
 
