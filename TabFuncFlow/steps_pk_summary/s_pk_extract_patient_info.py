@@ -39,12 +39,12 @@ The following table contains pharmacokinetics (PK) data:
 Here is the table caption:  
 {caption}
 Carefully analyze the table, **row by row and column by column**, and follow these steps:  
-(1) Identify how many unique [Population, Pregnancy stage, Gestational/pediatric age, Subject N] combinations are present in the table.  
+(1) Identify how many unique [Population, Pregnancy stage, Subject N] combinations are present in the table.  
 Population is the patient age group.
 Pregnancy stage is the pregnancy stages of patients mentioned in the study.
 Subject N is the number of subjects that correspond to the specific parameter.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
-(3) Verify the source of each [Population, Pregnancy stage, Gestational/pediatric age, Subject N] combination before including it in your answer.  
+(3) Verify the source of each [Population, Pregnancy stage, Subject N] combination before including it in your answer.  
 (4) The "Subject N" values within each population group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. You must include all the Ns for each age group. 
 Specifically, make sure to check every number in this list: {int_list} to determine if it should be listed in Subject N. Fill in "N/A" when you don't know the exact N.
 (5) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred. 
@@ -85,7 +85,7 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
     if not match_list:
         raise ValueError("Patient info extraction failed: match_list is empty!", f"\n{content}", f"\n<<{usage}>>")
 
-    df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational/pediatric age", "Subject N"])
+    df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
     return_md_table = dataframe_to_markdown(df_table)
 
     return return_md_table, res, content, usage, truncated
