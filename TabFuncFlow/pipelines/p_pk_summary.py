@@ -977,7 +977,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined = df_combined.reset_index(drop=True)
 
     """col exchange"""
-    df_combined[['Main value', 'Statistics type']] = df_combined[['Statistics type', 'Main value']]
     cols = list(df_combined.columns)
     i, j = cols.index('Main value'), cols.index('Statistics type')
     cols[i], cols[j] = cols[j], cols[i]
