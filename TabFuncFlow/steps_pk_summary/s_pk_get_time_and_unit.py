@@ -24,8 +24,8 @@ Subtable 2 should have the following column headers only:
 
 **Time, Time unit** 
 
-Time: The specific moment when data is measured, a drug dose is administered, or any other relevant time point.
-Time unit: The unit of measurement corresponding to this time point.
+Time: The specific moment, expressed as a numerical value, when data is measured, a drug dose is administered, or any other relevant event occurs. Only entries with a concrete numerical value should be recorded.
+Time unit: The unit of measurement corresponding to the recorded time point, ensuring clarity and precision in data representation.
 
 Please Note:
 (1) For values that do not need to be filled, enter "N/A".
