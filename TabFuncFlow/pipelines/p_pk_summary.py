@@ -864,9 +864,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
 
     """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
-    """if Time == "N/A", Time unit must be "N/A"。"""
-    df_combined.loc[
-        (df_combined["Time"] == "N/A"), "Time unit"] = "N/A"
+    # """if Time == "N/A", Time unit must be "N/A"。"""
+    # df_combined.loc[
+    #     (df_combined["Time"] == "N/A"), "Time unit"] = "N/A"
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
         (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
