@@ -976,6 +976,27 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     df_combined[["Lower bound", "Upper bound"]] = df_combined.apply(extract_limits, axis=1)
     df_combined = df_combined.reset_index(drop=True)
 
+    """remove inclusive rows"""
+    def remove_contained_rows(df):
+        df_cleaned = df.copy()
+
+        rows_to_drop = set()
+        for i in range(len(df_cleaned)):
+            for j in range(i + 1, len(df_cleaned)):
+                row1 = df_cleaned.iloc[i]
+                row2 = df_cleaned.iloc[j]
+
+                if all((r1 == r2) or (r1 == "N/A") for r1, r2 in zip(row1, row2)):
+                    rows_to_drop.add(i)  # row1 included by row2
+                elif all((r2 == r1) or (r2 == "N/A") for r1, r2 in zip(row1, row2)):
+                    rows_to_drop.add(j)
+
+        df_cleaned = df_cleaned.drop(index=rows_to_drop).reset_index(drop=True)
+        return df_cleaned
+
+    df_combined = remove_contained_rows(df_combined)
+    df_combined = df_combined.reset_index(drop=True)
+
     """col exchange"""
     cols = list(df_combined.columns)
     i, j = cols.index('Main value'), cols.index('Statistics type')
