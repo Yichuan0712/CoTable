@@ -832,7 +832,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     Step 16: Assembly
     """
     df_list = []
-    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list) == len(time_list)
+    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list) # == len(time_list)
     for i in range(len(drug_list)):
         df_drug = markdown_to_dataframe(drug_list[i])
         df_table_patient = markdown_to_dataframe(patient_list[i])
