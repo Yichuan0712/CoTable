@@ -1,0 +1,23 @@
+PMID,Drug name,Analyte,Specimen,Population,Pregnancy Stage,Subject N,Parameter type,Time value,Time unit,Summary Statistic,Value,Unit,Variation type,Variation value,Interval type,Lower limit,High limit,P value,Notes
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,Peak Concentration,,,?median,26.41,ng ml?1,,,25th每75th percentiles,23.98,29.88,0.23,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,Peak Concentration,,,?median,23.52,ng ml?1,,,25th每75th percentiles,21.21,27.87,0.23,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,time to rach maximum concetration,,,?median,1.79,?h,,,25th每75th percentiles,1.24,1.96,0.46,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,time to rach maximum concetration,,,?median,1.48,?h,,,25th每75th percentiles,1.03,1.73,0.46,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,AUC,<12 ,hours,?median,235.99,ng.h ml?1,,,25th每75th percentiles,203.72,261.97,0.38,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,AUC,<12 ,hours,?median,202.23,ng.h ml?1,,,25th每75th percentiles,185.54,235.52,0.38,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,?Kel,,,?median,0.16,h?1,,,25th每75th percentiles,0.15,0.18,0.72,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,?Kel,,,?median,0.14,h?1,,,25th每75th percentiles,0.13,0.25,0.72,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,?t?,,,?median,4.34,?h,,,25th每75th percentiles,3.87,4.64,0.28,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,?t?,,,?median,5,?h,,,25th每75th percentiles,4.45,5.84,0.28,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,?Vd/F,,,?median,560.96,?l,,,25th每75th percentiles,506.85,720.31,0.87,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,?Vd/F,,,?median,609.4,?l,,,25th每75th percentiles,357.28,742.05,0.87,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,12,?ClT/F,,,?median,84.77,l h?1,,,25th每75th percentiles,76.37,98.24,0.38,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,plasma,pregnant women,trimester 3,10,?ClT/F,,,?median,98.94,l h?1,,,25th每75th percentiles,85.14,107.79,0.38,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,?umbilical vein/maternal vein,pregnant women,trimester 3,12,concetration ratio,,,?median,0.53,,,,25th每75th percentiles,0.35,0.74,0.5,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,?umbilical vein/maternal vein,pregnant women,trimester 3,10,concetration ratio,,,?median,0.44,,,,25th每75th percentiles,0.36,0.56,0.5,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,?intervillous space/maternal vein,pregnant women,trimester 3,12,concetration ratio,,,?median,0.78,,,,25th每75th percentiles,0.62,0.99,0.97,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,?intervillous space/maternal vein,pregnant women,trimester 3,10,concetration ratio,,,?median,0.87,,,,25th每75th percentiles,0.63,0.92,0.97,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,?umbilical artery/umbilical vein,pregnant women,trimester 3,12,concetration ratio,,,?median,0.82,,,,25th每75th percentiles,0.66,1.18,0.67,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,?umbilical artery/umbilical vein,pregnant women,trimester 3,10,concetration ratio,,,?median,0.88,,,,25th每75th percentiles,0.48,1.12,0.67,hypertensive pregnant with type 2 diabetes mellitus 
+28042936,Nifedipine,Nifedipine,?amniotic fluid/maternal vein,pregnant women,trimester 3,12,concetration ratio,,,?median,0.05,,,,25th每75th percentiles,0.02,0.08,0.79,"control group, hypertensive pregnant"
+28042936,Nifedipine,Nifedipine,?amniotic fluid/maternal vein,pregnant women,trimester 3,8,concetration ratio,,,?median,0.05,,,,25th每75th percentiles,0.04,0.08,0.79,hypertensive pregnant with type 2 diabetes mellitus 

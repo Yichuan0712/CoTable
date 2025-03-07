@@ -1,0 +1,23 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Summary Statistics,Value,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+0,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Apparent total clearance,l/h,Median,98.94,N/A,N/A,IQR,85.14,107.79,0.38
+1,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Apparent volume of distribution,l,Median,609.4,N/A,N/A,IQR,357.28,742.05,0.87
+2,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Area under the plasma concentration-time curve from 0 to 12h,ng*h/ml,Median,202.23,N/A,N/A,IQR,185.54,235.52,0.38
+3,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Elimination half-life,h,Median,5,N/A,N/A,IQR,4.45,5.84,0.28
+4,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Elimination rate constant,h‚Åª¬?Median,0.14,N/A,N/A,IQR,0.13,0.25,0.72,
+5,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Peak plasma concentration,ng/ml,Median,23.52,N/A,N/A,IQR,21.21,27.87,0.23
+6,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,10,Time to reach peak plasma concentration,h,Median,1.48,N/A,N/A,IQR,1.03,1.73,0.46
+7,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Apparent total clearance,l/h,Median,84.77,N/A,N/A,IQR,76.37,98.24,0.38
+8,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Apparent volume of distribution,l,Median,560.96,N/A,N/A,IQR,506.85,720.31,0.87
+9,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Area under the plasma concentration-time curve from 0 to 12h,ng*h/ml,Median,235.99,N/A,N/A,IQR,203.72,261.97.28,0.38
+10,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Elimination half-life,h,Median,4.34,N/A,N/A,IQR,3.87,4.64,0.28
+11,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Elimination rate constant,h‚Åª¬?Median,0.16,N/A,N/A,IQR,0.15,0.18,0.72,
+12,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Peak plasma concentration,ng/ml,Median,26.41,N/A,N/A,IQR,23.98,29.88,0.23
+13,Nifedipine,Nifedipine,Plasma,Pregnant women,N/A,12,Time to reach peak plasma concentration,h,Median,1.79,N/A,N/A,IQR,1.24,1.96,0.46
+14,Nifedipine,Nifedipine,Amniotic fluid,Control,Late pregnancy/delivery,12,Nifedipine concentration ratio in amniotic fluid to maternal vein,Ratio of nifedipine concentrations,Median,0.05,N/A,N/A,IQR,0.02,0.08,0.79
+15,Nifedipine,Nifedipine,Amniotic fluid,T2DM,Late pregnancy/delivery,8,Nifedipine concentration ratio in amniotic fluid to maternal vein,Ratio of nifedipine concentrations,Median,0.05,N/A,N/A,IQR,0.04,0.08,0.79
+16,Nifedipine,Nifedipine,Intervillous space,Control,Late pregnancy/delivery,12,Nifedipine concentration ratio in intervillous space to maternal vein,Ratio of nifedipine concentrations,Median,0.78,N/A,N/A,IQR,0.62,0.99,0.97
+17,Nifedipine,Nifedipine,Intervillous space,T2DM,Late pregnancy/delivery,10,Nifedipine concentration ratio in intervillous space to maternal vein,Ratio of nifedipine concentrations,Median,0.87,N/A,N/A,IQR,0.63,0.92,0.97
+18,Nifedipine,Nifedipine,Umbilical artery,Control,Late pregnancy/delivery,12,Nifedipine concentration ratio in umbilical artery to umbilical vein,Ratio of nifedipine concentrations,Median,0.82,N/A,N/A,IQR,0.66,1.18,0.67
+19,Nifedipine,Nifedipine,Umbilical artery,T2DM,Late pregnancy/delivery,10,Nifedipine concentration ratio in umbilical artery to umbilical vein,Ratio of nifedipine concentrations,Median,0.88,N/A,N/A,IQR,0.48,1.12,0.67
+20,Nifedipine,Nifedipine,Umbilical vein,Control,Late pregnancy/delivery,12,Nifedipine concentration ratio in umbilical vein to maternal vein,Ratio of nifedipine concentrations,Median,0.53,N/A,N/A,IQR,0.35,0.74,0.5
+21,Nifedipine,Nifedipine,Umbilical vein,T2DM,Late pregnancy/delivery,10,Nifedipine concentration ratio in umbilical vein to maternal vein,Ratio of nifedipine concentrations,Median,0.44,N/A,N/A,IQR,0.36,0.56,0.5

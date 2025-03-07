@@ -1,0 +1,23 @@
+PMID,Drug name,Analyte,Specimen,Population,Pregnancy Stage,Subject N,Parameter type,Time value,Time unit,Summary Statistic,Value,Unit,Variation type,Variation value,Interval type,Lower limit,High limit,P value,Notes
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,14,C1.0,0-1,h,mean,108.7,ug/l,S.E.,22.6,,,,,All
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,14,C1.0,0-1,h,median,97.5,ug/l,,,minmax,19.9,292,,All
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,C120h,,,mean,32,ug/l,S.E.,9,,,,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,C120h,,,median,25,ug/l,,,minmax,6.9,67.2,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,C120h,,,mean,14.5,ug/l,S.E.,1.8,,,,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,C120h,,,median,14.6,ug/l,,,minmax,6,20,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,AUC0-120h,,,mean,220,mg/l h,S.E.,60.5,,,,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,AUC0-120h,,,median,174.1,mg/l h,,,minmax,91.1,542.2,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,AUC0-120h,,,mean,173.5,mg/l h,S.E.,9.9,,,,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,AUC0-120h,,,median,181.8,mg/l h,,,minmax,143,211,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,"AUC0-120h, nom",,,mean,45.4,mg/l h,S.E.,13.2,,,,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,"AUC0-120h, nom",,,median,31.34,mg/l h,,,minmax,18.4,115.6,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,"AUC0-120h, nom",,,mean,24.7,mg/l h,S.E.,2.3,,,,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,"AUC0-120h, nom",,,median,26,mg/l h,,,minmax,16.1,30.8,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Cl,,,mean,2.2,l/h,S.E.,0.5,,,,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Cl,,,median,2,l/h,,,minmax,0.6,3.7,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Cl,,,mean,2.9,l/h,S.E.,0.2,,,,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Cl,,,median,2.7,l/h,,,minmax,2.3,3.4,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Clnorm,,,mean,31.6,ml/(h kg),S.E.,6.3,,,,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Clnorm,,,median,31.9,ml/(h kg),,,minmax,8.6,54.4,,"Group 1, nifedipine slow release 60 mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Clnorm,,,mean,43,ml/(h kg),S.E.,4.4,,,,,"Group 2, nifedipineGITS 90mg/d"
+18394772,nifedipine,nifedipine,blood,maternal,pregnancy,7,Clnorm,,,median,38.5,ml/(h kg),,,minmax,32.4,62.3,,"Group 2, nifedipineGITS 90mg/d"

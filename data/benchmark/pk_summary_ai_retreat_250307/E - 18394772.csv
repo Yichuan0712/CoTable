@@ -1,0 +1,23 @@
+PMID,Drug name,Analyte,Specimen,Population,Pregnancy Stage,Subject N,Parameter type,Time value,Time unit,Summary Statistic,Value,Unit,Variation type,Variation value,Interval type,Lower limit,High limit,P value,Notes
+18394772,nifedipine, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",14, C1.0,1,h, Mean,108.7, 米g/l, S.E.,22.6, , , ,,nifedipine capsules 4℅ 10?mg
+18394772,nifedipine, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",14, C1.0,1,h, Median,97.5, 米g/l, , , range,19.9,292,,nifedipine capsules 4℅ 10?mg
+18394772,nifedipine, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, C120 h,120,h, Mean,32, 米g/l, S.E.,9, , , ,,nifedipine slow-release 60?mg/d
+18394772,nifedipine, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, C120 h,120,h, Median,25, 米g/l, , , range,6.9,67.2,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, C120 h,120,h, Mean,14.5, 米g/l, S.E.,1.8, , , ,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, C120 h,120,h, Median,14.6, 米g/l, , , range,6,20,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h,120,h, Mean,220, mg/l h, S.E.,60.5, , , ,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h,120,h, Median,174.1, mg/l h, , , range,91.1,542.2,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h,120,h, Mean,173.5, mg/l h, S.E.,9.9, , , ,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h,120,h, Median,181.8, mg/l h, , , range,143,211,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h  norm,120,h, Mean,45.4, g/l h, S.E.,13.2, , , ,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h  norm,120,h, Median,31.34, g/l h, , , range,18.4,115.6,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h  norm,120,h, Mean,24.7, g/l h, S.E.,2.3, , , ,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, AUC0每120 h  norm,120,h, Median,26, g/l h, , , range,16.1,30.8,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl,,, Mean,2.2, l/h, S.E.,0.5, , , ,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl,,, Median,2, l/h, , , range,0.6,3.7,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl,,, Mean,2.9, l/h, S.E.,0.2, , , ,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl,,, Median,2.7, l/h, , , range,2.3,3.4,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl norm,,, Mean,31.6, ml/(h kg), S.E.,6.3, , , ,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl norm,,, Median,31.9, ml/(h kg), , , range,8.6,54.4,,nifedipine slow-release 60?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl norm,,, Mean,43, ml/(h kg), S.E.,4.4, , , ,,nifedipine GITS 90?mg/d
+,, nifedipine,blood,maternal,"Trimester 2, Trimester 3, preterm labor",7, Cl norm,,, Median,38.5, ml/(h kg), , , range,32.4,62.3,,nifedipine GITS 90?mg/d

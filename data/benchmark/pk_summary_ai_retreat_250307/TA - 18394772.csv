@@ -1,0 +1,23 @@
+,Drug name,Analyte,Specimen,Population,Pregnancy stage,Subject N,Parameter type,Unit,Summary Statistics,Value,Variation type,Variation value,Interval type,Lower limit,High limit,P value
+1,nifedipine,nifedipine,Plasma,Pregnant women,,14,Cmax of the initial phase,Î¼g/l,Median,97.5,,,,,,
+2,nifedipine,nifedipine,Plasma,Pregnant women,,14,Cmax of the initial phase,Î¼g/l,Mean,108.7,S.E.,22.6,Range,19.9,292,
+3,nifedipine,AUC0â€?20 h,Plasma,Pregnant women,N/A,7,Area under the curve (AUC0-120h),mg/l h,Mean,220,SE,60.5,Range,91.1,542.2,N/A
+4,nifedipine,AUC0â€?20 h,Plasma,Pregnant women,N/A,7,Area under the curve (AUC0-120h),mg/l h,Mean,173.5,SE,9.9,N/A,N/A,N/A,N/A
+5,nifedipine,AUC0â€?20 h,Plasma,Pregnant women,N/A,7,Area under the curve (AUC0-120h),mg/l h,Median,181.8,N/A,N/A,N/A,N/A,N/A,N/A
+6,nifedipine,AUC0â€?20 h,Plasma,Pregnant women,N/A,7,Area under the curve (AUC0-120h),mg/l h,Median,174.1,N/A,N/A,Range,143,211,N/A
+7,nifedipine,"AUC0â€?20 h, norm",Plasma,Pregnant women,N/A,7,"Area under the curve, normalized for applied dose and bodyweight (AUC0-120h)",g/l h,Mean,45.4,SE,13.2,Range,18.4,115.6,N/A
+8,nifedipine,"AUC0â€?20 h, norm",Plasma,Pregnant women,N/A,7,"Area under the curve, normalized for applied dose and bodyweight (AUC0-120h)",g/l h,Mean,24.7,SE,2.3,N/A,N/A,N/A,N/A
+9,nifedipine,"AUC0â€?20 h, norm",Plasma,Pregnant women,N/A,7,"Area under the curve, normalized for applied dose and bodyweight (AUC0-120h)",g/l h,Median,26,N/A,N/A,N/A,N/A,N/A,N/A
+10,nifedipine,"AUC0â€?20 h, norm",Plasma,Pregnant women,N/A,7,"Area under the curve, normalized for applied dose and bodyweight (AUC0-120h)",g/l h,Median,31.34,N/A,N/A,Range,16.1,30.8,N/A
+11,nifedipine,C120 h,Plasma,Pregnant women,N/A,7,Steady-state concentration (C120h),Î¼g/l,Mean,32,SE,9,Range,6.9,67.2,N/A
+12,nifedipine,C120 h,Plasma,Pregnant women,N/A,7,Steady-state concentration (C120h),Î¼g/l,Mean,14.5,SE,1.8,N/A,N/A,N/A,N/A
+13,nifedipine,C120 h,Plasma,Pregnant women,N/A,7,Steady-state concentration (C120h),Î¼g/l,Median,14.6,N/A,N/A,N/A,N/A,N/A,N/A
+14,nifedipine,C120 h,Plasma,Pregnant women,N/A,7,Steady-state concentration (C120h),Î¼g/l,Median,25,N/A,N/A,Range,6,20,N/A
+15,nifedipine,Cl,Plasma,Pregnant women,N/A,7,Clearance (Cl),l/h,Mean,2.2,SE,0.5,Range,0.6,3.7,N/A
+16,nifedipine,Cl,Plasma,Pregnant women,N/A,7,Clearance (Cl),l/h,Mean,2.9,SE,0.2,N/A,N/A,N/A,N/A
+17,nifedipine,Cl,Plasma,Pregnant women,N/A,7,Clearance (Cl),l/h,Median,2.7,N/A,N/A,N/A,N/A,N/A,N/A
+18,nifedipine,Cl,Plasma,Pregnant women,N/A,7,Clearance (Cl),l/h,Median,2,N/A,N/A,Range,2.3,3.4,N/A
+19,nifedipine,Clnorm,Plasma,Pregnant women,N/A,7,"Clearance, normalized for bodyweight (Clnorm)",ml/(h kg),Mean,31.6,SE,6.3,Range,8.6,54.4,N/A
+20,nifedipine,Clnorm,Plasma,Pregnant women,N/A,7,"Clearance, normalized for bodyweight (Clnorm)",ml/(h kg),Mean,43,SE,4.4,N/A,N/A,N/A,N/A
+21,nifedipine,Clnorm,Plasma,Pregnant women,N/A,7,"Clearance, normalized for bodyweight (Clnorm)",ml/(h kg),Median,38.5,N/A,N/A,N/A,N/A,N/A,N/A
+22,nifedipine,Clnorm,Plasma,Pregnant women,N/A,7,"Clearance, normalized for bodyweight (Clnorm)",ml/(h kg),Median,31.9,N/A,N/A,Range,32.4,62.3,N/A
