@@ -852,20 +852,18 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # Processing each group
     for _, group in grouped:
         if len(group) == 2:  # Only process if there are exactly two rows in the group
-            median_row = group[group["Summary Statistics"] == "Median"]
-            non_median_row = group[group["Summary Statistics"] != "Median"]
+            median_row = group[group["Statistics type"] == "Median"]
+            non_median_row = group[group["Statistics type"] != "Median"]
 
             if not median_row.empty and not non_median_row.empty:
                 # Check if non-median row has "Range"
                 if "Range" in non_median_row["Interval type"].values:
                     # Assign range values to the median row
-                    df_combined.loc[median_row.index, ["Interval type", "Lower limit", "High limit"]] = \
-                        non_median_row[["Interval type", "Lower limit", "High limit"]].values
+                    df_combined.loc[median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = \
+                        non_median_row[["Interval type", "Lower bound", "Upper bound"]].values
 
                     # Remove range information from the non-median row
-                    df_combined.loc[non_median_row.index, ["Interval type", "Lower limit", "High limit"]] = ["N/A",
-                                                                                                             "N/A",
-                                                                                                             "N/A"]
+                    df_combined.loc[non_median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = ["N/A", "N/A", "N/A"]
 
     """Rename col names"""
     column_mapping = {
