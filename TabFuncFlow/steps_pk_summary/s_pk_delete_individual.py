@@ -2,7 +2,7 @@ import ast
 from TabFuncFlow.utils.table_utils import *
 from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_select_row_col import *
-
+import time
 
 # def s_pk_delete_individual_prompt(md_table):
 #     return f"""
@@ -32,52 +32,66 @@ When returning this, enclose the function call in double angle brackets.
 """
 
 
-def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
+import re
+import time
+import ast
+import json
+import pandas as pd
+
+
+def s_pk_delete_individual(md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_delete_individual_prompt(md_table)
-    messages = [msg, ]
+    messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
-    res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-    # print(display_md_table(md_table))
-    # print(usage, content)
+    retries = 0
+    wait_time = initial_wait
+    total_usage = 0
+    all_content = []
 
-    try:
-        # row_list, col_list = s_pk_delete_individual_parse(content, usage)
-        content = content.replace('\n', '')
-        match_end = re.search(r'\[\[END\]\]', content)
-        matches = re.findall(r'<<.*?>>', content)
-        match_angle = matches[-1] if matches else None
+    while retries < max_retries:
+        try:
+            res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-        if match_end:
-            row_list = None
-            col_list = None
+            total_usage += usage
+            all_content.append(f"Attempt {retries + 1}:\n{content}")
 
-        elif match_angle:
-            inner_content = match_angle[2:-2]
-            match_func = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)',
-                                  inner_content)
+            content = content.replace('\n', '')
+            matches = re.findall(r'<<.*?>>', content)
+            match_angle = matches[-1] if matches else None
+            match_end = re.search(r'\[\[END\]\]', content)
 
-            if match_func:
+            if match_end:
+                row_list, col_list = None, None
+            elif match_angle:
+                extracted_data = match_angle[2:-2]
                 try:
-                    row_list = ast.literal_eval(match_func.group(1))
-                    col_list = ast.literal_eval(match_func.group(2))
-                    # return arg1, arg2
-                except (SyntaxError, ValueError) as e:
-                    raise ValueError(f"Failed to parse row/col data: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+                    row_list, col_list = json.loads(extracted_data)
+                except json.JSONDecodeError:
+                    try:
+                        row_list, col_list = ast.literal_eval(extracted_data)
+                    except Exception as e:
+                        raise ValueError(f"Failed to parse row/column data: {e}") from e
+
+                if not isinstance(row_list, list) or not isinstance(col_list, list):
+                    raise ValueError(f"Extracted row/column data is not a list: {extracted_data}")
             else:
-                raise ValueError(f"Invalid format in extracted content: {inner_content}", f"\n{content}",
-                                 f"\n<<{usage}>>")
+                raise ValueError(f"No valid deletion parameters found.")
 
-        else:
-            raise ValueError("No valid deletion parameters found in content.", f"\n{content}", f"\n<<{usage}>>")
-    except Exception as e:
-        raise RuntimeError(f"Error in s_pk_delete_individual_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+            if col_list:
+                col_list = [fix_col_name(col, md_table) for col in col_list]
 
-    if col_list:
-        col_list = [fix_col_name(item, md_table) for item in col_list]
+            df_table = f_select_row_col(row_list, col_list, markdown_to_dataframe(md_table))
+            return_md_table = dataframe_to_markdown(df_table)
 
-    df_table = f_select_row_col(row_list, col_list, markdown_to_dataframe(md_table))
-    return_md_table = dataframe_to_markdown(df_table)
-    # print(display_md_table(return_md_table))
+            return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
 
-    return return_md_table, res, content, usage, truncated
+        except Exception as e:
+            retries += 1
+            print(f"Attempt {retries}/{max_retries} failed: {e}")
+            if retries < max_retries:
+                print(f"Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+                wait_time *= 2
+
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to delete specified rows/columns.")
