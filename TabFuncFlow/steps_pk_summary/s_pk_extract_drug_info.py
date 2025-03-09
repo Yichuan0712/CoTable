@@ -22,21 +22,6 @@ Specimen is the type of sample.
 """
 
 
-def s_pk_extract_drug_info_parse(content, usage):
-    content = content.replace('\n', '')
-    matches = re.findall(r'<<.*?>>', content)
-    match_angle = matches[-1] if matches else None
-
-    if match_angle:
-        try:
-            match_list = ast.literal_eval(match_angle[2:-2])
-            return match_list
-        except Exception as e:
-            raise ValueError(f"Failed to parse extracted data: {e}", f"\n{content}", f"\n<<{usage}>>") from e
-    else:
-        raise ValueError("No matching drug info found in content.", f"\n{content}", f"\n<<{usage}>>")
-
-
 def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
     msg = s_pk_extract_drug_info_prompt(md_table, caption)
 

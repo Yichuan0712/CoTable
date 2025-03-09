@@ -31,23 +31,6 @@ Carefully analyze the tables and follow these steps:
 # (2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
 
 
-def s_pk_match_patient_info_parse(content, usage):
-    content = content.replace('\n', '')
-    matches = re.findall(r'<<.*?>>', content)
-    match_angle = matches[-1] if matches else None
-
-    if match_angle:
-        try:
-            match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
-            if not isinstance(match_list, list):
-                raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}", f"\n<<{usage}>>")
-            return match_list
-        except (SyntaxError, ValueError) as e:
-            raise ValueError(f"Failed to parse matched patient info: {e}", f"\n{content}", f"\n<<{usage}>>") from e
-    else:
-        raise ValueError("No valid matched patient information found in content.", f"\n{content}", f"\n<<{usage}>>")  # Clearer error message
-
-
 def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table, model_name="gemini_15_pro"):
 
     msg = s_pk_match_patient_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table)

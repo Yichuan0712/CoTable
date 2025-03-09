@@ -51,21 +51,6 @@ Specifically, make sure to check every number in this list: {int_list} to determ
 """
 
 
-def s_pk_extract_patient_info_parse(content, usage):
-    content = content.replace('\n', '')
-    matches = re.findall(r'<<.*?>>', content)
-    match_angle = matches[-1] if matches else None
-
-    if match_angle:
-        try:
-            match_list = ast.literal_eval(match_angle[2:-2])
-            return match_list
-        except (SyntaxError, ValueError) as e:
-            raise ValueError(f"Failed to parse extracted patient info: {e}", f"\n{content}", f"\n<<{usage}>>") from e
-    else:
-        raise ValueError("No matching patient info found in content.", f"\n{content}", f"\n<<{usage}>>")
-
-
 def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
     msg = s_pk_extract_patient_info_prompt(md_table, caption)
     messages = [msg, ]
