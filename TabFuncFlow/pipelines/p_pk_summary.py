@@ -681,7 +681,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     Step 15: Post-Processing
     """
     """fix col name"""
-    expected_columns = ["Drug Name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
+    expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
 
     def rename_columns(df, expected_columns):
         renamed_columns = {}
