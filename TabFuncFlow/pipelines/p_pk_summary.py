@@ -208,6 +208,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    return
     """
     Step 2-1: Population Information Extraction (Trial 1)
     """
@@ -317,7 +318,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Parameter Type Alignment"
     print(COLOR_START+step_name+COLOR_END)
-    aligned_info = s_pk_align_parameter(s_pk_align_parameter, md_table_summary, llm)
+    aligned_info = s_pk_align_parameter(md_table_summary, llm)
     if aligned_info is None:
         return None
     md_table_aligned, res_aligned, content_aligned, usage_aligned, truncated_aligned = aligned_info

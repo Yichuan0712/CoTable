@@ -2,6 +2,7 @@ import ast
 from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_transpose import *
 import pandas as pd
+import time
 
 
 def extract_integers(text):
@@ -51,39 +52,87 @@ Specifically, make sure to check every number in this list: {int_list} to determ
 """
 
 
-def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
+# def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro"):
+#     msg = s_pk_extract_patient_info_prompt(md_table, caption)
+#     messages = [msg, ]
+#     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
+#
+#     res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+#     # print(display_md_table(md_table))
+#     # print(usage, content)
+#
+#     try:
+#         # match_list = s_pk_extract_patient_info_parse(content, usage)
+#         content = content.replace('\n', '')
+#         matches = re.findall(r'<<.*?>>', content)
+#         match_angle = matches[-1] if matches else None
+#
+#         if match_angle:
+#             try:
+#                 match_list = ast.literal_eval(match_angle[2:-2])
+#                 # return match_list
+#             except (SyntaxError, ValueError) as e:
+#                 raise ValueError(f"Failed to parse extracted patient info: {e}", f"\n{content}",
+#                                  f"\n<<{usage}>>") from e
+#         else:
+#             raise ValueError("No matching patient info found in content.", f"\n{content}", f"\n<<{usage}>>")
+#     except Exception as e:
+#         raise RuntimeError(f"Error in s_pk_extract_patient_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+#
+#     match_list = list(map(list, set(map(tuple, match_list))))
+#
+#     if not match_list:
+#         raise ValueError("Patient info extraction failed: match_list is empty!", f"\n{content}", f"\n<<{usage}>>")
+#
+#     df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
+#     return_md_table = dataframe_to_markdown(df_table)
+#
+#     return return_md_table, res, content, usage, truncated
+
+def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_extract_patient_info_prompt(md_table, caption)
-    messages = [msg, ]
+    messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
-    res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-    # print(display_md_table(md_table))
-    # print(usage, content)
+    retries = 0
+    wait_time = initial_wait
+    total_usage = 0
+    all_content = []
 
-    try:
-        # match_list = s_pk_extract_patient_info_parse(content, usage)
-        content = content.replace('\n', '')
-        matches = re.findall(r'<<.*?>>', content)
-        match_angle = matches[-1] if matches else None
+    while retries < max_retries:
+        try:
+            res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-        if match_angle:
-            try:
-                match_list = ast.literal_eval(match_angle[2:-2])
-                # return match_list
-            except (SyntaxError, ValueError) as e:
-                raise ValueError(f"Failed to parse extracted patient info: {e}", f"\n{content}",
-                                 f"\n<<{usage}>>") from e
-        else:
-            raise ValueError("No matching patient info found in content.", f"\n{content}", f"\n<<{usage}>>")
-    except Exception as e:
-        raise RuntimeError(f"Error in s_pk_extract_patient_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+            total_usage += usage
+            all_content.append(f"Attempt {retries + 1}:\n{content}")
 
-    match_list = list(map(list, set(map(tuple, match_list))))
+            content = content.replace('\n', '')
+            matches = re.findall(r'<<.*?>>', content)
+            match_angle = matches[-1] if matches else None
 
-    if not match_list:
-        raise ValueError("Patient info extraction failed: match_list is empty!", f"\n{content}", f"\n<<{usage}>>")
+            if match_angle:
+                try:
+                    match_list = ast.literal_eval(match_angle[2:-2])
+                    match_list = list(map(list, set(map(tuple, match_list))))
+                except Exception as e:
+                    raise ValueError(f"Failed to parse extracted population information. {e}") from e
+            else:
+                raise ValueError(f"No population information found in the extracted content.")
 
-    df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
-    return_md_table = dataframe_to_markdown(df_table)
+            if not match_list:
+                raise ValueError(f"Population information extraction failed: No valid entries found!")
 
-    return return_md_table, res, content, usage, truncated
+            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
+            return_md_table = dataframe_to_markdown(df_table)
+
+            return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
+
+        except (RuntimeError, ValueError) as e:
+            retries += 1
+            print(f"Attempt {retries}/{max_retries} failed: {e}")
+            if retries < max_retries:
+                print(f"Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+                wait_time *= 2
+
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to extract patient information.")
