@@ -489,7 +489,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
-    exit(0)
     """
     Step 11: Population Matching
     """
@@ -547,6 +546,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    exit(0)
     """
     Step 12: Parameter Value Extraction
     """

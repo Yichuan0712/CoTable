@@ -1,6 +1,8 @@
 import ast
 from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_transpose import *
+import re
+import time
 
 
 def s_pk_match_patient_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table):
@@ -31,44 +33,61 @@ Carefully analyze the tables and follow these steps:
 # (2) If a row in Subtable 1 is not correctly filled out (usually does not meet the requirements of the column headers), return -1 for that row.
 
 
-def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table, model_name="gemini_15_pro"):
-
+def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_match_patient_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, patient_md_table)
-
-    messages = [msg, ]
+    messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
-    res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+    retries = 0
+    wait_time = initial_wait
+    total_usage = 0
+    all_content = []
 
-    # print(usage, content)
+    while retries < max_retries:
+        try:
+            res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-    try:
-        # match_list = s_pk_match_patient_info_parse(content, usage)  # Parse extracted matches
-        content = content.replace('\n', '')
-        matches = re.findall(r'<<.*?>>', content)
-        match_angle = matches[-1] if matches else None
-        if match_angle:
+            total_usage += usage
+            all_content.append(f"Attempt {retries + 1}:\n{content}")
+
+            content = content.replace('\n', '')
+            matches = re.findall(r'<<.*?>>', content)
+
+            if not matches:
+                raise ValueError(f"No valid matched patient information found.")
+
+            extracted_data = matches[-1][2:-2]
+
             try:
-                match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
-                if not isinstance(match_list, list):
-                    raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}",
-                                     f"\n<<{usage}>>")
-                # return match_list
+                match_list = ast.literal_eval(extracted_data)
             except (SyntaxError, ValueError) as e:
-                raise ValueError(f"Failed to parse matched patient info: {e}", f"\n{content}", f"\n<<{usage}>>") from e
-        else:
-            raise ValueError("No valid matched patient information found in content.", f"\n{content}", f"\n<<{usage}>>")
-    except Exception as e:
-        raise RuntimeError(f"Error in s_pk_match_patient_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+                raise ValueError(f"Failed to parse matched patient info: {e}") from e
 
-    if not match_list:
-        raise ValueError("Patient information matching failed: No valid matches found.", f"\n{content}", f"\n<<{usage}>>")  # Ensures the function does not return None
+            if not isinstance(match_list, list):
+                raise ValueError(
+                    f"Parsed content is not a valid list: {match_list}"
+                )
 
-    # Validate row count against `md_table_aligned_with_1_param_type_and_value`
-    expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
-    if len(match_list) != expected_rows:
-        raise ValueError(
-            f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches.", f"\n{content}", f"\n<<{usage}>>"
-        )
+            if not match_list:
+                raise ValueError(
+                    f"Patient information matching failed: No valid matches found."
+                )
 
-    return match_list, res, content, usage, truncated
+            expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
+            if len(match_list) != expected_rows:
+                raise ValueError(
+                    f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
+                )
+
+            return match_list, res, "\n\n".join(all_content), total_usage, truncated
+
+        except (RuntimeError, ValueError) as e:
+            retries += 1
+            print(f"Attempt {retries}/{max_retries} failed: {e}")
+            if retries < max_retries:
+                print(f"Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+                wait_time *= 2
+
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to match patient information.")
+
