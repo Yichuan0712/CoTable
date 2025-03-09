@@ -113,7 +113,7 @@ def run_with_retry(func, *args, max_retries=5, base_delay=5, **kwargs):
     return None
 
 
-def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base_delay=1, use_color=True, clean_reasoning=False):
+def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=1, use_color=True, clean_reasoning=False):
     """
     PK Summary Pipeline 250227
     Summarizes pharmacokinetic (PK) data from a given markdown table.
@@ -122,7 +122,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     :param description: Additional contextual information, including captions, footnotes, etc.
     :param llm: The language model to use for processing ("gemini_15_pro" or "chatgpt_4o").
     :param max_retries: Maximum number of retries before failing.
-    :param base_delay: Initial delay before retrying (in seconds), which doubles on each failure.
+    :param initial_wait: Initial delay before retrying (in seconds), which doubles on each failure.
     :param use_color: Better-looking print output.
     :param clean_reasoning: When printing output, hide the parsing-related parts in the reasoning.
     :return:
@@ -168,7 +168,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Drug Information Extraction"
     print(COLOR_START+step_name+COLOR_END)
-    drug_info = s_pk_extract_drug_info(md_table, description, llm)
+    drug_info = s_pk_extract_drug_info(md_table, description, llm, max_retries, initial_wait)
     if drug_info is None:
         return None
     md_table_drug, res_drug, content_drug, usage_drug, truncated_drug = drug_info
@@ -190,7 +190,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Population Information Extraction"
     print(COLOR_START+step_name+COLOR_END)
-    patient_info = s_pk_extract_patient_info(md_table, description, llm)
+    patient_info = s_pk_extract_patient_info(md_table, description, llm, max_retries, initial_wait)
     if patient_info is None:
         return None
     md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
@@ -212,7 +212,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Individual Data Deletion"
     print(COLOR_START+step_name+COLOR_END)
-    summary_only_info = s_pk_delete_individual(md_table, llm)
+    summary_only_info = s_pk_delete_individual(md_table, llm, max_retries, initial_wait)
     if summary_only_info is None:
         return None
     md_table_summary, res_summary, content_summary, usage_summary, truncated_summary = summary_only_info
@@ -234,7 +234,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Parameter Type Alignment"
     print(COLOR_START+step_name+COLOR_END)
-    aligned_info = s_pk_align_parameter(md_table_summary, llm)
+    aligned_info = s_pk_align_parameter(md_table_summary, llm, max_retries, initial_wait)
     if aligned_info is None:
         return None
     md_table_aligned, res_aligned, content_aligned, usage_aligned, truncated_aligned = aligned_info
@@ -256,7 +256,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Column Header Categorization"
     print(COLOR_START+step_name+COLOR_END)
-    mapping_info = s_pk_get_col_mapping(md_table_aligned, llm)
+    mapping_info = s_pk_get_col_mapping(md_table_aligned, llm, max_retries, initial_wait)
     if mapping_info is None:
         return None
     col_mapping, res_mapping, content_mapping, usage_mapping, truncated_mapping = mapping_info
@@ -324,7 +324,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     step_name = "Sub-table Creation"
     print(COLOR_START + step_name + COLOR_END)
     if need_split_col:
-        split_returns = s_pk_split_by_cols(md_table_aligned, col_mapping, llm)
+        split_returns = s_pk_split_by_cols(md_table_aligned, col_mapping, llm, max_retries, initial_wait)
         if split_returns is None:
             return None
         md_table_list, res_split, content_split, usage_split, truncated_split = split_returns
@@ -395,7 +395,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 step_name = "Unit Extraction" + f" (Trial {str(round)})"
                 round += 1
                 print(COLOR_START + step_name + COLOR_END)
-                unit_info = s_pk_get_parameter_type_and_unit(md_table_aligned, col_mapping, md, description, llm)
+                unit_info = s_pk_get_parameter_type_and_unit(md_table_aligned, col_mapping, md, description, llm, max_retries, initial_wait)
                 if unit_info is None:
                     return None
                 tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
@@ -450,7 +450,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
             step_name = "Drug Matching" + f" (Trial {str(round)})"
             round += 1
             print(COLOR_START + step_name + COLOR_END)
-            drug_match_info = s_pk_match_drug_info(md_table_aligned, description, md, md_table_drug, llm)
+            drug_match_info = s_pk_match_drug_info(md_table_aligned, description, md, md_table_drug, llm, max_retries, initial_wait)
             if drug_match_info is None:
                 return None
             drug_match_list, res_drug_match, content_drug_match, usage_drug_match, truncated_drug_match = drug_match_info
@@ -507,7 +507,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
             step_name = "Population Matching" + f" (Trial {str(round)})"
             round += 1
             print(COLOR_START + step_name + COLOR_END)
-            patient_match_info = s_pk_match_patient_info(md_table_aligned, description, md, md_table_patient, llm)
+            patient_match_info = s_pk_match_patient_info(md_table_aligned, description, md, md_table_patient, llm, max_retries, initial_wait)
             if patient_match_info is None:
                 return None
             patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
@@ -557,7 +557,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         step_name = "Parameter Value Extraction" + f" (Trial {str(round)})"
         round += 1
         print(COLOR_START + step_name + COLOR_END)
-        value_info = s_pk_get_parameter_value(md_table_aligned, description, md, llm)
+        value_info = s_pk_get_parameter_value(md_table_aligned, description, md, llm, max_retries, initial_wait)
         if value_info is None:
             return None
         md_value, res_value, content_value, usage_value, truncated_value = value_info
