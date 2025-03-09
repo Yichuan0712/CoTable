@@ -363,7 +363,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         print(display_md_table(md_table_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
-    exit(0)
     """
     Step 8: Unit Extraction
     """
@@ -414,6 +413,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 print(COLOR_START + "Reasoning:" + COLOR_END)
                 print(content_to_print)
             type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
+    exit(0)
     """
     Step 9: Unit Extraction (Final)
     """
