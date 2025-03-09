@@ -36,9 +36,9 @@ P value: P-value.
 Please Note:
 (1) An interval consisting of two numbers must be placed separately into the Low limit and High limit fields; it is prohibited to place it in the Variation value field.
 (2) For values that do not need to be filled, enter "N/A".
-(3) For rows in Subtable 1 that can not be extracted, enter "N/A" for the entire row.
-(4) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1.**  
+(3) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total). 
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
+(4) For rows in Subtable 1 that can not be extracted, enter "N/A" for the entire row.
 (5) **Important:** Please return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
 (6) **Absolutely no calculations are allowed—every value must be taken directly from Subtable 1 without any modifications.**  
 (7) Format the final list within double angle brackets, like this:

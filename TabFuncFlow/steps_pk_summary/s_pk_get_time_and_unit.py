@@ -29,9 +29,9 @@ Time unit: The unit of measurement corresponding to the recorded time point, ens
 
 Please Note:
 (1) For values that do not need to be filled, enter "N/A".
-(2) For rows that can not be extracted, enter "N/A" for the entire row.
-(3) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 ({markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).**  
+(2) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).  
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
+(3) For rows that can not be extracted, enter "N/A" for the entire row.
 (4) **Important:** Please return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
 (5) **Absolutely no calculations are allowed—every value must be taken directly from main table and its caption without any modifications.**  
 (6) Format the final list within double angle brackets, like this:

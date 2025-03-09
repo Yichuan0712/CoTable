@@ -44,9 +44,9 @@ Carefully analyze the table and follow these steps:
 (2) Return a tuple containing two lists:  
     - The first list should contain the extracted "Parameter type" values.  
     - The second list should contain the corresponding "Parameter unit" values.  
-(3) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}" ({markdown_to_dataframe(md_table).shape[0]} rows in total).**  
+(3) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table).shape[0] - 1} from the column "{key_with_parameter_type}" (which has {markdown_to_dataframe(md_table).shape[0]} rows in total). 
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
-(4) For rows that can not be extracted, enter "N/A" for the entire row.
+(4) For rows in Subtable 1 that can not be extracted, enter "N/A" for the entire row.
 (5) The returned list should be enclosed within double angle brackets, like this:  
     <<(["Parameter type 1", "Parameter type 2", ...], ["Unit 1", "Unit 2", ...])>>  
 """

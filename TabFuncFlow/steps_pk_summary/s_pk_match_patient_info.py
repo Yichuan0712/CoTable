@@ -20,7 +20,7 @@ Additionally, I have compiled Subtable 2, where each row represents a unique com
 {display_md_table(patient_md_table)}
 Carefully analyze the tables and follow these steps:  
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
-(2) **Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 ({markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).**  
+(2) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).  
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
 (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
 (4) The "Subject N" values within each population group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. 
