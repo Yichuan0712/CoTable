@@ -47,12 +47,9 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro", max_retries=5, 
             elif match_angle:
                 extracted_data = match_angle[2:-2]
                 try:
-                    row_list, col_list = json.loads(extracted_data)
-                except json.JSONDecodeError:
-                    try:
-                        row_list, col_list = ast.literal_eval(extracted_data)
-                    except Exception as e:
-                        raise ValueError(f"Failed to parse row/column data: {e}") from e
+                    row_list, col_list = ast.literal_eval(extracted_data)
+                except Exception as e:
+                    raise ValueError(f"Failed to parse row/column data: {e}") from e
 
                 if not isinstance(row_list, list) or not isinstance(col_list, list):
                     raise ValueError(f"Extracted row/column data is not a list: {extracted_data}")
