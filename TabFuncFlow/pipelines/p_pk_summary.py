@@ -746,6 +746,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     for _, group in grouped:
         group = group.reset_index(drop=True)
         used_indices = set()
+        temp_rows = []
 
         for i, j in itertools.combinations(range(len(group)), 2):
             if i in used_indices or j in used_indices:
@@ -769,12 +770,18 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
                 used_indices.add(j)
                 merged_rows.append(row1)
             else:
-                merged_rows.append(row1)
-                merged_rows.append(row2)
+                if i not in used_indices:
+                    temp_rows.append(row1)
+                    used_indices.add(i)
+                if j not in used_indices:
+                    temp_rows.append(row2)
+                    used_indices.add(j)
 
         for i in range(len(group)):
             if i not in used_indices:
-                merged_rows.append(group.iloc[i])
+                temp_rows.append(group.iloc[i])
+
+        merged_rows.extend({tuple(row) for row in temp_rows})
 
     df_merged = pd.DataFrame(merged_rows, columns=df.columns)
     df_merged.fillna("N/A", inplace=True)
