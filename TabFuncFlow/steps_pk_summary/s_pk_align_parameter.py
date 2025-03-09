@@ -46,7 +46,7 @@ def s_pk_align_parameter(md_table, model_name="gemini_15_pro"):
         match_angle = matches[-1] if matches else None
 
         if match_col:
-            return None
+            col_name = None
         elif match_angle:
             col_name = match_angle[2:-2]
             # return match_name
