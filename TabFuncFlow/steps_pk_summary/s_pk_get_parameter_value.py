@@ -2,6 +2,8 @@ import ast
 from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_transpose import *
 import pandas as pd
+import re
+import time
 
 
 def s_pk_get_parameter_value_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value):
@@ -46,56 +48,76 @@ Please Note:
 """
 
 
-def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro"):
+def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_get_parameter_value_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value)
-
-    messages = [msg, ]
+    messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
-    # question = "When writing code to solve a problem, do not give the final result immediately. First, explain your thought process in detail, including how you analyze the problem, choose an algorithm or approach, and implement key steps. Then, provide the final code solution."
 
-    res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-    # print(display_md_table(md_table))
-    # print(usage, content)
+    retries = 0
+    wait_time = initial_wait
+    total_usage = 0
+    all_content = []
 
-    try:
-        # match_list = s_pk_get_parameter_value_parse(content, usage)  # Parse extracted values
-        content = content.replace('\n', '')
-        matches = re.findall(r'<<.*?>>', content)
-        match_angle = matches[-1] if matches else None
+    while retries < max_retries:
+        try:
+            res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-        if match_angle:
+            total_usage += usage
+            all_content.append(f"Attempt {retries + 1}:\n{content}")
+
+            content = content.replace('\n', '')
+            matches = re.findall(r'<<.*?>>', content)
+
+            if not matches:
+                raise ValueError(f"No valid parameter values found.")
+
+            extracted_data = matches[-1][2:-2]
+
             try:
-                match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
-                if not isinstance(match_list, list):
-                    raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}",
-                                     f"\n<<{usage}>>")
-                # return match_list
+                match_list = ast.literal_eval(extracted_data)
             except (SyntaxError, ValueError) as e:
-                raise ValueError(f"Failed to parse parameter values: {e}", f"\n{content}", f"\n<<{usage}>>") from e
-        else:
-            raise ValueError("No valid parameter values found in content.", f"\n{content}",
-                             f"\n<<{usage}>>")  # Clearer error message
-    except Exception as e:
-        raise RuntimeError(f"Error in s_pk_get_parameter_value_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+                raise ValueError(f"Failed to parse parameter values: {e}") from e
 
-    if not match_list:
-        raise ValueError(
-            "Parameter value extraction failed: No valid values found.", f"\n{content}", f"\n<<{usage}>>")  # Ensures the function does not return None
+            if not isinstance(match_list, list):
+                raise ValueError(
+                    f"Parsed content is not a valid list: {match_list}"
+                )
 
-    df_table = pd.DataFrame(match_list, columns=[
-        'Main value', 'Statistics type', 'Variation type', 'Variation value',
-        'Interval type', 'Lower bound', 'Upper bound', 'P value'
-    ])
+            if not match_list:
+                raise ValueError(
+                    f"Parameter value extraction failed: No valid values found."
+                )
 
-    expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
-    if df_table.shape[0] != expected_rows:
-        raise ValueError(
-            f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values.", f"\n{content}", f"\n<<{usage}>>"
-        )
+            expected_columns = [
+                'Main value', 'Statistics type', 'Variation type', 'Variation value',
+                'Interval type', 'Lower bound', 'Upper bound', 'P value'
+            ]
 
-    return_md_table = dataframe_to_markdown(df_table)
+            for row in match_list:
+                if len(row) != len(expected_columns):
+                    raise ValueError(
+                        f"Invalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}"
+                    )
 
-    return return_md_table, res, content, usage, truncated
+            df_table = pd.DataFrame(match_list, columns=expected_columns)
 
-# print(s_pk_get_parameter_value_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value))
-# s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro")
+            expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
+            if df_table.shape[0] != expected_rows:
+                raise ValueError(
+                    f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values."
+                )
+
+            return_md_table = dataframe_to_markdown(df_table)
+
+            return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
+
+        except (RuntimeError, ValueError) as e:
+            retries += 1
+            print(f"Attempt {retries}/{max_retries} failed: {e}")
+
+            if retries < max_retries:
+                print(f"Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+                wait_time *= 2
+
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to extract parameter values.")
