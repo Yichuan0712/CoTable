@@ -413,7 +413,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
                 print(COLOR_START + "Reasoning:" + COLOR_END)
                 print(content_to_print)
             type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
-    exit(0)
     """
     Step 9: Unit Extraction (Final)
     """
@@ -490,6 +489,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    exit(0)
     """
     Step 11: Population Matching
     """
