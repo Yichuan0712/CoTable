@@ -271,7 +271,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    exit(0)
     """
     Step 6: Rough Task Allocation (Preferably hidden from Users)
     """
@@ -284,27 +283,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     need_match_drug = True
     need_match_patient = True
     unit_auto_parse = False
-    # 0302 unit parse speedup!
-    # if parameter_unit_count == 0 and parameter_type_count == 1:
-    #     parameter_type_key = None
-    #     for key, value in col_mapping.items():
-    #         if value == "Parameter type":
-    #             parameter_type_key = key
-    #             break
-    #     df_table_aligned = markdown_to_dataframe(md_table_aligned)
-    #     df_table_aligned["Parameter unit"] = df_table_aligned[parameter_type_key].str.extract(r'\((.*?)\)')[0].fillna(
-    #         "N/A")
-    #     df_table_aligned[parameter_type_key] = df_table_aligned[parameter_type_key].str.replace(r'\(.*?\)', '',
-    #                                                                                             regex=True).str.strip()
-    #     matched_count = (df_table_aligned["Parameter unit"] != "N/A").sum()
-    #     total_count = len(df_table_aligned)
-    #     if matched_count <= total_count / 2:
-    #         df_table_aligned.drop(columns=["Parameter unit"], inplace=True)
-    #     else:
-    #         col_mapping["Parameter unit"] = "Parameter unit"
-    #         parameter_unit_count += 1
-    #         unit_auto_parse = True
-    #     md_table_aligned = dataframe_to_markdown(df_table_aligned)
     if parameter_value_count == 0:
         return
     if parameter_type_count == 0:
@@ -355,7 +333,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         content_list_clean.append(clean_llm_reasoning(content_split))
         usage_list.append(usage_split)
         truncated_list.append(truncated_split)
-        # print("\n"*1)
     else:
         usage_split = 0
         content_split = "Automatic execution.\n"
@@ -386,6 +363,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
         print(display_md_table(md_table_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
+    exit(0)
     """
     Step 8: Unit Extraction
     """

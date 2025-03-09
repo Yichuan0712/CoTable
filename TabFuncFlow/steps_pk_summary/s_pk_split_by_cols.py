@@ -2,6 +2,8 @@ import ast
 from TabFuncFlow.utils.table_utils import *
 from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_split_by_cols import *
+import re
+import time
 
 
 def s_pk_split_by_cols_prompt(md_table, col_mapping):
@@ -50,48 +52,60 @@ Enclose the final list within double angle brackets (<< >>) like this:
 """
 
 
-def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro"):
+def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_split_by_cols_prompt(md_table, col_mapping)
-
-    messages = [msg, ]
+    messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
-    res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-    # print(display_md_table(md_table))
-    # print(usage, content)
+    retries = 0
+    wait_time = initial_wait
+    total_usage = 0
+    all_content = []
 
-    try:
-        # col_groups = s_pk_split_by_cols_parse(content, usage)  # Parse extracted column groups
-        content = content.replace('\n', '')
+    while retries < max_retries:
+        try:
+            res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
 
-        matches = re.findall(r'<<.*?>>', content)
-        match_angle = matches[-1] if matches else None
+            total_usage += usage
+            all_content.append(f"Attempt {retries + 1}:\n{content}")
 
-        if match_angle:
+            content = content.replace('\n', '')
+            matches = re.findall(r'<<.*?>>', content)
+
+            if not matches:
+                raise ValueError(f"No valid column groups found.")
+
+            extracted_data = matches[-1][2:-2]
+
             try:
-                col_groups = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
-                if not isinstance(col_groups, list) or not all(isinstance(group, list) for group in col_groups):
-                    raise ValueError(f"Parsed content is not a valid list of column groups: {col_groups}",
-                                     f"\n{content}", f"\n<<{usage}>>")
-                # return match_list
-            except (SyntaxError, ValueError) as e:
-                raise ValueError(f"Failed to parse column groups: {e}", f"\n{content}", f"\n<<{usage}>>") from e
-        else:
-            raise ValueError("No valid column groups found in content.", f"\n{content}",
-                             f"\n<<{usage}>>")  # Clearer error message
-    except Exception as e:
-        raise RuntimeError(f"Error in s_pk_split_by_cols_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+                col_groups = ast.literal_eval(extracted_data)
+            except Exception as e:
+                raise ValueError(f"Failed to parse column groups: {e}") from e
 
-    if not col_groups:
-        raise ValueError("Column splitting failed: No valid column groups found.", f"\n{content}", f"\n<<{usage}>>")  # Ensures the function does not return None
+            if not isinstance(col_groups, list) or not all(isinstance(group, list) for group in col_groups):
+                raise ValueError(
+                    f"Parsed content is not a valid list of column groups: {col_groups}"
+                )
 
-    # Fix column names before using them
-    col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
+            if not col_groups:
+                raise ValueError(f"Column splitting failed: No valid column groups found.")
 
-    # Perform the actual column splitting
-    df_table = f_split_by_cols(col_groups, markdown_to_dataframe(md_table))
+            col_groups = [[fix_col_name(item, md_table) for item in group] for group in col_groups]
 
-    # Convert the resulting DataFrames to markdown
-    return_md_table_list = [dataframe_to_markdown(d) for d in df_table]
+            df_table = f_split_by_cols(col_groups, markdown_to_dataframe(md_table))
 
-    return return_md_table_list, res, content, usage, truncated
+            return_md_table_list = [dataframe_to_markdown(d) for d in df_table]
+
+            return return_md_table_list, res, "\n\n".join(all_content), total_usage, truncated
+
+        except Exception as e:
+            retries += 1
+            print(f"Attempt {retries}/{max_retries} failed: {e}")
+
+            if retries < max_retries:
+                print(f"Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+                wait_time *= 2
+
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to split columns.")
+
