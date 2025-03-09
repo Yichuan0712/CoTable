@@ -844,7 +844,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
     """give range to median"""
     group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-                     "Unit"]
+                     "Parameter unit"]
 
     # Finding pairs of rows that match on group_columns
     grouped = df_combined.groupby(group_columns)
