@@ -62,7 +62,6 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(content)
 
             total_usage += usage
             all_content.append(f"Attempt {retries + 1}:\n{content}")
