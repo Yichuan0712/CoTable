@@ -54,6 +54,7 @@ Enclose the final list within double angle brackets (<< >>) like this:
 
 def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_split_by_cols_prompt(md_table, col_mapping)
+    msg = fix_angle_brackets(msg)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 

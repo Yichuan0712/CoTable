@@ -26,6 +26,7 @@ Specimen is the type of sample.
 
 def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_extract_drug_info_prompt(md_table, caption)
+    msg = fix_angle_brackets(msg)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 

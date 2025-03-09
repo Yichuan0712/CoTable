@@ -30,3 +30,15 @@ def get_llm_response(messages, question, model="gemini_15_pro"):
     res, content, usage, truncated = request_llm(prompt_list, question)
     return res, content, usage, truncated
 
+
+def fix_angle_brackets(text: str) -> str:
+    left_count = text.count('<')
+    right_count = text.count('>')
+
+    if left_count == right_count + 1 and text.strip().endswith('>'):
+        print("*"*64)
+        print("*" * 64)
+        print("*" * 64)
+        print("*" * 64)
+        return text.strip() + '>'
+    return text

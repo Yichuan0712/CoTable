@@ -58,6 +58,7 @@ def s_pk_get_time_and_unit_parse(content, usage):
 
 def s_pk_get_time_and_unit(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, model_name="gemini_15_pro"):
     msg = s_pk_get_time_and_unit_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value)
+    msg = fix_angle_brackets(msg)
 
     messages = [msg, ]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
