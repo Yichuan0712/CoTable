@@ -768,7 +768,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
             if can_merge:
                 used_indices.add(i)
                 used_indices.add(j)
-                merged_rows.append(row1)
+                temp_rows.append(row1)
             else:
                 if i not in used_indices:
                     temp_rows.append(row1)
@@ -780,6 +780,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
         for i in range(len(group)):
             if i not in used_indices:
                 temp_rows.append(group.iloc[i])
+                used_indices.add(i)
 
         merged_rows.extend({tuple(row) for row in temp_rows})
 
