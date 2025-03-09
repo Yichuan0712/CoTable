@@ -76,7 +76,8 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro"):
         match_angle = matches[-1] if matches else None
 
         if match_end:
-            return None, None
+            row_list = None
+            col_list = None
 
         elif match_angle:
             inner_content = match_angle[2:-2]
