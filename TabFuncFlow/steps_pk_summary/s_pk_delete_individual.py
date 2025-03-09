@@ -1,21 +1,9 @@
-import ast
 from TabFuncFlow.utils.table_utils import *
 from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_select_row_col import *
 import time
-
-# def s_pk_delete_individual_prompt(md_table):
-#     return f"""
-# There is now a table related to pharmacokinetics (PK).
-# {display_md_table(md_table)}
-# Carefully examine the table and follow these steps:
-# (1) Remove any information that is specific to an individual.
-# If the table already meets this requirement, return [[END]].
-# If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
-# Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement.
-# When returning this, enclose the function call in double angle brackets.
-# """
-"""The table presents pharmacokinetic data comparing two groups of patients: those without and those with "ARC->GM".  The table provides the median concentration (Cmid) and trough concentration (Ctrough) along with their 95% confidence intervals for each group.  It also provides the number of patients (N) in each group for two different treatments (EI and IB).  Since the prompt asks to remove individual-specific information, we need to remove the 'N=' values associated with each group.  This means rows 0 and 3 should be removed."""
+import ast
+import re
 
 
 def s_pk_delete_individual_prompt(md_table):
@@ -30,13 +18,6 @@ If not, please use the following function to create a new table: f_select_row_co
 Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement. 
 When returning this, enclose the function call in double angle brackets.
 """
-
-
-import re
-import time
-import ast
-import json
-import pandas as pd
 
 
 def s_pk_delete_individual(md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):

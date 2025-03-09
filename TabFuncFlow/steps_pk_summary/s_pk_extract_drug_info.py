@@ -3,6 +3,7 @@ from TabFuncFlow.utils.llm_utils import *
 from TabFuncFlow.operations.f_transpose import *
 import pandas as pd
 import time
+import re
 
 
 def s_pk_extract_drug_info_prompt(md_table, caption):
