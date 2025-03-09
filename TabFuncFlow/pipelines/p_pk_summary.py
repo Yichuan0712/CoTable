@@ -842,6 +842,31 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     df_combined = df_combined[cols]
     df_combined = df_combined.reset_index(drop=True)
 
+    """give range to median"""
+    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
+                     "Unit"]
+
+    # Finding pairs of rows that match on group_columns
+    grouped = df_combined.groupby(group_columns)
+
+    # Processing each group
+    for _, group in grouped:
+        if len(group) == 2:  # Only process if there are exactly two rows in the group
+            median_row = group[group["Summary Statistics"] == "Median"]
+            non_median_row = group[group["Summary Statistics"] != "Median"]
+
+            if not median_row.empty and not non_median_row.empty:
+                # Check if non-median row has "Range"
+                if "Range" in non_median_row["Interval type"].values:
+                    # Assign range values to the median row
+                    df_combined.loc[median_row.index, ["Interval type", "Lower limit", "High limit"]] = \
+                        non_median_row[["Interval type", "Lower limit", "High limit"]].values
+
+                    # Remove range information from the non-median row
+                    df_combined.loc[non_median_row.index, ["Interval type", "Lower limit", "High limit"]] = ["N/A",
+                                                                                                             "N/A",
+                                                                                                             "N/A"]
+
     """Rename col names"""
     column_mapping = {
         "Parameter unit": "Unit",
