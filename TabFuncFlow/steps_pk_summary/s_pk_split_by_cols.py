@@ -79,7 +79,24 @@ def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        col_groups = s_pk_split_by_cols_parse(content, usage)  # Parse extracted column groups
+        # col_groups = s_pk_split_by_cols_parse(content, usage)  # Parse extracted column groups
+        content = content.replace('\n', '')
+
+        matches = re.findall(r'<<.*?>>', content)
+        match_angle = matches[-1] if matches else None
+
+        if match_angle:
+            try:
+                match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
+                if not isinstance(match_list, list) or not all(isinstance(group, list) for group in match_list):
+                    raise ValueError(f"Parsed content is not a valid list of column groups: {match_list}",
+                                     f"\n{content}", f"\n<<{usage}>>")
+                # return match_list
+            except (SyntaxError, ValueError) as e:
+                raise ValueError(f"Failed to parse column groups: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+        else:
+            raise ValueError("No valid column groups found in content.", f"\n{content}",
+                             f"\n<<{usage}>>")  # Clearer error message
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_split_by_cols_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

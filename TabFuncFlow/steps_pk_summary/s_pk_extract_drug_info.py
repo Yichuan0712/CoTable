@@ -48,7 +48,19 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        match_list = s_pk_extract_drug_info_parse(content, usage)
+        # match_list = s_pk_extract_drug_info_parse(content, usage)
+        content = content.replace('\n', '')
+        matches = re.findall(r'<<.*?>>', content)
+        match_angle = matches[-1] if matches else None
+
+        if match_angle:
+            try:
+                match_list = ast.literal_eval(match_angle[2:-2])
+                # return match_list
+            except Exception as e:
+                raise ValueError(f"Failed to parse extracted data: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+        else:
+            raise ValueError("No matching drug info found in content.", f"\n{content}", f"\n<<{usage}>>")
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_extract_drug_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

@@ -75,7 +75,23 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
     # print(usage, content)
 
     try:
-        match_list = s_pk_get_parameter_value_parse(content, usage)  # Parse extracted values
+        # match_list = s_pk_get_parameter_value_parse(content, usage)  # Parse extracted values
+        content = content.replace('\n', '')
+        matches = re.findall(r'<<.*?>>', content)
+        match_angle = matches[-1] if matches else None
+
+        if match_angle:
+            try:
+                match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
+                if not isinstance(match_list, list):
+                    raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}",
+                                     f"\n<<{usage}>>")
+                # return match_list
+            except (SyntaxError, ValueError) as e:
+                raise ValueError(f"Failed to parse parameter values: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+        else:
+            raise ValueError("No valid parameter values found in content.", f"\n{content}",
+                             f"\n<<{usage}>>")  # Clearer error message
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_get_parameter_value_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

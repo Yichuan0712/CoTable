@@ -84,7 +84,23 @@ def s_pk_get_parameter_type_and_unit(md_table_aligned, col_dict, md_table, capti
 
         # print(usage, content)
         try:
-            match_tuple = s_pk_get_parameter_type_and_unit_parse(content, usage)
+            # match_tuple = s_pk_get_parameter_type_and_unit_parse(content, usage)
+            content = content.replace('\n', '')
+            matches = re.findall(r'<<.*?>>', content)
+            match_angle = matches[-1] if matches else None
+
+            if match_angle:
+                try:
+                    match_tuple = ast.literal_eval(match_angle[2:-2])  # Extract tuple from `<<(...)>>`
+                    if not isinstance(match_tuple, tuple) or len(match_tuple) != 2:
+                        raise ValueError(f"Parsed content is not a valid (type, unit) tuple: {match_tuple}",
+                                         f"\n{content}", f"\n<<{usage}>>")
+                    # return match_tuple
+                except (SyntaxError, ValueError) as e:
+                    raise ValueError(f"Failed to parse parameter type and unit: {e}", f"\n{content}",
+                                     f"\n<<{usage}>>") from e
+            else:
+                raise ValueError("No valid match_angle.", f"\n{content}", f"\n<<{usage}>>")
         except Exception as e:
             raise RuntimeError(f"Error in s_pk_get_parameter_type_and_unit_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

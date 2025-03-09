@@ -51,7 +51,23 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        match_dict = s_pk_get_col_mapping_parse(content, usage)  # Parse the extracted mapping
+        # match_dict = s_pk_get_col_mapping_parse(content, usage)  # Parse the extracted mapping
+        content = content.replace('\n', '')
+
+        matches = re.findall(r'<<.*?>>', content)
+        match_angle = matches[-1] if matches else None
+
+        if match_angle:
+            try:
+                match_dict = ast.literal_eval(match_angle[2:-2])
+                if not isinstance(match_dict, dict):
+                    raise ValueError(f"Parsed content is not a dictionary: {match_dict}", f"\n{content}",
+                                     f"\n<<{usage}>>")
+                # return match_dict
+            except (SyntaxError, ValueError) as e:
+                raise ValueError(f"Failed to parse column mapping: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+        else:
+            raise ValueError("No valid column mapping found in content.", f"\n{content}", f"\n<<{usage}>>")
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_get_col_mapping_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

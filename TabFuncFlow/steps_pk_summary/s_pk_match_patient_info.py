@@ -60,7 +60,21 @@ def s_pk_match_patient_info(md_table_aligned, caption, md_table_aligned_with_1_p
     # print(usage, content)
 
     try:
-        match_list = s_pk_match_patient_info_parse(content, usage)  # Parse extracted matches
+        # match_list = s_pk_match_patient_info_parse(content, usage)  # Parse extracted matches
+        content = content.replace('\n', '')
+        matches = re.findall(r'<<.*?>>', content)
+        match_angle = matches[-1] if matches else None
+        if match_angle:
+            try:
+                match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
+                if not isinstance(match_list, list):
+                    raise ValueError(f"Parsed content is not a valid list: {match_list}", f"\n{content}",
+                                     f"\n<<{usage}>>")
+                # return match_list
+            except (SyntaxError, ValueError) as e:
+                raise ValueError(f"Failed to parse matched patient info: {e}", f"\n{content}", f"\n<<{usage}>>") from e
+        else:
+            raise ValueError("No valid matched patient information found in content.", f"\n{content}", f"\n<<{usage}>>")
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_match_patient_info_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 

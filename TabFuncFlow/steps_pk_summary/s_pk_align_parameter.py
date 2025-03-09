@@ -39,7 +39,19 @@ def s_pk_align_parameter(md_table, model_name="gemini_15_pro"):
     # print(usage, content)
 
     try:
-        col_name = s_pk_align_parameter_parse(content, usage)
+        # col_name = s_pk_align_parameter_parse(content, usage)
+        content = content.replace('\n', '')
+        match_col = re.search(r'\[\[COL\]\]', content)
+        matches = re.findall(r'<<.*?>>', content)
+        match_angle = matches[-1] if matches else None
+
+        if match_col:
+            return None
+        elif match_angle:
+            col_name = match_angle[2:-2]
+            # return match_name
+        else:
+            raise ValueError("No valid alignment parameter found in content.", f"\n{content}", f"\n<<{usage}>>")
     except Exception as e:
         raise RuntimeError(f"Error in s_pk_align_parameter_parse: {e}", f"\n{content}", f"\n<<{usage}>>") from e
 
