@@ -80,6 +80,7 @@ def s_pk_get_parameter_type_and_unit(md_table_aligned, col_dict, md_table, capti
 
                 expected_rows = markdown_to_dataframe(md_table).shape[0]
                 if len(match_tuple[0]) != expected_rows or len(match_tuple[1]) != expected_rows:
+                    messages = [msg, "Wrong answer example:\n"+content+f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units)."]
                     raise ValueError(
                         f"Mismatch: Expected {expected_rows} rows, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units)."
                     )
