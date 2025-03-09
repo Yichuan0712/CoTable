@@ -87,9 +87,9 @@ def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro"):
 
         if match_angle:
             try:
-                match_list = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
-                if not isinstance(match_list, list) or not all(isinstance(group, list) for group in match_list):
-                    raise ValueError(f"Parsed content is not a valid list of column groups: {match_list}",
+                col_groups = ast.literal_eval(match_angle[2:-2])  # Extract list from `<<(...)>>`
+                if not isinstance(col_groups, list) or not all(isinstance(group, list) for group in col_groups):
+                    raise ValueError(f"Parsed content is not a valid list of column groups: {col_groups}",
                                      f"\n{content}", f"\n<<{usage}>>")
                 # return match_list
             except (SyntaxError, ValueError) as e:
