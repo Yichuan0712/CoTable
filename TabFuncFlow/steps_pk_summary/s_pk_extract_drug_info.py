@@ -57,7 +57,7 @@ def s_pk_extract_drug_info(md_table, caption, model_name="gemini_15_pro", max_re
             if not match_list:
                 raise ValueError("Drug information extraction failed: No valid entries found!")
 
-            df_table = pd.DataFrame(match_list, columns=["Drug Name", "Analyte", "Specimen"])
+            df_table = pd.DataFrame(match_list, columns=["Drug name", "Analyte", "Specimen"])
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
