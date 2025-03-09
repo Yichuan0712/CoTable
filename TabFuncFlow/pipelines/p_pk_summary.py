@@ -192,7 +192,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, base
     print("=" * 64)
     step_name = "Population Information Extraction"
     print(COLOR_START+step_name+COLOR_END)
-    patient_info = s_pk_extract_patient_info(s_pk_extract_patient_info, md_table, description, llm)
+    patient_info = s_pk_extract_patient_info(md_table, description, llm)
     if patient_info is None:
         return None
     md_table_patient, res_patient, content_patient, usage_patient, truncated_patient = patient_info
