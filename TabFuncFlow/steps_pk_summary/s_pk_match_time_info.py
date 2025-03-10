@@ -5,7 +5,7 @@ import re
 import time
 
 
-def s_pk_match_drug_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table):
+def s_pk_match_time_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, time_md_table):
     first_line = md_table_aligned_with_1_param_type_and_value.strip().split("\n")[0]
     headers = [col.strip() for col in first_line.split("|") if col.strip()]
     extracted_param_types = f""" "{'", "'.join(headers)}" """
@@ -18,20 +18,20 @@ From the main table above, I have extracted the following columns to create Subt
 {extracted_param_types}  
 Below is Subtable 1:
 {display_md_table(md_table_aligned_with_1_param_type_and_value)}
-Additionally, I have compiled Subtable 2, where each row represents a unique combination of "Drug name" - "Analyte" - "Specimen," as follows:
-{display_md_table(drug_md_table)}
+Additionally, I have compiled Subtable 2, where each row represents a unique combination of "Time value" - "Time unit," as follows:
+{display_md_table(time_md_table)}
 Carefully analyze the tables and follow these steps:  
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
-(2) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).   
+(2) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).  
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
-(3) Format the final list within double angle brackets without removing duplicates or sorting, like this:  
+(3) Format the final list within double angle brackets without removing duplicates or sorting, like this:
     <<[1,1,2,2,3,3]>>
 """
 # (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
 
 
-def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
-    msg = s_pk_match_drug_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table)
+def s_pk_match_time_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, time_md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
+    msg = s_pk_match_time_info_prompt(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, time_md_table)
     msg = fix_angle_brackets(msg)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
@@ -44,6 +44,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+
             total_usage += usage
             all_content.append(f"Attempt {retries + 1}:\n{content}")
 
@@ -51,14 +52,14 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
             matches = re.findall(r'<<.*?>>', content)
 
             if not matches:
-                raise ValueError(f"No valid matched drug information found.")
+                raise ValueError(f"No valid matched time information found.")
 
             extracted_data = matches[-1][2:-2]
 
             try:
                 match_list = ast.literal_eval(extracted_data)
-            except Exception as e:
-                raise ValueError(f"Failed to parse matched drug info: {e}") from e
+            except (SyntaxError, ValueError) as e:
+                raise ValueError(f"Failed to parse matched time info: {e}") from e
 
             if not isinstance(match_list, list):
                 raise ValueError(
@@ -67,7 +68,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
 
             if not match_list:
                 raise ValueError(
-                    f"Drug information matching failed: No valid matches found."
+                    f"Patient information matching failed: No valid matches found."
                 )
 
             expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
@@ -79,7 +80,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
 
             return match_list, res, "\n\n".join(all_content), total_usage, truncated
 
-        except Exception as e:
+        except (RuntimeError, ValueError) as e:
             retries += 1
             print(f"Attempt {retries}/{max_retries} failed: {e}")
             if retries < max_retries:
@@ -87,4 +88,5 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
                 time.sleep(wait_time)
                 wait_time *= 2
 
-    raise RuntimeError(f"All {max_retries} attempts failed. Unable to match drug information.")
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to match time information.")
+
