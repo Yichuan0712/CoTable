@@ -161,6 +161,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    exit(0)
     """
     Step 3: Individual Data Deletion
     """

@@ -139,9 +139,9 @@ def extract_integers(text):
 #     raise RuntimeError(f"All {max_retries} attempts failed. Unable to extract population information.")
 def s_pk_extract_patient_info_prompt(md_table, caption):
     int_list = extract_integers(md_table+caption)
-    # print("*"*32)
-    # print(int_list)
-    # print("*"*32)
+    print("*"*32)
+    print(int_list)
+    print("*"*32)
     return f"""
 The following table contains pharmacokinetics (PK) data:
 {display_md_table(md_table)}
