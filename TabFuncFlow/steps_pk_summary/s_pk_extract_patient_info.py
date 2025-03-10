@@ -42,17 +42,16 @@ Here is the table caption:
 {caption}
 Carefully analyze the table, **row by row and column by column**, and follow these steps:  
 (1) Identify unique [Population, Pregnancy stage, Gestational age, Pediatric age, Subject N] combinations are present in the table.  
-    - Population is the patient age group. 
+    - **Population**: The patient age group. 
         **Common categories include:**
         "Maternal"
         "Preterm" or "premature": ≤ 37 weeks of gestation
-        "Neonates" or "Newborns": from birth to 1 month
-        "Infants": 1 month to 1 year 
+        "Neonates" or "Newborns": birth through 1 month
+        "Infants": 1 month through 1 year 
         "Children": 1 year through 12 years
         "Adolescents" or "Teenagers": 13 years through 17 years
         "Adults": 18 years or older
-
-    - Pregnancy stage is the pregnancy stages of patients mentioned in the study.
+    - **Pregnancy stage**:The pregnancy stages of patients mentioned in the study.
         **Common categories include:**
         "Trimester 1": ≤ 14 weeks of pregnancy
         "Trimester 2": 15-28 weeks of pregnancy
@@ -61,10 +60,9 @@ Carefully analyze the table, **row by row and column by column**, and follow the
         "Parturition," "Labor," or "Delivery": process of giving birth
         "Postpartum": 6-8 weeks (about 2 months) after birth of baby
         "Nursing," "Breast feeding," or "Lactation"
-
-    - Gestational age refers to the fetal or neonatal age (or age range) at a specific point in the study. Please retain the original wording whenever possible.
-    - Pediatric age refers to the child’s age (or age range) at a specific point in the study. Please retain the original wording whenever possible.
-    - Subject N is the number of subjects that correspond to the specific population.
+    - **Gestational age**: The fetal or neonatal age (or age range) at a specific point in the study. Please retain the original wording whenever possible.
+    - **Pediatric age**: The child’s age (or age range) at a specific point in the study. Please retain the original wording whenever possible.
+    - **Subject N**: The number of subjects that correspond to the specific population.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>. 
 (3) Verify the source of each [Population, Pregnancy stage, Gestational age, Pediatric age, Subject N] combination before including it in your answer.  
 (4) The "Subject N" values within each population group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. You must include all the Ns for each age group. 
