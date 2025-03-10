@@ -14,12 +14,25 @@ Here is the table caption:
 {caption}
 Carefully analyze the table and follow these steps:  
 (1) Identify how many unique [Time value, Time unit] combinations are present in the table.  
-Time: The specific moment, expressed as numerical value or a time range, when data is measured, a drug dose is administered, or any other relevant event occurs. Only entries with concrete numerical value should be recorded.
-Time unit: The unit of measurement corresponding to the recorded time point, ensuring clarity and precision in data representation.
+- **Time Value:** A specific moment (numerical or time range) when data is recorded, a drug dose is administered, or any other relevant event occurs.  
+  - Examples: Sampling times, dosing times, or reported observation times.  
+  - **DO NOT include half-lives (T½ Beta), elimination rate constants (Beta), or other PK parameters unless they explicitly represent a measurement time.**  
+- **Time Unit:** The unit corresponding to the recorded time point (e.g., "Hour", "Min", "Day").  
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["0-1", "Hour"], ["10", "Min"]]>> (example)  
 (3) Verify the source of each [Time value, Time unit] combination before including it in your answer.  
 (4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
+
+**Examples:**
+Include:  
+   - "0-12" (indicating a dosing period)  
+   - "24" (indicating a time of sample collection)  
+   - "5 min" (indicating a measured event)  
+
+Do NOT include:  
+   - "T½Beta(hr)" values like "16.8" (this is a half-life, not a recorded time)  
+   - "Beta(hr)" values like "0.017–0.118" (this is an elimination rate constant)  
+
 """
 
 
