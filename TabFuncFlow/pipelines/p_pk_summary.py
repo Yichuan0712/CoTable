@@ -675,6 +675,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     """if Lower limit & High limit == "N/A", Interval type must be "N/A"。"""
     df_combined.loc[
         (df_combined["Lower bound"] == "N/A") & (df_combined["Upper bound"] == "N/A"), "Interval type"] = "N/A"
+    """if Lower limit & High limit != "N/A", Interval type set as default "Range" """
+    df_combined.loc[
+        (df_combined["Lower bound"] != "N/A") & (df_combined["Upper bound"] != "N/A"), "Interval type"] = "Range"
     """if Variation value == "N/A", Variation type must be "N/A"。"""
     df_combined.loc[
         (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
