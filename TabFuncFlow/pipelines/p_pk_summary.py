@@ -161,29 +161,29 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    """
-    Step 3: Time Information Extraction
-    """
-    print("=" * 64)
-    step_name = "Time Information Extraction"
-    print(COLOR_START+step_name+COLOR_END)
-    time_info = s_pk_extract_time_info(md_table, description, llm, max_retries, initial_wait)
-    if time_info is None:
-        return None
-    md_table_time, res_time, content_time, usage_time, truncated_time = time_info
-    step_list.append(step_name)
-    res_list.append(res_time)
-    content_list.append(content_time)
-    content_list_clean.append(clean_llm_reasoning(content_time))
-    usage_list.append(usage_time)
-    truncated_list.append(truncated_time)
-    print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
-    print(COLOR_START+"Result:"+COLOR_END)
-    print(display_md_table(md_table_time))
-    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-    print(COLOR_START + "Reasoning:" + COLOR_END)
-    print(content_to_print)
-    exit(0)
+    # """
+    # Step 3: Time Information Extraction
+    # """
+    # print("=" * 64)
+    # step_name = "Time Information Extraction"
+    # print(COLOR_START+step_name+COLOR_END)
+    # time_info = s_pk_extract_time_info(md_table, description, llm, max_retries, initial_wait)
+    # if time_info is None:
+    #     return None
+    # md_table_time, res_time, content_time, usage_time, truncated_time = time_info
+    # step_list.append(step_name)
+    # res_list.append(res_time)
+    # content_list.append(content_time)
+    # content_list_clean.append(clean_llm_reasoning(content_time))
+    # usage_list.append(usage_time)
+    # truncated_list.append(truncated_time)
+    # print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
+    # print(COLOR_START+"Result:"+COLOR_END)
+    # print(display_md_table(md_table_time))
+    # content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    # print(COLOR_START + "Reasoning:" + COLOR_END)
+    # print(content_to_print)
+    # exit(0)
     """
     Step 3: Individual Data Deletion
     """
@@ -261,7 +261,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     need_split_col = False
     need_match_drug = True
     need_match_patient = True
-    need_match_time = True
     unit_auto_parse = False
     if parameter_value_count == 0:
         return
@@ -275,8 +274,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
         need_match_drug = False
     if markdown_to_dataframe(md_table_patient).shape[0] == 1:
         need_match_patient = False
-    if markdown_to_dataframe(md_table_time).shape[0] == 1:
-        need_match_time = False
     print("=" * 64)
     step_name = "Rough Task Allocation"
     print(COLOR_START+step_name+COLOR_END)
@@ -284,8 +281,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START+"Result:"+COLOR_END)
     if unit_auto_parse:
         print("Auto unit parsing is complete!")
-    tasks = ["Unit Extraction", "Sub-table Creation", "Drug Matching", "Population Matching", "Time Matching"]
-    statuses = [need_get_unit, need_split_col, need_match_drug, need_match_patient, need_match_time]
+    tasks = ["Unit Extraction", "Sub-table Creation", "Drug Matching", "Population Matching"]
+    statuses = [need_get_unit, need_split_col, need_match_drug, need_match_patient]
     active_tasks = [task for task, status in zip(tasks, statuses) if status]
     canceled_tasks = [task for task, status in zip(tasks, statuses) if not status]
     print(f"LLM Execution: {', '.join(active_tasks) if active_tasks else 'None'}")
@@ -529,63 +526,63 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
-    """
-    Step 11: Time Matching
-    """
-    time_list = []
-    round = 1
-    if need_match_time is False:
-        for md in md_table_list:
-            df = markdown_to_dataframe(md)
-            row_num = df.shape[0]
-            df_expanded = pd.concat([markdown_to_dataframe(md_table_time)] * row_num, ignore_index=True)
-            time_list.append(dataframe_to_markdown(df_expanded))
-    else:
-        for md in md_table_list:
-            print("=" * 64)
-            step_name = "Time Matching" + f" (Trial {str(round)})"
-            round += 1
-            print(COLOR_START + step_name + COLOR_END)
-            time_match_info = s_pk_match_time_info(md_table_aligned, description, md, md_table_time, llm, max_retries, initial_wait)
-            if time_match_info is None:
-                return None
-            time_match_list, res_time_match, content_time_match, usage_time_match, truncated_time_match = time_match_info
-            df_table_time = markdown_to_dataframe(md_table_time)
-            df_table_time = pd.concat(
-                [df_table_time, pd.DataFrame([{'Time value': 'ERROR', 'Time unit': 'ERROR'}])],
-                ignore_index=True)
-            df_table_time_reordered = df_table_time.iloc[time_match_list].reset_index(drop=True)
-            time_list.append(dataframe_to_markdown(df_table_time_reordered))
-            # type_unit_list.append(md_type_unit)
-            step_list.append(step_name)
-            res_list.append(res_time_match)
-            content_list.append(content_time_match)
-            content_list_clean.append(clean_llm_reasoning(content_time_match))
-            usage_list.append(usage_time_match)
-            truncated_list.append(truncated_time_match)
-            print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
-            print(COLOR_START + "Result:" + COLOR_END)
-            print(display_md_table(time_list[-1]))
-            content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-            print(COLOR_START + "Reasoning:" + COLOR_END)
-            print(content_to_print)
-
-    print("=" * 64)
-    step_name = "Time Matching (Final)"
-    print(COLOR_START+step_name+COLOR_END)
-    print(COLOR_START+"Usage:"+COLOR_END, 0)
-    print(COLOR_START+"Result:"+COLOR_END)
-    for i in range(len(time_list)):
-        print(f"Index [{i}]:")
-        print(display_md_table(time_list[i]))
-    print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Automatic execution.\n")
-    step_list.append(step_name)
-    res_list.append(True)
-    content_list.append("Automatic execution.\n")
-    content_list_clean.append("Automatic execution.\n")
-    usage_list.append(0)
-    truncated_list.append(False)
+    # """
+    # Step 11: Time Matching
+    # """
+    # time_list = []
+    # round = 1
+    # if need_match_time is False:
+    #     for md in md_table_list:
+    #         df = markdown_to_dataframe(md)
+    #         row_num = df.shape[0]
+    #         df_expanded = pd.concat([markdown_to_dataframe(md_table_time)] * row_num, ignore_index=True)
+    #         time_list.append(dataframe_to_markdown(df_expanded))
+    # else:
+    #     for md in md_table_list:
+    #         print("=" * 64)
+    #         step_name = "Time Matching" + f" (Trial {str(round)})"
+    #         round += 1
+    #         print(COLOR_START + step_name + COLOR_END)
+    #         time_match_info = s_pk_match_time_info(md_table_aligned, description, md, md_table_time, llm, max_retries, initial_wait)
+    #         if time_match_info is None:
+    #             return None
+    #         time_match_list, res_time_match, content_time_match, usage_time_match, truncated_time_match = time_match_info
+    #         df_table_time = markdown_to_dataframe(md_table_time)
+    #         df_table_time = pd.concat(
+    #             [df_table_time, pd.DataFrame([{'Time value': 'ERROR', 'Time unit': 'ERROR'}])],
+    #             ignore_index=True)
+    #         df_table_time_reordered = df_table_time.iloc[time_match_list].reset_index(drop=True)
+    #         time_list.append(dataframe_to_markdown(df_table_time_reordered))
+    #         # type_unit_list.append(md_type_unit)
+    #         step_list.append(step_name)
+    #         res_list.append(res_time_match)
+    #         content_list.append(content_time_match)
+    #         content_list_clean.append(clean_llm_reasoning(content_time_match))
+    #         usage_list.append(usage_time_match)
+    #         truncated_list.append(truncated_time_match)
+    #         print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+    #         print(COLOR_START + "Result:" + COLOR_END)
+    #         print(display_md_table(time_list[-1]))
+    #         content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    #         print(COLOR_START + "Reasoning:" + COLOR_END)
+    #         print(content_to_print)
+    # 
+    # print("=" * 64)
+    # step_name = "Time Matching (Final)"
+    # print(COLOR_START+step_name+COLOR_END)
+    # print(COLOR_START+"Usage:"+COLOR_END, 0)
+    # print(COLOR_START+"Result:"+COLOR_END)
+    # for i in range(len(time_list)):
+    #     print(f"Index [{i}]:")
+    #     print(display_md_table(time_list[i]))
+    # print(COLOR_START + "Reasoning:" + COLOR_END)
+    # print("Automatic execution.\n")
+    # step_list.append(step_name)
+    # res_list.append(True)
+    # content_list.append("Automatic execution.\n")
+    # content_list_clean.append("Automatic execution.\n")
+    # usage_list.append(0)
+    # truncated_list.append(False)
     """
     Step 12: Parameter Value Extraction
     """
@@ -636,15 +633,15 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     Step 16: Assembly
     """
     df_list = []
-    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list) == len(time_list)
+    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list)# == len(time_list)
     for i in range(len(drug_list)):
         df_drug = markdown_to_dataframe(drug_list[i])
         df_table_patient = markdown_to_dataframe(patient_list[i])
         df_type_unit = markdown_to_dataframe(type_unit_list[i])
         df_value = markdown_to_dataframe(value_list[i])
-        df_time = markdown_to_dataframe(time_list[i])
-        df_combined = pd.concat([df_drug, df_table_patient, df_time, df_type_unit, df_value], axis=1)
-        # df_combined = pd.concat([df_drug, df_table_patient, df_type_unit, df_value], axis=1)
+        # df_time = markdown_to_dataframe(time_list[i])
+        # df_combined = pd.concat([df_drug, df_table_patient, df_time, df_type_unit, df_value], axis=1)
+        df_combined = pd.concat([df_drug, df_table_patient, df_type_unit, df_value], axis=1)
         df_list.append(df_combined)
     df_combined = pd.concat(df_list, ignore_index=True)
     print("=" * 64)
@@ -666,7 +663,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     Step 15: Post-Processing
     """
     """fix col name"""
-    expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Time value", "Time unit", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
+    expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
 
     def rename_columns(df, expected_columns):
         renamed_columns = {}
@@ -684,9 +681,9 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
     """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
-    """if Time == "N/A", Time unit must be "N/A"。"""
-    df_combined.loc[
-        (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
+    # """if Time == "N/A", Time unit must be "N/A"。"""
+    # df_combined.loc[
+    #     (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
         (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
@@ -729,7 +726,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     df.replace("N/A", pd.NA, inplace=True)
 
     group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-                     "Parameter unit", "Time value", "Time unit"]
+                     "Parameter unit"]
     grouped = df.groupby(group_columns, dropna=False)
 
     merged_rows = []
@@ -811,7 +808,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
     """give range to median"""
     group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-                     "Parameter unit", "Time value", "Time unit"]
+                     "Parameter unit"]
 
     # Finding pairs of rows that match on group_columns
     grouped = df_combined.groupby(group_columns)
