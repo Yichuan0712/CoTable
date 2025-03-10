@@ -29,7 +29,7 @@ def extract_integers(text):
         ) - {0}
     )
 
-
+#         **If the study provides a more specific description, please retain the original terminology whenever possible.**
 def s_pk_extract_patient_info_prompt(md_table, caption):
     int_list = extract_integers(md_table+caption)
     # print("*"*32)
@@ -51,7 +51,6 @@ Carefully analyze the table, **row by row and column by column**, and follow the
         "Children": 1 year through 12 years
         "Adolescents" or "Teenagers": 13 years through 17 years
         "Adults": 18 years or older
-        **If the study provides a more specific description, please retain the original terminology whenever possible.**
 
     - Pregnancy stage is the pregnancy stages of patients mentioned in the study.
         **Common categories include:**
@@ -62,7 +61,7 @@ Carefully analyze the table, **row by row and column by column**, and follow the
         "Parturition," "Labor," or "Delivery": process of giving birth
         "Postpartum": 6-8 weeks (about 2 months) after birth of baby
         "Nursing," "Breast feeding," or "Lactation"
-        **If a more specific description is provided in the study, please retain the original terminology.**
+
     - Gestational age refers to the fetal or neonatal age (or age range) at a specific point in the study. Please retain the original wording whenever possible.
     - Pediatric age refers to the child’s age (or age range) at a specific point in the study. Please retain the original wording whenever possible.
     - Subject N is the number of subjects that correspond to the specific population.
