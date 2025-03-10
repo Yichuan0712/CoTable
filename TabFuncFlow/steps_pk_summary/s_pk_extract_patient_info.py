@@ -151,12 +151,11 @@ Carefully analyze the table, **row by row and column by column**, and follow the
 (1) Identify how many unique [Population, Pregnancy stage, Subject N] combinations are present in the table.
 Population is the patient age group.
 Pregnancy stage is the pregnancy stages of patients mentioned in the study.
-Subject N is the number of subjects that correspond to the specific parameter.
+Subject N represents the number of subjects corresponding to the specific parameter or the number of samples with quantifiable levels of the respective analyte.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>.
 (3) Verify the source of each [Population, Pregnancy stage, Subject N] combination before including it in your answer.
 (4) The "Subject N" values within each population group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. **YOU MUST** include all the Ns for each age group.
     - Specifically, **YOU MUST** explain every number, **ONE BY ONE** in this list: {int_list} to determine if it should be listed in Subject N. 
-    - Don't only include primary Subject N. **YOU MUST** include all the relevant Ns.
     - Fill in "N/A" when you don't know the exact N.
 (5) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
 """
