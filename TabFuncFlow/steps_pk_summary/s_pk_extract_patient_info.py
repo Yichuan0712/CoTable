@@ -41,7 +41,7 @@ The following table contains pharmacokinetics (PK) data:
 Here is the table caption:  
 {caption}
 Carefully analyze the table, **row by row and column by column**, and follow these steps:  
-(1) Identify how many unique [Population, Pregnancy stage, Gestational age, Pediatric age, Subject N] combinations are present in the table.  
+(1) Identify unique [Population, Pregnancy stage, Gestational age, Pediatric age, Subject N] combinations are present in the table.  
     - Population is the patient age group. 
         **Common categories include:**
         "Maternal"
@@ -95,19 +95,32 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro", max
             matches = re.findall(r'<<.*?>>', content)
             match_angle = matches[-1] if matches else None
 
-            if match_angle:
-                try:
-                    match_list = ast.literal_eval(match_angle[2:-2])
-                    match_list = list(map(list, set(map(tuple, match_list))))
-                except Exception as e:
-                    raise ValueError(f"Failed to parse extracted population information. {e}") from e
-            else:
-                raise ValueError(f"No population information found in the extracted content.")
+            if not match_angle:
+                raise ValueError("No population information found in the extracted content.")
 
-            if not match_list:
-                raise ValueError(f"Population information extraction failed: No valid entries found!")
+            try:
+                match_list = ast.literal_eval(match_angle[2:-2])
+                if not isinstance(match_list, list):
+                    raise ValueError("Parsed content is not a valid list.")
 
-            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
+                match_list = [list(row) for row in set(tuple(row) for row in match_list)]
+            except Exception as e:
+                raise ValueError(f"Failed to parse extracted population information. {e}") from e
+
+            # **数据格式校验**
+            expected_columns = ["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"]
+            for row in match_list:
+                if len(row) != len(expected_columns):
+                    messages.append(
+                        f"Wrong answer example:\n{content}\n"
+                        f"Why it's wrong:\n"
+                        f"Invalid format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\n"
+                        f"Row: {row}"
+                    )
+                    raise ValueError(f"Invalid format: Expected {len(expected_columns)} columns per row.")
+
+            # **转换为 Markdown 表格**
+            df_table = pd.DataFrame(match_list, columns=expected_columns)
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
@@ -115,13 +128,17 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro", max
         except Exception as e:
             retries += 1
             print(f"Attempt {retries}/{max_retries} failed: {e}")
+
+            # **将错误反馈给 LLM 并让它修正**
             if retries < max_retries:
+                messages.append(
+                    f"Your previous response had a mistake: {str(e)}. Please correct your answer."
+                )
                 print(f"Retrying in {wait_time} seconds...")
                 time.sleep(wait_time)
                 wait_time *= 2
 
     raise RuntimeError(f"All {max_retries} attempts failed. Unable to extract population information.")
-
 # def s_pk_extract_patient_info_prompt(md_table, caption):
 #     int_list = extract_integers(md_table+caption)
 #     # print("*"*32)
