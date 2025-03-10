@@ -21,7 +21,8 @@ Carefully analyze the table and follow these steps:
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["0-1", "Hour"], ["10", "Min"]]>> (example)  
 (3) Verify the source of each [Time value, Time unit] combination before including it in your answer.  
-(4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
+(4) **If no valid [Time value, Time unit] combinations are found, return the default output:**  
+    **<<[["N/A", "N/A"]]>>**  
 
 **Examples:**
 Include:  
@@ -30,9 +31,9 @@ Include:
    - "5 min" (indicating a measured event)  
 
 Do NOT include:  
-   - "T½Beta(hr)" values like "16.8" (this is a half-life, not a recorded time)  
-   - "Beta(hr)" values like "0.017–0.118" (this is an elimination rate constant)  
-
+   - "T½Beta(hr)" values (half-life, not a recorded time)  
+   - "Beta(hr)" values (elimination rate constant)  
+   
 """
 
 
