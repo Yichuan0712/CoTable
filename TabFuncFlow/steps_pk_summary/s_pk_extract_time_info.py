@@ -21,7 +21,8 @@ Carefully analyze the table and follow these steps:
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["0-1", "Hour"], ["10", "Min"]]>> (example)  
 (3) Verify the source of each [Time value, Time unit] combination before including it in your answer.  
-(4) **If no valid [Time value, Time unit] combinations are found, return the default output:**  
+(4) **Absolutely no calculations are allowed—every value must be taken directly from the table without any modifications.** 
+(5) **If no valid [Time value, Time unit] combinations are found, return the default output:**  
     **<<[["N/A", "N/A"]]>>**  
 
 **Examples:**
