@@ -3,6 +3,7 @@ from TabFuncFlow.steps_pk_summary.s_pk_delete_individual import *
 from TabFuncFlow.steps_pk_summary.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_summary.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_extract_patient_info import *
+from TabFuncFlow.steps_pk_summary.s_pk_extract_time_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_col_mapping import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_type_and_unit import *
 from TabFuncFlow.steps_pk_summary.s_pk_match_drug_info import *
@@ -65,52 +66,6 @@ def clean_llm_reasoning(text: str) -> str:
 
     # Ensure the output ends with a newline
     return result if result.endswith("\n") else result + "\n"
-
-
-# def run_with_retry(func, *args, max_retries=5, base_delay=10, **kwargs):
-#     delay = base_delay
-#     for attempt in range(max_retries):
-#         try:
-#             return func(*args, **kwargs)
-#         except Exception as e:
-#             print(f"Attempt {attempt + 1} failed: {e}")
-#             if attempt < max_retries - 1:
-#                 print(f"Retrying in {delay} seconds...")
-#                 time.sleep(delay)
-#                 delay *= 2
-#             else:
-#                 print("Max retries reached. Returning None.")
-#                 return None
-#
-#     # it will not get here
-#     return None
-
-
-def run_with_retry(func, *args, max_retries=5, base_delay=5, **kwargs):
-    delay = base_delay
-    last_matched_number = 0
-
-    for attempt in range(max_retries):
-        try:
-            result = func(*args, **kwargs)
-            if isinstance(result, (list, tuple)) and len(result) >= 2:
-                modified_result = list(result)
-                modified_result[-2] += last_matched_number
-                return tuple(modified_result) if isinstance(result, tuple) else modified_result
-        except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            matches = re.findall(r'<<(\d+)>>', str(e))
-            if matches:
-                last_matched_number += int(matches[-1])
-
-            if attempt < max_retries - 1:
-                print(f"Retrying in {delay} seconds...")
-                time.sleep(delay)
-                delay *= 2
-            else:
-                print("Max retries reached. Returning None.")
-                return None
-    return None
 
 
 def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=1, use_color=True, clean_reasoning=False):
@@ -206,6 +161,29 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    """
+    Step 3: Time Information Extraction
+    """
+    print("=" * 64)
+    step_name = "Time Information Extraction"
+    print(COLOR_START+step_name+COLOR_END)
+    time_info = s_pk_extract_time_info(md_table, description, llm, max_retries, initial_wait)
+    if time_info is None:
+        return None
+    md_table_time, res_time, content_time, usage_time, truncated_time = patient_info
+    step_list.append(step_name)
+    res_list.append(res_time)
+    content_list.append(content_time)
+    content_list_clean.append(clean_llm_reasoning(content_time))
+    usage_list.append(usage_time)
+    truncated_list.append(truncated_time)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
+    print(COLOR_START+"Result:"+COLOR_END)
+    print(display_md_table(md_table_time))
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print(content_to_print)
+    exit(0)
     """
     Step 3: Individual Data Deletion
     """
@@ -811,29 +789,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
     df_combined[["Lower bound", "Upper bound"]] = df_combined.apply(extract_limits, axis=1)
     df_combined = df_combined.reset_index(drop=True)
-
-    """remove inclusive rows"""
-    # def remove_contained_rows(df):
-    #     df_cleaned = df.copy()
-    #
-    #     rows_to_drop = set()
-    #     for i in range(len(df_cleaned)):
-    #         for j in range(i + 1, len(df_cleaned)):
-    #             row1 = df_cleaned.iloc[i]
-    #             row2 = df_cleaned.iloc[j]
-    #
-    #             if all((r1 == r2) or (r1 == "N/A") for r1, r2 in zip(row1, row2)):
-    #                 rows_to_drop.add(i)  # row1 included by row2
-    #             elif all((r2 == r1) or (r2 == "N/A") for r1, r2 in zip(row1, row2)):
-    #                 rows_to_drop.add(j)
-    #
-    #     df_cleaned = df_cleaned.drop(index=rows_to_drop).reset_index(drop=True)
-    #     return df_cleaned
-    #
-    # df_combined = remove_contained_rows(df_combined)
-    # df_combined = remove_contained_rows(df_combined)
-    # df_combined = remove_contained_rows(df_combined)
-    # df_combined = df_combined.reset_index(drop=True)
 
     """col exchange"""
     cols = list(df_combined.columns)
