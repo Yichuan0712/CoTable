@@ -1,4 +1,3 @@
-import time
 from TabFuncFlow.steps_pk_summary.s_pk_delete_individual import *
 from TabFuncFlow.steps_pk_summary.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_summary.s_pk_extract_drug_info import *
@@ -9,7 +8,7 @@ from TabFuncFlow.steps_pk_summary.s_pk_match_drug_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_split_by_cols import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_value import *
-from TabFuncFlow.steps_pk_summary.s_pk_get_time_and_unit import *
+from archive.s_pk_get_time_and_unit import *
 import re
 import itertools
 

@@ -14,7 +14,7 @@ Here is the table caption:
 {caption}
 Carefully analyze the table and follow these steps:  
 (1) Identify how many unique [Time value, Time unit] combinations are present in the table.  
-Time: The specific moment, expressed as numerical value, when data is measured, a drug dose is administered, or any other relevant event occurs. Only entries with concrete numerical value should be recorded.
+Time: The specific moment, expressed as numerical value or a time range, when data is measured, a drug dose is administered, or any other relevant event occurs. Only entries with concrete numerical value should be recorded.
 Time unit: The unit of measurement corresponding to the recorded time point, ensuring clarity and precision in data representation.
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["0-1", "Hour"], ["10", "Min"]]>> (example)  
