@@ -170,7 +170,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     time_info = s_pk_extract_time_info(md_table, description, llm, max_retries, initial_wait)
     if time_info is None:
         return None
-    md_table_time, res_time, content_time, usage_time, truncated_time = patient_info
+    md_table_time, res_time, content_time, usage_time, truncated_time = time_info
     step_list.append(step_name)
     res_list.append(res_time)
     content_list.append(content_time)
