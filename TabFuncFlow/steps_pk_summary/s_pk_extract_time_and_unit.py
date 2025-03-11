@@ -57,7 +57,7 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_proce
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(usage, content)
+            # print(usage, content)
 
             total_usage += usage
             all_content.append(f"Attempt {retries + 1}:\n{content}")

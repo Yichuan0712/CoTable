@@ -39,6 +39,9 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Nursing," "Breastfeeding," or "Lactation" (refers to the period of breastfeeding after birth) 
  
     - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the fetal or neonatal age (or age range).
+        Note: Verify that the value explicitly states the age. Only consider it valid if the age is directly mentioned. Do not infer age from the timing of data recording or drug administration.
+        For example: "Concentrations on Days 7" refers to a measurement time point, not an age, and should not be treated as such.
+        
     - **Subject N**: The number of subjects corresponding to the specific population.
 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
@@ -48,8 +51,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
 
 (4) For each Pregnancy Stage, check whether it aligns with any of the common categories. If it does, replace it with the corresponding standard category. If it does not fit any common category, keep the original wording unchanged.
 
-(5) If any information is missing, attempt to infer it based on available data (e.g., context, related entries, or common pharmacokinetic knowledge).  
-   - Only use **"N/A"** if the information **cannot** be reasonably inferred.
+(5) Use **"N/A"** as the placeholder if the information **cannot** be reasonably inferred.
    
 (6) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(patient_md_table).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(patient_md_table).shape[0]} rows in total).   
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
