@@ -8,6 +8,7 @@ from TabFuncFlow.steps_pk_summary.s_pk_match_drug_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_split_by_cols import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_value import *
+from TabFuncFlow.steps_pk_summary.s_pk_refine_patient_info import *
 from archive.s_pk_get_time_and_unit import *
 import re
 import itertools
@@ -225,6 +226,29 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # content_list_clean.append("Automatic execution.\n")
     # usage_list.append(0)
     # truncated_list.append(False)
+    """
+    Step 2: Population Information Refinement
+    """
+    print("=" * 64)
+    step_name = "Population Information Refinement"
+    print(COLOR_START+step_name+COLOR_END)
+    patient_info_refined = s_pk_refine_patient_info(md_table, description, llm, max_retries, initial_wait)
+    if patient_info_refined is None:
+        return None
+    md_table_patient_refined, res_patient_refined, content_patient_refined, usage_patient_refined, truncated_patient_refined = patient_info_refined
+    step_list.append(step_name)
+    res_list.append(res_patient_refined)
+    content_list.append(content_patient_refined)
+    content_list_clean.append(clean_llm_reasoning(content_patient_refined))
+    usage_list.append(usage_patient_refined)
+    truncated_list.append(truncated_patient_refined)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
+    print(COLOR_START+"Result:"+COLOR_END)
+    print(display_md_table(md_table_patient))
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print(content_to_print)
+    exit(0)
     """
     Step 3: Individual Data Deletion
     """
