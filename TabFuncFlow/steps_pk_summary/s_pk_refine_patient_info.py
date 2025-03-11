@@ -15,8 +15,8 @@ From the main table above, I have extracted the following information to create 
 {display_md_table(patient_md_table)}
 Carefully analyze the tables and follow these steps to refine Subtable 1 into a more detailed Subtable 2:  
 
-(1) Identify all unique combinations of **[Population type, Pregnancy stage type, Gestational age, Pediatric age, Subject N]** from the table.
-    - **Population type**: The age group of the subjects.
+(1) Identify all unique combinations of **[Population, Pregnancy stage, Gestational age, Pediatric age, Subject N]** from the table.
+    - **Population**: The age group of the subjects.  
       **Common categories include:**  
         - "Maternal"  
         - "Preterm" or "Premature" (≤ 37 weeks of gestation)  
@@ -26,7 +26,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Adolescents" or "Teenagers" (13 years to 17 years)  
         - "Adults" (18 years or older)  
       
-    - **Pregnancy stage type**: The stage of pregnancy for the patients in the study.  
+    - **Pregnancy stage**: The stage of pregnancy for the patients in the study.  
       **Common categories include:**  
         - "Trimester 1" (≤ 14 weeks of pregnancy)  
         - "Trimester 2" (15–28 weeks of pregnancy)  
@@ -43,9 +43,11 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
    - Your response should be enclosed in **double angle brackets** `<< >>` and formatted as a **single line**.
 
-(3) Verify the source of each **[Population, Pregnancy Stage, Gestational Age, Pediatric Age, Subject N]** combination before including it in your response.
+(3) For each Population, check whether it can be categorized under any of the common categories listed above. If it fits, classify it accordingly; if not, retain the original wording.
 
-(4) If any information is missing, attempt to infer it based on available data (e.g., context, related entries, or common pharmacokinetic knowledge).  
+(4) For each Pregnancy stage, check whether it can be categorized under any of the common categories listed above. If it does, classify it accordingly; if not, keep the original wording unchanged.
+
+(5) If any information is missing, attempt to infer it based on available data (e.g., context, related entries, or common pharmacokinetic knowledge).  
    - Only use **"N/A"** if the information **cannot** be reasonably inferred.
 
 """
@@ -87,7 +89,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
             if not match_list:
                 raise ValueError(f"Population information refinement failed: No valid entries found!")
 
-            df_table = pd.DataFrame(match_list, columns=["Population type", "Pregnancy stage type", "Gestational age", "Pediatric age", "Subject N"])
+            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
