@@ -100,7 +100,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
                     f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
                 )
 
-            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
+            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"]).astype(str)
             print("*"*16)
             print(df_table['Subject N'])
             print(markdown_to_dataframe(patient_md_table)['Subject N'])

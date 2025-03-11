@@ -719,6 +719,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     df_combined.replace("nan", "N/A", inplace=True)
     """replace Standard Deviation (SD) by SD"""
     df_combined.replace("Standard Deviation (SD)", "SD", inplace=True)
+    df_combined.replace("s.d.", "SD", inplace=True)
+    df_combined.replace("S.D.", "SD", inplace=True)
 
     """replace , by empty"""
     df_combined.replace(",", " ", inplace=True)
