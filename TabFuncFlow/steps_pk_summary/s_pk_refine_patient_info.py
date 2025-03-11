@@ -15,7 +15,7 @@ From the main table above, I have extracted the following information to create 
 {display_md_table(patient_md_table)}
 Carefully analyze the tables and follow these steps to refine Subtable 1 into a more detailed Subtable 2:  
 
-(1) Identify all unique combinations of **[Population, Pregnancy Stage, Gestational Age, Pediatric Age, Subject N]** from the table.
+(1) Identify all unique combinations of **[Population, Pregnancy stage, Gestational age, Pediatric age, Subject N]** from the table.
     - **Population**: The age group of the subjects.  
       **Common categories include:**  
         - "Maternal"  
@@ -26,7 +26,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Adolescents" or "Teenagers" (13 years to 17 years)  
         - "Adults" (18 years or older)  
       
-    - **Pregnancy Stage**: The stage of pregnancy for the patients in the study.  
+    - **Pregnancy stage**: The stage of pregnancy for the patients in the study.  
       **Common categories include:**  
         - "Trimester 1" (≤ 14 weeks of pregnancy)  
         - "Trimester 2" (15–28 weeks of pregnancy)  
@@ -36,8 +36,8 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Postpartum" (6–8 weeks after birth)  
         - "Nursing," "Breastfeeding," or "Lactation"  
 
-    - **Gestational Age**: The fetal or neonatal age (or age range) at a specific point in the study. Retain the original wording whenever possible.  
-    - **Pediatric Age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible.  
+    - **Gestational age**: The fetal or neonatal age (or age range) at a specific point in the study. Retain the original wording whenever possible.  
+    - **Pediatric age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible.  
     - **Subject N**: The number of subjects corresponding to the specific population.
 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
@@ -72,37 +72,26 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
 
             content = content.replace('\n', '')
             matches = re.findall(r'<<.*?>>', content)
+            match_angle = matches[-1] if matches else None
 
-            if not matches:
-                raise ValueError(f"No valid matched patient information found.")
-
-            extracted_data = matches[-1][2:-2]
-
-            try:
-                match_list = ast.literal_eval(extracted_data)
-            except (SyntaxError, ValueError) as e:
-                raise ValueError(f"Failed to parse matched patient info: {e}") from e
-
-            if not isinstance(match_list, list):
-                raise ValueError(
-                    f"Parsed content is not a valid list: {match_list}"
-                )
+            if match_angle:
+                try:
+                    match_list = ast.literal_eval(match_angle[2:-2])
+                    match_list = list(map(list, set(map(tuple, match_list))))
+                except Exception as e:
+                    raise ValueError(f"Failed to parse refined population information. {e}") from e
+            else:
+                raise ValueError(f"No refined population information found in the content.")
 
             if not match_list:
-                raise ValueError(
-                    f"Patient information matching failed: No valid matches found."
-                )
+                raise ValueError(f"Population information refinement failed: No valid entries found!")
 
-            expected_rows = markdown_to_dataframe(patient_md_table).shape[0]
-            if len(match_list) != expected_rows:
-                messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."]
-                raise ValueError(
-                    f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
-                )
+            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
+            return_md_table = dataframe_to_markdown(df_table)
 
-            return match_list, res, "\n\n".join(all_content), total_usage, truncated
+            return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
 
-        except (RuntimeError, ValueError) as e:
+        except Exception as e:
             retries += 1
             print(f"Attempt {retries}/{max_retries} failed: {e}")
             if retries < max_retries:
@@ -110,5 +99,4 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
                 time.sleep(wait_time)
                 wait_time *= 2
 
-    raise RuntimeError(f"All {max_retries} attempts failed. Unable to match patient information.")
-
+    raise RuntimeError(f"All {max_retries} attempts failed. Unable to refine population information.")
