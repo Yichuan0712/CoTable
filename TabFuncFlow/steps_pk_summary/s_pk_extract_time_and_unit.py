@@ -79,8 +79,8 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_proce
                 raise ValueError("Time information extraction failed: No valid entries found!")
 
             df_table = pd.DataFrame(match_list, columns=["Time value", "Time unit"])
-            print(df_table)
-            exit(0)
+            # print(df_table)
+            # exit(0)
 
             expected_rows = markdown_to_dataframe(md_data_lines_after_post_process).shape[0]
             if df_table.shape[0] != expected_rows:

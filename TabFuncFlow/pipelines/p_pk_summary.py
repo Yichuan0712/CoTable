@@ -98,10 +98,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list = []
     truncated_list = []
     """
-    Step 0: Pre-launch Inspection
+    Step 0: Pre-operation Inspection
     """
     print("=" * 64)
-    step_name = "Pre-launch Inspection"
+    step_name = "Pre-operation Inspection"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
@@ -672,7 +672,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 16: Post-Processing
+    Step 16: Post-Processing & Time Extraction
     """
     """fix col name"""
     # expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
@@ -876,11 +876,11 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
                     # Remove range information from the non-median row
                     df_combined.loc[non_median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = ["N/A", "N/A", "N/A"]
 
-    """
-    Step 17: Time Extraction
-    """
+    # """
+    # Step 17: Time Extraction
+    # """
     print("=" * 64)
-    step_name = "Time Extraction"
+    step_name = "Post-Processing & Time Extraction"
     print(COLOR_START+step_name+COLOR_END)
     md_data_lines_after_post_process = dataframe_to_markdown(df_combined[["Main value", "Statistics type", "Variation type", "Variation value",
                         "Interval type", "Lower bound", "Upper bound", "P value"]])
@@ -901,6 +901,15 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
 
+    insert_pos = df_combined.columns.get_loc("Parameter type")  # before Parameter type
+
+    # split df_combined and insert df of time
+    df_combined = pd.concat([df_combined.iloc[:, :insert_pos], markdown_to_dataframe(md_table_time), df_combined.iloc[:, insert_pos:]], axis=1)
+
+    """
+    Step 17: Post-operation Inspection
+    """
+
     """Rename col names"""
     column_mapping = {
         "Parameter unit": "Unit",
@@ -912,7 +921,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     df_combined = df_combined.rename(columns=column_mapping)
 
     print("=" * 64)
-    step_name = "Post-Processing"
+    step_name = "Post-operation Inspection"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
