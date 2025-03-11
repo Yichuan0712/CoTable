@@ -541,7 +541,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
         for md in md_table_list:
             df = markdown_to_dataframe(md)
             row_num = df.shape[0]
-            df_expanded = pd.concat([markdown_to_dataframe(md_table_patient)] * row_num, ignore_index=True)
+            # df_expanded = pd.concat([markdown_to_dataframe(md_table_patient)] * row_num, ignore_index=True)
+            df_expanded = pd.concat([markdown_to_dataframe(md_table_patient_refined)] * row_num, ignore_index=True)  # 这
             patient_list.append(dataframe_to_markdown(df_expanded))
     else:
         for md in md_table_list:
