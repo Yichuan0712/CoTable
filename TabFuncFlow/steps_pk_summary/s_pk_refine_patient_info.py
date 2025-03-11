@@ -100,13 +100,14 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
                     f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
                 )
 
+            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
+
             if df_table['Subject N'] != markdown_to_dataframe(patient_md_table)['Subject N']:
                 messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nThe row order in the refined table does not match the original order."]
                 raise ValueError(
                     f"The row order in the refined Subtable 2 does not match the original order in Subtable 1."
                 )
 
-            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
