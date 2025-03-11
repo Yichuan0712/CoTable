@@ -53,7 +53,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
    
 (6) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(patient_md_table).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(patient_md_table).shape[0]} rows in total).   
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
-    - **Maintain the original row order** from Subtable 1—do not shuffle, reorder, or omit any rows.
+    - **Maintain the original row order** from Subtable 1—do not shuffle, reorder, or omit any rows. The Subject N for each row in Subtable 2 must be the same as in Subtable 1.
 """
 # (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
 
