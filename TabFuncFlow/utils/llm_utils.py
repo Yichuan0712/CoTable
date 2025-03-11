@@ -32,10 +32,5 @@ def get_llm_response(messages, question, model="gemini_15_pro"):
 
 
 def fix_angle_brackets(text: str) -> str:
-    # when output is long, llm may miss a '>' at the end
-    left_count = text.count('<')
-    right_count = text.count('>')
+    return text + '>' if text.endswith('>') and not text.endswith('>>') else text
 
-    if left_count == right_count + 1 and text.strip().endswith('>'):
-        return text.strip() + '>'
-    return text
