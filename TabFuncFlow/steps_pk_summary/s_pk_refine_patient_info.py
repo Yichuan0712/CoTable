@@ -84,7 +84,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
             if match_angle:
                 try:
                     match_list = ast.literal_eval(match_angle[2:-2])
-                    match_list = list(map(list, set(map(tuple, match_list))))
+                    match_list = [list(t) for t in dict.fromkeys(map(tuple, match_list))]
                 except Exception as e:
                     raise ValueError(f"Failed to parse refined population information. {e}") from e
             else:
@@ -102,7 +102,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
 
             df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
 
-            if df_table['Subject N'] != markdown_to_dataframe(patient_md_table)['Subject N']:
+            if not df_table['Subject N'].equals(markdown_to_dataframe(patient_md_table)['Subject N']):
                 messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nThe row order in the refined table does not match the original order."]
                 raise ValueError(
                     f"The row order in the refined Subtable 2 does not match the original order in Subtable 1."
