@@ -43,9 +43,9 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
    - Your response should be enclosed in **double angle brackets** `<< >>` and formatted as a **single line**.
 
-(3) For each Population, check whether it can be categorized under any of the common categories listed above. If it fits, classify it accordingly; if not, retain the original wording.
+(3) For each Population, determine whether it can be classified under one of the common categories listed above. If so, replace it with the corresponding standard category while preserving the original term in parentheses (e.g., "Children (Toddler)" if "Toddler" was the original term and falls under "Children"). If it does not fit any common category, retain the original wording.
 
-(4) For each Pregnancy stage, check whether it can be categorized under any of the common categories listed above. If it does, classify it accordingly; if not, keep the original wording unchanged.
+(4) For each Pregnancy Stage, check whether it aligns with any of the common categories. If it does, replace it with the corresponding standard category while keeping the original term in parentheses (e.g., "Postpartum (Postnatal period)" if "Postnatal period" was the original term and falls under "Postpartum"). If it does not fit any common category, keep the original wording unchanged.
 
 (5) If any information is missing, attempt to infer it based on available data (e.g., context, related entries, or common pharmacokinetic knowledge).  
    - Only use **"N/A"** if the information **cannot** be reasonably inferred.
