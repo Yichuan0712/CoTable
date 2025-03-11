@@ -13,6 +13,7 @@ Here is the table caption:
 {caption}
 From the main table above, I have extracted the following information to create Subtable 1, where each row represents a unique combination of "Population" - "Pregnancy stage" - "Subject N," as follows:
 {display_md_table(patient_md_table)}
+
 Carefully analyze the tables and follow these steps to refine Subtable 1 into a more detailed Subtable 2:  
 
 (1) Identify all unique combinations of **[Population, Pregnancy stage, Gestational age, Pediatric age, Subject N]** from the table.
@@ -52,7 +53,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
    
 (6) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(patient_md_table).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(patient_md_table).shape[0]} rows in total).   
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
-
+    - **Maintain the original row order** from Subtable 1—do not shuffle, reorder, or omit any rows.
 """
 # (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
 
