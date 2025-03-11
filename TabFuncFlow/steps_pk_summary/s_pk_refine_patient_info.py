@@ -20,23 +20,23 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
 (1) Identify all unique combinations of **[Population, Pregnancy stage, Pediatric/Gestational age, Subject N]** from the table.
     - **Population**: The age group of the subjects.  
       **Common categories include:**  
-        - "Maternal"  
-        - "Preterm" or "Premature" (≤ 37 weeks of gestation)  
-        - "Neonates" or "Newborns" (birth to 1 month)  
-        - "Infants" (1 month to 1 year)  
-        - "Children" (1 year to 12 years)  
-        - "Adolescents" or "Teenagers" (13 years to 17 years)  
-        - "Adults" (18 years or older)  
+        - "Maternal" (pregnant individuals)
+        - "Preterm" or "Premature" (typically ≤ 37 weeks of gestation)  
+        - "Neonates" or "Newborns" (generally birth to ~1 month)  
+        - "Infants" (~1 month to ~1 year)  
+        - "Children" (~1 year to ~12 years)  
+        - "Adolescents" or "Teenagers" (~13 years to ~17 years)  
+        - "Adults" (typically 18 years or older)  
       
     - **Pregnancy stage**: The stage of pregnancy for the patients in the study.  
       **Common categories include:**  
-        - "Trimester 1" (≤ 14 weeks of pregnancy)  
-        - "Trimester 2" (15–28 weeks of pregnancy)  
-        - "Trimester 3" (≥ 28 weeks of pregnancy)  
-        - "Fetus" or "Fetal Stage" (developing baby during pregnancy)  
-        - "Parturition," "Labor," or "Delivery" (process of childbirth)  
-        - "Postpartum" (6–8 weeks after birth)  
-        - "Nursing," "Breastfeeding," or "Lactation"  
+        - "Trimester 1" (usually up to 14 weeks of pregnancy)  
+        - "Trimester 2" (~15–28 weeks of pregnancy)  
+        - "Trimester 3" (~≥ 28 weeks of pregnancy)  
+        - "Fetus" or "Fetal Stage" (referring to the developing baby during pregnancy)  
+        - "Parturition," "Labor," or "Delivery" (the process of childbirth)  
+        - "Postpartum" (~6–8 weeks after birth)  
+        - "Nursing," "Breastfeeding," or "Lactation" (refers to the period of breastfeeding after birth) 
  
     - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the fetal or neonatal age (or age range).
     - **Subject N**: The number of subjects corresponding to the specific population.
