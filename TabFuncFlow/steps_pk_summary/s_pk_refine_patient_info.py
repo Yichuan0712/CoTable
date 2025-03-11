@@ -15,8 +15,8 @@ From the main table above, I have extracted the following information to create 
 {display_md_table(patient_md_table)}
 Carefully analyze the tables and follow these steps to refine Subtable 1 into a more detailed Subtable 2:  
 
-(1) Identify all unique combinations of **[Population, Pregnancy stage, Gestational age, Pediatric age, Subject N]** from the table.
-    - **Population**: The age group of the subjects.  
+(1) Identify all unique combinations of **[Population type, Pregnancy stage type, Gestational age, Pediatric age, Subject N]** from the table.
+    - **Population type**: The age group of the subjects.
       **Common categories include:**  
         - "Maternal"  
         - "Preterm" or "Premature" (≤ 37 weeks of gestation)  
@@ -26,7 +26,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Adolescents" or "Teenagers" (13 years to 17 years)  
         - "Adults" (18 years or older)  
       
-    - **Pregnancy stage**: The stage of pregnancy for the patients in the study.  
+    - **Pregnancy stage type**: The stage of pregnancy for the patients in the study.  
       **Common categories include:**  
         - "Trimester 1" (≤ 14 weeks of pregnancy)  
         - "Trimester 2" (15–28 weeks of pregnancy)  
@@ -87,7 +87,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
             if not match_list:
                 raise ValueError(f"Population information refinement failed: No valid entries found!")
 
-            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
+            df_table = pd.DataFrame(match_list, columns=["Population type", "Pregnancy stage type", "Gestational age", "Pediatric age", "Subject N"])
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
