@@ -45,7 +45,6 @@ Do NOT include:
 def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_process, model_name="gemini_15_pro",
                                max_retries=5, initial_wait=1):
     msg = s_pk_extract_time_and_unit_prompt(md_table, caption, md_data_lines_after_post_process)
-    msg = fix_angle_brackets(msg)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -57,6 +56,7 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_proce
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+            content = fix_angle_brackets(content)
             # print(usage, content)
 
             total_usage += usage

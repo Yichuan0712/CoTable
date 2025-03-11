@@ -62,7 +62,6 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
 
 def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_refine_patient_info_prompt(md_table_aligned, caption, patient_md_table)
-    msg = fix_angle_brackets(msg)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -74,7 +73,8 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(repr(content))
+            content = fix_angle_brackets(content)
+            # print(repr(content))
 
             total_usage += usage
             all_content.append(f"Attempt {retries + 1}:\n{content}")

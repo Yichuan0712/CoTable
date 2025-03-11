@@ -42,7 +42,6 @@ def s_pk_get_parameter_type_and_unit(md_table_aligned, col_dict, md_table, capti
 
     elif parameter_type_count == 1 and parameter_unit_count == 0:
         msg = s_pk_get_parameter_type_and_unit_prompt(md_table_aligned, col_dict, md_table, caption)
-        msg = fix_angle_brackets(msg)
         messages = [msg]
         question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -54,6 +53,7 @@ def s_pk_get_parameter_type_and_unit(md_table_aligned, col_dict, md_table, capti
         while retries < max_retries:
             try:
                 res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+                content = fix_angle_brackets(content)
 
                 total_usage += usage
                 all_content.append(f"Attempt {retries + 1}:\n{content}")
