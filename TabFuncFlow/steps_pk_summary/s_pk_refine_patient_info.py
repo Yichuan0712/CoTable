@@ -101,7 +101,9 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
                 )
 
             df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
-
+            print("*"*16)
+            print(df_table['Subject N'])
+            print(markdown_to_dataframe(patient_md_table)['Subject N'])
             if not df_table['Subject N'].equals(markdown_to_dataframe(patient_md_table)['Subject N']):
                 messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nThe row order in the refined table does not match the original order."]
                 raise ValueError(
