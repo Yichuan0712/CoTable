@@ -43,12 +43,15 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
    - Your response should be enclosed in **double angle brackets** `<< >>` and formatted as a **single line**.
 
-(3) For each Population, determine whether it can be classified under one of the common categories listed above. If so, replace it with the corresponding standard category while preserving the original term in parentheses (e.g., "Children (Toddler)" if "Toddler" was the original term and falls under "Children"). If it does not fit any common category, retain the original wording.
+(3) For each Population, determine whether it can be classified under one of the common categories listed above. If it does, replace it with the corresponding standard category. If it does not fit any common category, retain the original wording.
 
-(4) For each Pregnancy Stage, check whether it aligns with any of the common categories. If it does, replace it with the corresponding standard category while keeping the original term in parentheses (e.g., "Postpartum (Postnatal period)" if "Postnatal period" was the original term and falls under "Postpartum"). If it does not fit any common category, keep the original wording unchanged.
+(4) For each Pregnancy Stage, check whether it aligns with any of the common categories. If it does, replace it with the corresponding standard category. If it does not fit any common category, keep the original wording unchanged.
 
 (5) If any information is missing, attempt to infer it based on available data (e.g., context, related entries, or common pharmacokinetic knowledge).  
    - Only use **"N/A"** if the information **cannot** be reasonably inferred.
+   
+(6) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(patient_md_table).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(patient_md_table).shape[0]} rows in total).   
+    - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
 
 """
 # (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
@@ -88,6 +91,13 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
 
             if not match_list:
                 raise ValueError(f"Population information refinement failed: No valid entries found!")
+
+            expected_rows = markdown_to_dataframe(patient_md_table).shape[0]
+            if len(match_list) != expected_rows:
+                messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."]
+                raise ValueError(
+                    f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
+                )
 
             df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"])
             return_md_table = dataframe_to_markdown(df_table)
