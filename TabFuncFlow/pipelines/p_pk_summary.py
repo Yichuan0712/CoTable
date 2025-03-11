@@ -232,7 +232,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print("=" * 64)
     step_name = "Population Information Refinement"
     print(COLOR_START+step_name+COLOR_END)
-    patient_info_refined = s_pk_refine_patient_info(md_table, description, llm, max_retries, initial_wait)
+    patient_info_refined = s_pk_refine_patient_info(md_table, description, md_table_patient, llm, max_retries, initial_wait)
     if patient_info_refined is None:
         return None
     md_table_patient_refined, res_patient_refined, content_patient_refined, usage_patient_refined, truncated_patient_refined = patient_info_refined
