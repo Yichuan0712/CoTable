@@ -32,5 +32,5 @@ def get_llm_response(messages, question, model="gemini_15_pro"):
 
 
 def fix_angle_brackets(text: str) -> str:
-    return text + '>' if text.endswith('>') and not text.endswith('>>') else text
+    return text.strip() + '>' if text.strip().endswith('>') and not text.strip().endswith('>>') else text
 
