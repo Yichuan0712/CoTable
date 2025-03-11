@@ -560,7 +560,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
             #     ignore_index=True)
             df_table_patient = pd.concat(
                 [df_table_patient,
-                 pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Gestational age': 'ERROR', 'Pediatric age': 'ERROR', 'Subject N': 'ERROR'}])],
+                 pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Pediatric/Gestational age': 'ERROR', 'Subject N': 'ERROR'}])],
                 ignore_index=True)
             df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
             patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
@@ -674,7 +674,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     """
     """fix col name"""
     # expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
-    expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
+    expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
 
     def rename_columns(df, expected_columns):
         renamed_columns = {}
@@ -743,7 +743,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
     # group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
     #                  "Parameter unit"]
-    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pregnancy stage", "Gestational age", "Subject N", "Parameter type",
+    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type",
                      "Parameter unit"]
     grouped = df.groupby(group_columns, dropna=False)
 
@@ -852,7 +852,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     """give range to median"""
     # group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
     #                  "Parameter unit"]
-    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pregnancy stage", "Gestational age", "Subject N", "Parameter type",
+    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type",
                      "Parameter unit"]
 
     # Finding pairs of rows that match on group_columns

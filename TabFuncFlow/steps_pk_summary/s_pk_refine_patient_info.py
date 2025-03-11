@@ -5,6 +5,7 @@ import re
 import time
 
 
+#     - **Gestational age**: The fetal or neonatal age (or age range) at a specific point in the study. Retain the original wording whenever possible.
 def s_pk_refine_patient_info_prompt(md_table_aligned, caption, patient_md_table):
     return f"""
 The following main table contains pharmacokinetics (PK) data:  
@@ -16,7 +17,7 @@ From the main table above, I have extracted the following information to create 
 
 Carefully analyze the tables and follow these steps to refine Subtable 1 into a more detailed Subtable 2:  
 
-(1) Identify all unique combinations of **[Population, Pregnancy stage, Gestational age, Pediatric age, Subject N]** from the table.
+(1) Identify all unique combinations of **[Population, Pregnancy stage, Pediatric/Gestational age, Subject N]** from the table.
     - **Population**: The age group of the subjects.  
       **Common categories include:**  
         - "Maternal"  
@@ -36,9 +37,8 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Parturition," "Labor," or "Delivery" (process of childbirth)  
         - "Postpartum" (6–8 weeks after birth)  
         - "Nursing," "Breastfeeding," or "Lactation"  
-
-    - **Gestational age**: The fetal or neonatal age (or age range) at a specific point in the study. Retain the original wording whenever possible.  
-    - **Pediatric age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible.  
+ 
+    - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the fetal or neonatal age (or age range).
     - **Subject N**: The number of subjects corresponding to the specific population.
 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
@@ -100,7 +100,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
                     f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
                 )
 
-            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Gestational age", "Pediatric age", "Subject N"]).astype(str)
+            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Pediatric/Gestational", "Subject N"]).astype(str)
             print("*"*16)
             print(df_table['Subject N'])
             print(markdown_to_dataframe(patient_md_table)['Subject N'])
