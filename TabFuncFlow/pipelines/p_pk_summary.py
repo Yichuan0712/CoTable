@@ -2,6 +2,7 @@ from TabFuncFlow.steps_pk_summary.s_pk_delete_individual import *
 from TabFuncFlow.steps_pk_summary.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_summary.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_summary.s_pk_extract_patient_info import *
+from TabFuncFlow.steps_pk_summary.s_pk_extract_time_and_unit import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_col_mapping import *
 from TabFuncFlow.steps_pk_summary.s_pk_get_parameter_type_and_unit import *
 from TabFuncFlow.steps_pk_summary.s_pk_match_drug_info import *
@@ -227,7 +228,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # usage_list.append(0)
     # truncated_list.append(False)
     """
-    Step 2: Population Information Refinement
+    Step 3: Population Information Refinement
     """
     print("=" * 64)
     step_name = "Population Information Refinement"
@@ -249,7 +250,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     """
-    Step 3: Individual Data Deletion
+    Step 4: Individual Data Deletion
     """
     print("=" * 64)
     step_name = "Individual Data Deletion"
@@ -271,7 +272,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     """
-    Step 4: Parameter Type Alignment
+    Step 5: Parameter Type Alignment
     """
     print("=" * 64)
     step_name = "Parameter Type Alignment"
@@ -293,7 +294,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     """
-    Step 5: Column Header Categorization
+    Step 6: Column Header Categorization
     """
     print("=" * 64)
     step_name = "Column Header Categorization"
@@ -315,7 +316,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
     """
-    Step 6: Rough Task Allocation (Preferably hidden from Users)
+    Step 7: Rough Task Allocation (Preferably hidden from Users)
     """
     parameter_type_count = list(col_mapping.values()).count("Parameter type")
     parameter_unit_count = list(col_mapping.values()).count("Parameter unit")
@@ -360,7 +361,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 7: Sub-table Creation
+    Step 8: Sub-table Creation
     """
     print("=" * 64)
     step_name = "Sub-table Creation"
@@ -407,7 +408,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
     """
-    Step 8: Unit Extraction
+    Step 9: Unit Extraction
     """
     type_unit_list = []
     type_unit_cache = {}
@@ -457,7 +458,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
                 print(content_to_print)
             type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
     """
-    Step 9: Unit Extraction (Final)
+    Step 10: Unit Extraction (Final)
     """
     print("=" * 64)
     step_name = "Unit Extraction (Final)"
@@ -476,7 +477,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 10: Drug Matching
+    Step 11: Drug Matching
     """
     drug_list = []
     round = 1
@@ -533,7 +534,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 11: Population Matching
+    Step 12: Population Matching
     """
     patient_list = []
     round = 1
@@ -596,7 +597,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 12: Parameter Value Extraction
+    Step 13: Parameter Value Extraction
     """
     value_list = []
     round = 1
@@ -623,7 +624,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
         print(COLOR_START + "Reasoning:" + COLOR_END)
         print(content_to_print)
     """
-    Step 13: Parameter Value Extraction (Final)
+    Step 14: Parameter Value Extraction (Final)
     """
     print("=" * 64)
     step_name = "Parameter Value Extraction (Final)"
@@ -642,7 +643,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 16: Assembly
+    Step 15: Assembly
     """
     df_list = []
     assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list)# == len(time_list)
@@ -671,7 +672,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 15: Post-Processing
+    Step 16: Post-Processing
     """
     """fix col name"""
     # expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
@@ -874,6 +875,31 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
                     # Remove range information from the non-median row
                     df_combined.loc[non_median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = ["N/A", "N/A", "N/A"]
+
+    """
+    Step 17: Time Extraction
+    """
+    print("=" * 64)
+    step_name = "Time Extraction"
+    print(COLOR_START+step_name+COLOR_END)
+    md_data_lines_after_post_process = dataframe_to_markdown(df_combined[["Main value", "Statistics type", "Variation type", "Variation value",
+                        "Interval type", "Lower bound", "Upper bound", "P value"]])
+    time_info = s_pk_extract_time_and_unit(md_table_aligned, description, md_data_lines_after_post_process, llm, max_retries, initial_wait)
+    if time_info is None:
+        return None
+    md_table_time, res_time, content_time, usage_time, truncated_time = time_info
+    step_list.append(step_name)
+    res_list.append(res_time)
+    content_list.append(content_time)
+    content_list_clean.append(clean_llm_reasoning(content_time))
+    usage_list.append(usage_time)
+    truncated_list.append(truncated_time)
+    print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
+    print(COLOR_START+"Result:"+COLOR_END)
+    print(display_md_table(md_table_time))
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print(content_to_print)
 
     """Rename col names"""
     column_mapping = {
