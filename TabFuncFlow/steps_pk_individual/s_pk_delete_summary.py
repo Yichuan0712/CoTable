@@ -20,7 +20,7 @@ When returning this, enclose the function call in double angle brackets.
 """
 
 
-def s_pk_delete_individual(md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
+def s_pk_delete_summary(md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
     msg = s_pk_delete_summary_prompt(md_table)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
