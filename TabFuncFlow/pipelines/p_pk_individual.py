@@ -3,7 +3,7 @@ from TabFuncFlow.steps_pk_individual.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
-# from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
+from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
 # from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
@@ -226,7 +226,6 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    exit(0)
     """
     Step 6: Column Header Categorization
     """
@@ -249,6 +248,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    exit(0)
     """
     Step 7: Rough Task Allocation (Preferably hidden from Users)
     """
