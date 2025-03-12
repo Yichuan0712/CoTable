@@ -34,7 +34,6 @@ def s_pk_delete_summary(md_table, model_name="gemini_15_pro", max_retries=5, ini
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(content)
             content = fix_angle_brackets(content)
 
             total_usage += usage
