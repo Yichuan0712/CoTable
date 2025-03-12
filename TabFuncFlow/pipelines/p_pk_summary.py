@@ -935,9 +935,13 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
 
     """Rename col names"""
     column_mapping = {
-        "Parameter unit": "Unit",
-        "Main value": "Value",
-        "Statistics type": "Summary Statistics",
+        # "Parameter unit": "Unit",
+        # "Main value": "Value",
+        # "Statistics type": "Summary Statistics",
+        # "Lower bound": "Lower limit",
+        # "Upper bound": "High limit",
+        "Main value": "Parameter value",
+        "Statistics type": "Parameter statistic",
         "Lower bound": "Lower limit",
         "Upper bound": "High limit",
     }
