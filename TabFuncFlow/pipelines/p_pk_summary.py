@@ -674,6 +674,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     """
     Step 16: Row cleanup
     """
+    df_combined["original_index"] = df_combined.index
+
     """fix col name"""
     # expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
     expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
@@ -877,6 +879,10 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
                     df_combined.loc[non_median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = ["N/A", "N/A", "N/A"]
 
     df_combined = df_combined.reset_index(drop=True)
+
+    df_combined.sort_values(by="original_index", inplace=True)
+    df_combined.drop(columns=["original_index"], inplace=True)
+    df_combined.reset_index(drop=True, inplace=True)
 
     print("=" * 64)
     step_name = "Row cleanup"
