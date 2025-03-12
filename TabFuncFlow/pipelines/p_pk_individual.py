@@ -1,5 +1,5 @@
 from TabFuncFlow.steps_pk_individual.s_pk_delete_summary import *
-# from TabFuncFlow.steps_pk_individual.s_pk_align_parameter import *
+from TabFuncFlow.steps_pk_individual.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
@@ -204,7 +204,6 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    exit(0)
     """
     Step 5: Parameter Type Alignment
     """
@@ -227,6 +226,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    exit(0)
     """
     Step 6: Column Header Categorization
     """
