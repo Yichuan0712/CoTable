@@ -1,15 +1,15 @@
-from TabFuncFlow.steps_pk_individual.s_pk_delete_individual import *
-from TabFuncFlow.steps_pk_individual.s_pk_align_parameter import *
+from TabFuncFlow.steps_pk_individual.s_pk_delete_summary import *
+# from TabFuncFlow.steps_pk_individual.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
-from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
-from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
-from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
-from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
-from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
-from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
-from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
-from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
+# from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
+# from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
+# from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
+# from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
+# from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
+# from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
+# from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
+# from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
 import re
 import itertools
 from difflib import get_close_matches
@@ -67,9 +67,9 @@ def clean_llm_reasoning(text: str) -> str:
     return result if result.endswith("\n") else result + "\n"
 
 
-def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=1, use_color=True, clean_reasoning=False):
+def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=1, use_color=True, clean_reasoning=False):
     """
-    PK Summary Pipeline 250227
+    PK Individual Pipeline 250312
     Summarizes pharmacokinetic (PK) data from a given markdown table.
 
     :param md_table: The markdown representation of a SINGLE HTML table containing PK data.
@@ -138,6 +138,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    exit(0)
     """
     Step 2: Population Information Extraction
     """
