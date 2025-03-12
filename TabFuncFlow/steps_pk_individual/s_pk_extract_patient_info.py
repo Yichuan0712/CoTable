@@ -6,28 +6,28 @@ import time
 import re
 
 
-def extract_integers(text):
-    """
-    Extract only "pure integers":
-    - Skip numbers with decimal points (including forms like 3.14, 1.0, .99, etc.)
-    - Skip numbers immediately followed (possibly with spaces) by '%' or '％' (e.g., 8%, 8 %)
-    - Keep only integers like 42, 100, etc.
-    - Remove duplicates and exclude 0
-    """
-    # 1) (?<![\d.]) ensures that the left side is not a digit or a dot.
-    # 2) (\d+) matches a sequence of digits.
-    # 3) (?![\d.]| *[%％]) ensures that the right side is not a digit, a dot,
-    #    or zero or more spaces followed by '%' or '％'.
-    pattern = r'(?<![\d.])(\d+)(?![\d.]| *[%％])'
-
-    # Convert matched digit-strings to integers, use a set to remove duplicates,
-    # then remove 0 if present
-    return list(
-        set(
-            int(num_str)
-            for num_str in re.findall(pattern, text)
-        ) - {0}
-    )
+# def extract_integers(text):
+#     """
+#     Extract only "pure integers":
+#     - Skip numbers with decimal points (including forms like 3.14, 1.0, .99, etc.)
+#     - Skip numbers immediately followed (possibly with spaces) by '%' or '％' (e.g., 8%, 8 %)
+#     - Keep only integers like 42, 100, etc.
+#     - Remove duplicates and exclude 0
+#     """
+#     # 1) (?<![\d.]) ensures that the left side is not a digit or a dot.
+#     # 2) (\d+) matches a sequence of digits.
+#     # 3) (?![\d.]| *[%％]) ensures that the right side is not a digit, a dot,
+#     #    or zero or more spaces followed by '%' or '％'.
+#     pattern = r'(?<![\d.])(\d+)(?![\d.]| *[%％])'
+#
+#     # Convert matched digit-strings to integers, use a set to remove duplicates,
+#     # then remove 0 if present
+#     return list(
+#         set(
+#             int(num_str)
+#             for num_str in re.findall(pattern, text)
+#         ) - {0}
+#     )
 
 #         **If the study provides a more specific description, please retain the original terminology whenever possible.**
 # def s_pk_extract_patient_info_prompt(md_table, caption):
@@ -140,26 +140,22 @@ def extract_integers(text):
 
 
 def s_pk_extract_patient_info_prompt(md_table, caption):
-    int_list = extract_integers(md_table+caption)
-    print("==== Automatically Extracted Integers ====")
-    print(int_list)
+    # int_list = extract_integers(md_table+caption)
+    # print("==== Automatically Extracted Integers ====")
+    # print(int_list)
     return f"""
 The following table contains pharmacokinetics (PK) data:
 {display_md_table(md_table)}
 Here is the table caption:
 {caption}
 Carefully analyze the table, **row by row and column by column**, and follow these steps:
-(1) Identify how many unique [Population, Pregnancy stage, Subject N] combinations are present in the table.
+(1) Identify how many unique [Patient ID, Population, Pregnancy stage] combinations are present in the table.
+Patient ID refers to the identifier assigned to each patient.
 Population is the patient age group.
 Pregnancy stage is the pregnancy stages of patients mentioned in the study.
-Subject N represents the number of subjects corresponding to the specific parameter or the number of samples with quantifiable levels of the respective analyte.
 (2) List each unique combination in the format of a list of lists in one line, using Python string syntax. Your answer should be enclosed in double angle brackets <<>>.
-(3) Verify the source of each [Population, Pregnancy stage, Subject N] combination before including it in your answer.
-(4) The "Subject N" values within each population group sometimes differ slightly across parameters. This reflects data availability for each specific parameter within that age group. **YOU MUST** include all the Ns for each age group.
-    - Specifically, **YOU MUST** explain every number, in this list: {int_list} to determine if it should be listed in Subject N.
-    - For example, if a population group has a Subject N of 8, but further analysis shows that 5, 6, and 7 of the 8 subjects correspond to different parameter values, then 5, 6, 7, and 8 must all be included as Subject N in different combinations in the final answer.
-    - Fill in "N/A" when you don't know the exact N.
-(5) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
+(3) Verify the source of each [Patient ID, Population, Pregnancy stage] combination before including it in your answer.
+(4) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
 """
 
 
@@ -197,7 +193,7 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro", max
             if not match_list:
                 raise ValueError(f"Population information extraction failed: No valid entries found!")
 
-            df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Subject N"])
+            df_table = pd.DataFrame(match_list, columns=["Patient ID", "Population", "Pregnancy stage"])
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
