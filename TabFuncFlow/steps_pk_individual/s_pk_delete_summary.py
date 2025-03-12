@@ -14,9 +14,10 @@ Carefully examine the table and follow these steps:
 (1) Remove any information that pertains to summary statistics, aggregated values, or group-level information such as 'N=' values, as these are not individual-specific.
 (2) **Do not remove** any information that pertains to specific individuals, such as individual-level results or personally identifiable data.
 If the table already meets this requirement, return [[END]].
-If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
-Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement. 
-When returning this, enclose the function call in double angle brackets <<>>.
+If not, please return the following list of lists to assist in creating a new table: [row_list, col_list].  
+Replace row_list with the row indices that meet the requirement and col_list with the column names that satisfy the condition.  
+When returning this, enclose the list in double angle brackets, like this:
+<<[[0, 1, 2, 3], ["Column 1", "Column 2"]]>>
 """
 
 
@@ -48,8 +49,6 @@ def s_pk_delete_summary(md_table, model_name="gemini_15_pro", max_retries=5, ini
                 row_list, col_list = None, None
             elif match_angle:
                 extracted_data = match_angle[2:-2]
-                extracted_data = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)',
-                                      extracted_data)
                 try:
                     row_list, col_list = ast.literal_eval(extracted_data)
                 except Exception as e:
