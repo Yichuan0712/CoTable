@@ -103,9 +103,9 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
                 )
 
             df_table = pd.DataFrame(match_list, columns=["Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N"]).astype(str)
-            print("*"*16)
-            print(df_table['Subject N'])
-            print(markdown_to_dataframe(patient_md_table)['Subject N'])
+            print("==== Automatically 'Subject N' Comparison ====")
+            print(markdown_to_dataframe(patient_md_table)['Subject N'].tolist(), "== Original ==")
+            print(df_table['Subject N'].tolist(), "== Refined ==")
             if not df_table['Subject N'].equals(markdown_to_dataframe(patient_md_table)['Subject N']):
                 messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nThe rows in the refined Subtable 2 do not correspond to those in Subtable 1 on a one-to-one basis."]
                 raise ValueError(
