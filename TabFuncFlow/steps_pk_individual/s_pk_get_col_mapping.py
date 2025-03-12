@@ -16,7 +16,7 @@ The following table contains pharmacokinetics (PK) data:
 Carefully analyze the table and follow these steps:  
 (1) Examine all column headers and categorize each one into one of the following groups:  
    - **"Patient ID"**: Columns that describe the identifier assigned to each patient.
-   - **"Parameter type"**: Columns that describe the type of pharmacokinetic parameter.  
+   - **"Parameter"**: Columns that describe any parameter data.  
    - **"Uncategorized"**: Columns that do not fit into any of the above categories.  
 (3) if a column is only about the subject number, it is considered as "Uncategorized"
 (2) Return a dictionary where each key is a column header, and the corresponding value is its assigned category. Your dictionary should be enclosed in double angle brackets <<>>.  
@@ -57,7 +57,7 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro", max_retries=5, in
             if not isinstance(match_dict, dict):
                 raise ValueError(f"Parsed content is not a dictionary")
 
-            predefined_categories = ["Patient ID", "Parameter type", "Uncategorized"]
+            predefined_categories = ["Patient ID", "Parameter", "Uncategorized"]
 
             match_dict = {
                 fix_col_name(k, md_table): (
@@ -74,11 +74,11 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro", max_retries=5, in
                     f"Mismatch: Expected {expected_columns} columns, but got {len(match_dict.keys())} in match_dict."
                 )
 
-            parameter_type_count = list(match_dict.values()).count("Parameter type")
-            if parameter_type_count != 1:
-                raise ValueError(
-                    f"Invalid mapping: Expected 1 'Parameter type' column, but found {parameter_type_count}."
-                )
+            # parameter_type_count = list(match_dict.values()).count("Parameter type")
+            # if parameter_type_count != 1:
+            #     raise ValueError(
+            #         f"Invalid mapping: Expected 1 'Parameter type' column, but found {parameter_type_count}."
+            #     )
 
             return match_dict, res, "\n\n".join(all_content), total_usage, truncated
 
