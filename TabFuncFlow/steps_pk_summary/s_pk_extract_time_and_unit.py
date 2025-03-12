@@ -36,8 +36,9 @@ Include:
    - "5 min" (indicating a measured event)  
 
 Do NOT include:  
-   - "T½Beta(hr)" values (half-life parameter value, not a recorded time)  
-   - "Beta(hr)" values (elimination rate constant)  
+   - "Tmax" (this is a pharmacokinetic parameter, NOT a recorded time)
+   - "T½Beta(hr)" values (half-life parameter value, not a recorded time) 
+   - "Beta(hr)" values (elimination rate constant)
 
 """
 
