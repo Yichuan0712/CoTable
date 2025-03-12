@@ -9,7 +9,7 @@ from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
-# from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
+from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
 import re
 import itertools
 from difflib import get_close_matches
@@ -160,7 +160,6 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    exit(0)
     # """
     # Step 2-1: Population Information Extraction (Trial 1)
     # """
@@ -249,6 +248,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
+    exit(0)
     """
     Step 4: Individual Data Deletion
     """
