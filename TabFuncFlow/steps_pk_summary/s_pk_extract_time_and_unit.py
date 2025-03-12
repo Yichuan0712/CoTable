@@ -78,11 +78,15 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_proce
             if not match_list:
                 raise ValueError("Time information extraction failed: No valid entries found!")
 
-            df_table = pd.DataFrame(match_list, columns=["Time value", "Time unit"])
-            # print(df_table)
-            # exit(0)
-
             expected_rows = markdown_to_dataframe(md_data_lines_after_post_process).shape[0]
+
+            # if all the same
+            if all(x == match_list[0] for x in match_list):
+                # expand to expect_rows
+                match_list = [match_list[0]] * expected_rows
+
+            df_table = pd.DataFrame(match_list, columns=["Time value", "Time unit"])
+
             if df_table.shape[0] != expected_rows:
                 messages = [msg,
                             "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted matches."]
