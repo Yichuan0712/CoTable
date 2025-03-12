@@ -16,7 +16,7 @@ Carefully examine the table and follow these steps:
 If the table already meets this requirement, return [[END]].
 If not, please use the following function to create a new table: f_select_row_col(row_list, col_list)
 Replace row_list with the row indices that satisfy the requirement, and col_list with the column names that satisfy the requirement. 
-When returning this, enclose the function call in double angle brackets.
+When returning this, enclose the function call in double angle brackets <<>>.
 """
 
 
