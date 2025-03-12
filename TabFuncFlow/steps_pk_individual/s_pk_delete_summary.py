@@ -48,6 +48,8 @@ def s_pk_delete_summary(md_table, model_name="gemini_15_pro", max_retries=5, ini
                 row_list, col_list = None, None
             elif match_angle:
                 extracted_data = match_angle[2:-2]
+                extracted_data = re.match(r'\w+\s*\(\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*,\s*(?:\w+\s*=\s*)?(\[[^\]]*\])\s*\)',
+                                      extracted_data)
                 try:
                     row_list, col_list = ast.literal_eval(extracted_data)
                 except Exception as e:
