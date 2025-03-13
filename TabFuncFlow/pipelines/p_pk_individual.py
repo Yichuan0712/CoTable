@@ -7,7 +7,7 @@ from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
 # from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
-# from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
+from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
 from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
 import re
@@ -320,7 +320,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     __md_table_list = []
     for md in _md_table_list:
         df = markdown_to_dataframe(md)
-        cols_to_split = [col for col in df.columns if col_mapping.get(col) == "Parameter value"]
+        cols_to_split = [col for col in df.columns if col_mapping.get(col) == "Parameter"]
         common_cols = [col for col in df.columns if col not in cols_to_split]
         for col in cols_to_split:
             if col in df.columns:
@@ -335,6 +335,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
         print(display_md_table(md_table_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
+    exit(0)
     """
     Step 9: Unit Extraction
     """
