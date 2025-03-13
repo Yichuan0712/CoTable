@@ -5,7 +5,7 @@ from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
 from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
-# from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
+from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
@@ -344,78 +344,8 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
         print(display_md_table(md_table_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
-    exit(0)
     """
-    Step 9: Unit Extraction
-    """
-    type_unit_list = []
-    type_unit_cache = {}
-    round = 1
-    for md in md_table_list:
-        df = markdown_to_dataframe(md)
-        col_name_of_parameter_type = [col for col in df.columns if col_mapping.get(col) == "Parameter type"][0]
-        col_name_of_parameter_unit_list = [col for col in df.columns if col_mapping.get(col) == "Parameter unit"]
-        if col_name_of_parameter_type in type_unit_cache.keys():
-            type_unit_list.append(type_unit_cache[col_name_of_parameter_type])
-        else:
-            if len(col_name_of_parameter_unit_list) == 1:
-                # print(col_name_of_parameter_unit_list)
-                selected_cols = [col_name_of_parameter_type, col_name_of_parameter_unit_list[0]]
-                df_selected = df[selected_cols].copy()
-                if df_selected is None or df_selected.empty:
-                    raise ValueError(
-                        "df_selected is None or empty. Please check the input DataFrame and selected columns.")
-                df_selected = df_selected.rename(
-                    columns={col_name_of_parameter_type: "Parameter type",
-                             col_name_of_parameter_unit_list[0]: "Parameter unit"}
-                )
-
-                type_unit_list.append(dataframe_to_markdown(df_selected))
-            else:
-                print("=" * 64)
-                step_name = "Unit Extraction" + f" (Trial {str(round)})"
-                round += 1
-                print(COLOR_START + step_name + COLOR_END)
-                unit_info = s_pk_get_parameter_type_and_unit(md_table_aligned, col_mapping, md, description, llm, max_retries, initial_wait)
-                if unit_info is None:
-                    return None
-                tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
-                md_type_unit = dataframe_to_markdown(pd.DataFrame([tuple_type_unit[0], tuple_type_unit[1]], index=["Parameter type", "Parameter unit"]).T)
-                type_unit_list.append(md_type_unit)
-                step_list.append(step_name)
-                res_list.append(res_type_unit)
-                content_list.append(content_type_unit)
-                content_list_clean.append(clean_llm_reasoning(content_type_unit))
-                usage_list.append(usage_type_unit)
-                truncated_list.append(truncated_type_unit)
-                print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
-                print(COLOR_START + "Result:" + COLOR_END)
-                print(display_md_table(md_type_unit))
-                content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-                print(COLOR_START + "Reasoning:" + COLOR_END)
-                print(content_to_print)
-            type_unit_cache[col_name_of_parameter_type] = type_unit_list[-1]
-    """
-    Step 10: Unit Extraction (Final)
-    """
-    print("=" * 64)
-    step_name = "Unit Extraction (Final)"
-    print(COLOR_START+step_name+COLOR_END)
-    print(COLOR_START+"Usage:"+COLOR_END, 0)
-    print(COLOR_START+"Result:"+COLOR_END)
-    for i in range(len(type_unit_list)):
-        print(f"Index [{i}]:")
-        print(display_md_table(type_unit_list[i]))
-    print(COLOR_START + "Reasoning:" + COLOR_END)
-    print("Automatic execution.\n")
-    step_list.append(step_name)
-    res_list.append(True)
-    content_list.append("Automatic execution.\n")
-    content_list_clean.append("Automatic execution.\n")
-    usage_list.append(0)
-    truncated_list.append(False)
-    """
-    Step 11: Drug Matching
+    Step 9: Drug Matching
     """
     drug_list = []
     round = 1
@@ -471,6 +401,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    exit(0)
     """
     Step 12: Population Matching
     """
