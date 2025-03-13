@@ -6,7 +6,7 @@ from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
 from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
-# from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
+from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
 # from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
 from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
@@ -401,9 +401,8 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
-    exit(0)
     """
-    Step 12: Population Matching
+    Step 10: Population Matching
     """
     patient_list = []
     round = 1
