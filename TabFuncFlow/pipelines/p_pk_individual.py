@@ -248,27 +248,22 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    exit(0)
     """
     Step 7: Rough Task Allocation (Preferably hidden from Users)
     """
-    parameter_type_count = list(col_mapping.values()).count("Parameter type")
-    parameter_unit_count = list(col_mapping.values()).count("Parameter unit")
-    parameter_value_count = list(col_mapping.values()).count("Parameter value")
-    parameter_pvalue_count = list(col_mapping.values()).count("P value")
-    need_get_unit = True
+    parameter_count = list(col_mapping.values()).count("Parameter")
+    patient_id_count = list(col_mapping.values()).count("Patient ID")
     need_split_col = False
     need_match_drug = True
     need_match_patient = True
-    unit_auto_parse = False
-    if parameter_value_count == 0:
-        return
-    if parameter_type_count == 0:
-        return
-    if parameter_type_count > 1 or parameter_pvalue_count > 1:
+    if parameter_count == 0:
+        return 0
+    if patient_id_count == 0:
+        return 0
+    if patient_id_count == 1:
+        need_split_col = False
+    if patient_id_count > 1:
         need_split_col = True
-    if parameter_unit_count == 1 and parameter_type_count == 1:
-        need_get_unit = False
     if markdown_to_dataframe(md_table_drug).shape[0] == 1:
         need_match_drug = False
     if markdown_to_dataframe(md_table_patient).shape[0] == 1:
@@ -278,10 +273,8 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
-    if unit_auto_parse:
-        print("Auto unit parsing is complete!")
-    tasks = ["Unit Extraction", "Sub-table Creation", "Drug Matching", "Population Matching"]
-    statuses = [need_get_unit, need_split_col, need_match_drug, need_match_patient]
+    tasks = ["Sub-table Creation", "Drug Matching", "Patient Matching"]
+    statuses = [need_split_col, need_match_drug, need_match_patient]
     active_tasks = [task for task, status in zip(tasks, statuses) if status]
     canceled_tasks = [task for task, status in zip(tasks, statuses) if not status]
     print(f"LLM Execution: {', '.join(active_tasks) if active_tasks else 'None'}")
@@ -294,6 +287,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    exit(0)
     """
     Step 8: Sub-table Creation
     """

@@ -325,7 +325,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     need_split_col = False
     need_match_drug = True
     need_match_patient = True
-    unit_auto_parse = False
     if parameter_value_count == 0:
         return
     if parameter_type_count == 0:
@@ -343,8 +342,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
-    if unit_auto_parse:
-        print("Auto unit parsing is complete!")
     tasks = ["Unit Extraction", "Sub-table Creation", "Drug Matching", "Population Matching"]
     statuses = [need_get_unit, need_split_col, need_match_drug, need_match_patient]
     active_tasks = [task for task, status in zip(tasks, statuses) if status]
