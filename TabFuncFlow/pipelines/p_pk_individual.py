@@ -665,8 +665,10 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     df_combined.drop(columns=["original_index"], inplace=True)
     df_combined.reset_index(drop=True, inplace=True)
 
-    df_combined = df_combined.sort_values(by="Patient ID")
-    df_combined.reset_index(drop=True, inplace=True)
+    df_combined = df_combined.sort_values(
+        by="Patient ID",
+        key=lambda x: pd.Categorical(x, categories=df_combined["Patient ID"].unique(), ordered=True)
+    ).reset_index(drop=True)
 
     print("=" * 64)
     step_name = "Row cleanup"
