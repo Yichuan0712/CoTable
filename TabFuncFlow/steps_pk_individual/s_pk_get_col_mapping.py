@@ -16,7 +16,7 @@ The following table contains pharmacokinetics (PK) data:
 Carefully analyze the table and follow these steps:  
 (1) Examine all column headers and categorize each one into one of the following groups:  
    - **"Patient ID"**: Columns that describe the identifier assigned to each patient.
-   - **"Parameter"**: Columns that describe any parameter data.  
+   - **"Parameter"**: Columns that describe pharmacokinetics concentration parameter data.  
    - **"Uncategorized"**: Columns that do not fit into any of the above categories.  
 (3) if a column is only about the subject number, it is considered as "Uncategorized"
 (2) Return a dictionary where each key is a column header, and the corresponding value is its assigned category. Your dictionary should be enclosed in double angle brackets <<>>.  
