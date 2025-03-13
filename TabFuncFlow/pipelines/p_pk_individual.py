@@ -603,15 +603,13 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
-    exit(0)
     """
     Step 16: Row cleanup
     """
     df_combined["original_index"] = df_combined.index
 
     """fix col name"""
-    # expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
-    expected_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type", "Parameter unit", "Main value", "Statistics type", "Variation type", "Variation value", "Interval type", "Lower bound", "Upper bound", "P value"]
+    expected_columns = ["Patient ID", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Drug name", "Analyte", "Specimen", "Parameter type", "Parameter unit", "Parameter value", "Variation value", "Time value", "Time unit"]
 
     def rename_columns(df, expected_columns):
         renamed_columns = {}
@@ -632,19 +630,11 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     # """if Time == "N/A", Time unit must be "N/A"。"""
     # df_combined.loc[
     #     (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
-    """if Value == "N/A", Summary Statistics must be "N/A"。"""
+    """if Value == "N/A", type and unit must be "N/A"。"""
     df_combined.loc[
-        (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
-    """if Lower limit & High limit == "N/A", Interval type must be "N/A"。"""
+        (df_combined["Parameter value"] == "N/A"), "Parameter type"] = "N/A"
     df_combined.loc[
-        (df_combined["Lower bound"] == "N/A") & (df_combined["Upper bound"] == "N/A"), "Interval type"] = "N/A"
-    """if Lower limit & High limit != "N/A", Interval type set as default "Range" """
-    df_combined.loc[
-        (df_combined["Lower bound"] != "N/A") & (df_combined["Upper bound"] != "N/A"), "Interval type"] = "Range"
-    """if Variation value == "N/A", Variation type must be "N/A"。"""
-    df_combined.loc[
-        (df_combined["Variation value"] == "N/A"), "Variation type"] = "N/A"
-    df_combined = df_combined.reset_index(drop=True)
+        (df_combined["Parameter value"] == "N/A"), "Parameter unit"] = "N/A"
     """replace empty by N/A"""
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
     """replace n/a by N/A"""
@@ -654,17 +644,11 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     df_combined.replace("Unknown", "N/A", inplace=True)
     """replace nan by N/A"""
     df_combined.replace("nan", "N/A", inplace=True)
-    """replace Standard Deviation (SD) by SD"""
-    df_combined.replace("Standard Deviation (SD)", "SD", inplace=True)
-    df_combined.replace("s.d.", "SD", inplace=True)
-    df_combined.replace("S.D.", "SD", inplace=True)
-
     """replace , by empty"""
     df_combined.replace(",", " ", inplace=True)
 
     """Remove non-digit rows"""
-    columns_to_check = ["Main value", "Statistics type", "Variation type", "Variation value",
-                        "Interval type", "Lower bound", "Upper bound", "P value"]
+    columns_to_check = ["Parameter value",]
 
     def contains_number(s):
         return any(char.isdigit() for char in s)
@@ -672,149 +656,16 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     df_combined = df_combined[df_combined[columns_to_check].apply(lambda row: any(contains_number(str(cell)) for cell in row), axis=1)]
     df_combined = df_combined.reset_index(drop=True)
 
-    """ Merge """
-
-    df = df_combined.copy()
-
-    df.replace("N/A", pd.NA, inplace=True)
-
-    # group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-    #                  "Parameter unit"]
-    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type",
-                     "Parameter unit"]
-    grouped = df.groupby(group_columns, dropna=False)
-
-    merged_rows = []
-    for _, group in grouped:
-        group = group.reset_index(drop=True)
-        used_indices = set()
-
-        for i, j in itertools.combinations(range(len(group)), 2):
-            if i in used_indices or j in used_indices:
-                continue
-
-            row1, row2 = group.iloc[i].copy(), group.iloc[j].copy()
-            can_merge = True
-
-            for col in df.columns:
-                val1, val2 = row1[col], row2[col]
-                if pd.notna(val1) and pd.notna(val2) and val1 != val2:
-                    can_merge = False
-                    break
-                elif pd.isna(val1) and pd.notna(val2):
-                    row1[col] = val2
-                elif pd.notna(val1) and pd.isna(val2):
-                    row2[col] = val1
-
-            if can_merge:
-                used_indices.add(i)
-                used_indices.add(j)
-                merged_rows.append(row1)
-            # else:
-            #     merged_rows.append(row1)
-            #     merged_rows.append(row2)
-
-        for i in range(len(group)):
-            if i not in used_indices:
-                merged_rows.append(group.iloc[i])
-
-    df_merged = pd.DataFrame(merged_rows, columns=df.columns)
-    df_merged.fillna("N/A", inplace=True)
-
-    df_combined = df_merged
-    df_combined = df_combined.reset_index(drop=True)
-
     """Remove duplicate"""
     df_combined = df_combined.drop_duplicates()
     df_combined = df_combined.reset_index(drop=True)
 
-    """delete 'fill in subject N as value error', this implementation is bad, still looking for better solutions"""
-    df_combined = df_combined[df_combined["Subject N"] != df_combined["Main value"]]
-    # df_combined = df_combined[~df_combined["Value"].isin(markdown_to_dataframe(md_table_patient)["Subject N"].to_list())]
-    df_combined = df_combined.reset_index(drop=True)
-
-    """fix put range only in lower limit/high limit"""
-    float_pattern = re.compile(r"-?\d+\.\d+")
-
-    def extract_limits(row):
-        if row["Upper bound"] == "N/A":
-            numbers = float_pattern.findall(str(row["Lower bound"]))
-            if len(numbers) == 2:
-                return pd.Series([str(numbers[0]), str(numbers[1])])
-        if row["Lower bound"] == "N/A":
-            numbers = float_pattern.findall(str(row["Upper bound"]))
-            if len(numbers) == 2:
-                return pd.Series([str(numbers[0]), str(numbers[1])])
-        if row["Upper bound"] == row["Lower bound"]:
-            numbers = float_pattern.findall(str(row["Upper bound"]))
-            if len(numbers) == 2:
-                return pd.Series([str(numbers[0]), str(numbers[1])])
-        return pd.Series([row["Lower bound"], row["Upper bound"]])
-
-    df_combined[["Lower bound", "Upper bound"]] = df_combined.apply(extract_limits, axis=1)
-    df_combined = df_combined.reset_index(drop=True)
-
-    """remove inclusive rows"""
-    def remove_contained_rows(df):
-        df_cleaned = df.copy()
-
-        rows_to_drop = set()
-        for i in range(len(df_cleaned)):
-            for j in range(i + 1, len(df_cleaned)):
-                row1 = df_cleaned.iloc[i]
-                row2 = df_cleaned.iloc[j]
-
-                if all((r1 == r2) or (r1 == "N/A") for r1, r2 in zip(row1, row2)):
-                    rows_to_drop.add(i)  # row1 included by row2
-                elif all((r2 == r1) or (r2 == "N/A") for r1, r2 in zip(row1, row2)):
-                    rows_to_drop.add(j)
-
-        df_cleaned = df_cleaned.drop(index=rows_to_drop).reset_index(drop=True)
-        return df_cleaned
-
-    df_combined = remove_contained_rows(df_combined)
-    df_combined = remove_contained_rows(df_combined)
-    df_combined = remove_contained_rows(df_combined)
-    df_combined = remove_contained_rows(df_combined)
-    df_combined = remove_contained_rows(df_combined)
-    df_combined = df_combined.reset_index(drop=True)
-
-    """col exchange"""
-    cols = list(df_combined.columns)
-    i, j = cols.index('Main value'), cols.index('Statistics type')
-    cols[i], cols[j] = cols[j], cols[i]
-    df_combined = df_combined[cols]
-    df_combined = df_combined.reset_index(drop=True)
-
-    """give range to median"""
-    # group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Subject N", "Parameter type",
-    #                  "Parameter unit"]
-    group_columns = ["Drug name", "Analyte", "Specimen", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Subject N", "Parameter type",
-                     "Parameter unit"]
-
-    # Finding pairs of rows that match on group_columns
-    grouped = df_combined.groupby(group_columns)
-
-    # Processing each group
-    for _, group in grouped:
-        if len(group) == 2:  # Only process if there are exactly two rows in the group
-            median_row = group[group["Statistics type"] == "Median"]
-            non_median_row = group[group["Statistics type"] != "Median"]
-
-            if not median_row.empty and not non_median_row.empty:
-                # Check if non-median row has "Range"
-                if "Range" in non_median_row["Interval type"].values:
-                    # Assign range values to the median row
-                    df_combined.loc[median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = \
-                        non_median_row[["Interval type", "Lower bound", "Upper bound"]].values
-
-                    # Remove range information from the non-median row
-                    df_combined.loc[non_median_row.index, ["Interval type", "Lower bound", "Upper bound"]] = ["N/A", "N/A", "N/A"]
-
-    df_combined = df_combined.reset_index(drop=True)
-
+    """Final"""
     df_combined.sort_values(by="original_index", inplace=True)
     df_combined.drop(columns=["original_index"], inplace=True)
+    df_combined.reset_index(drop=True, inplace=True)
+
+    df_combined = df_combined.sort_values(by="Patient ID")
     df_combined.reset_index(drop=True, inplace=True)
 
     print("=" * 64)
@@ -832,53 +683,23 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     usage_list.append(0)
     truncated_list.append(False)
 
-    # """
-    # Step 17: Time Extraction
-    # """
-    print("=" * 64)
-    step_name = "Time Appending"
-    print(COLOR_START+step_name+COLOR_END)
-    md_data_lines_after_post_process = dataframe_to_markdown(df_combined[["Main value", "Statistics type", "Variation type", "Variation value",
-                        "Interval type", "Lower bound", "Upper bound", "P value"]])
-    time_info = s_pk_extract_time_and_unit(md_table_aligned, description, md_data_lines_after_post_process, llm, max_retries, initial_wait)
-    if time_info is None:
-        return None
-    md_table_time, res_time, content_time, usage_time, truncated_time = time_info
-    step_list.append(step_name)
-    res_list.append(res_time)
-    content_list.append(content_time)
-    content_list_clean.append(clean_llm_reasoning(content_time))
-    usage_list.append(usage_time)
-    truncated_list.append(truncated_time)
-    print(COLOR_START+"Usage:"+COLOR_END, usage_list[-1])
-    print(COLOR_START+"Result:"+COLOR_END)
-    print(display_md_table(md_table_time))
-    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-    print(COLOR_START + "Reasoning:" + COLOR_END)
-    print(content_to_print)
-
-    # insert_pos = df_combined.columns.get_loc("Parameter type")  # before Parameter type
-    # # split df_combined and insert df of time
-    # df_combined = pd.concat([df_combined.iloc[:, :insert_pos], markdown_to_dataframe(md_table_time), df_combined.iloc[:, insert_pos:]], axis=1)
-    df_combined = pd.concat([df_combined, markdown_to_dataframe(md_table_time)], axis=1)
-    df_combined = df_combined.reset_index(drop=True)
     """
     Step 17: Post-operation Inspection
     """
 
     """Rename col names"""
-    column_mapping = {
-        # "Parameter unit": "Unit",
-        # "Main value": "Value",
-        # "Statistics type": "Summary Statistics",
-        # "Lower bound": "Lower limit",
-        # "Upper bound": "High limit",
-        "Main value": "Parameter value",
-        "Statistics type": "Parameter statistic",
-        "Lower bound": "Lower limit",
-        "Upper bound": "High limit",
-    }
-    df_combined = df_combined.rename(columns=column_mapping)
+    # column_mapping = {
+    #     # "Parameter unit": "Unit",
+    #     # "Main value": "Value",
+    #     # "Statistics type": "Summary Statistics",
+    #     # "Lower bound": "Lower limit",
+    #     # "Upper bound": "High limit",
+    #     "Main value": "Parameter value",
+    #     "Statistics type": "Parameter statistic",
+    #     "Lower bound": "Lower limit",
+    #     "Upper bound": "High limit",
+    # }
+    # df_combined = df_combined.rename(columns=column_mapping)
 
     print("=" * 64)
     step_name = "Column Renaming & Final Inspection"
