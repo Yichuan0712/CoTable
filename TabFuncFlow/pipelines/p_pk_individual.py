@@ -401,52 +401,117 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    # """
+    # Step 10: Population Matching
+    # """
+    # patient_list = []
+    # round = 1
+    # if need_match_patient is False:
+    #     for md in md_table_list:
+    #         df = markdown_to_dataframe(md)
+    #         row_num = df.shape[0]
+    #         # df_expanded = pd.concat([markdown_to_dataframe(md_table_patient)] * row_num, ignore_index=True)
+    #         df_expanded = pd.concat([markdown_to_dataframe(md_table_patient_refined)] * row_num, ignore_index=True)  # 这
+    #         patient_list.append(dataframe_to_markdown(df_expanded))
+    # else:
+    #     for md in md_table_list:
+    #         print("=" * 64)
+    #         step_name = "Population Matching" + f" (Trial {str(round)})"
+    #         round += 1
+    #         print(COLOR_START + step_name + COLOR_END)
+    #         patient_match_info = s_pk_match_patient_info(md_table_aligned, description, md, md_table_patient, llm, max_retries, initial_wait)
+    #         if patient_match_info is None:
+    #             return None
+    #         patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
+    #         df_table_patient = markdown_to_dataframe(md_table_patient_refined)  # 这
+    #         # df_table_patient = pd.concat(
+    #         #     [df_table_patient,
+    #         #      pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Subject N': 'ERROR'}])],
+    #         #     ignore_index=True)
+    #         df_table_patient = pd.concat(
+    #             [df_table_patient,
+    #              pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Pediatric/Gestational age': 'ERROR'}])],
+    #             ignore_index=True)
+    #         df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
+    #         patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
+    #         # type_unit_list.append(md_type_unit)
+    #         step_list.append(step_name)
+    #         res_list.append(res_patient_match)
+    #         content_list.append(content_patient_match)
+    #         content_list_clean.append(clean_llm_reasoning(content_patient_match))
+    #         usage_list.append(usage_patient_match)
+    #         truncated_list.append(truncated_patient_match)
+    #         print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+    #         print(COLOR_START + "Result:" + COLOR_END)
+    #         print(display_md_table(patient_list[-1]))
+    #         content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    #         print(COLOR_START + "Reasoning:" + COLOR_END)
+    #         print(content_to_print)
+    #
+    # print("=" * 64)
+    # step_name = "Population Matching (Final)"
+    # print(COLOR_START+step_name+COLOR_END)
+    # print(COLOR_START+"Usage:"+COLOR_END, 0)
+    # print(COLOR_START+"Result:"+COLOR_END)
+    # for i in range(len(patient_list)):
+    #     print(f"Index [{i}]:")
+    #     print(display_md_table(patient_list[i]))
+    # print(COLOR_START + "Reasoning:" + COLOR_END)
+    # print("Automatic execution.\n")
+    # step_list.append(step_name)
+    # res_list.append(True)
+    # content_list.append("Automatic execution.\n")
+    # content_list_clean.append("Automatic execution.\n")
+    # usage_list.append(0)
+    # truncated_list.append(False)
     """
-    Step 10: Population Matching
+    Step 10: Population Matching (with cache)
     """
     patient_list = []
+    patient_cache = {}
     round = 1
     if need_match_patient is False:
         for md in md_table_list:
             df = markdown_to_dataframe(md)
             row_num = df.shape[0]
-            # df_expanded = pd.concat([markdown_to_dataframe(md_table_patient)] * row_num, ignore_index=True)
             df_expanded = pd.concat([markdown_to_dataframe(md_table_patient_refined)] * row_num, ignore_index=True)  # 这
             patient_list.append(dataframe_to_markdown(df_expanded))
     else:
         for md in md_table_list:
-            print("=" * 64)
-            step_name = "Population Matching" + f" (Trial {str(round)})"
-            round += 1
-            print(COLOR_START + step_name + COLOR_END)
-            patient_match_info = s_pk_match_patient_info(md_table_aligned, description, md, md_table_patient, llm, max_retries, initial_wait)
-            if patient_match_info is None:
-                return None
-            patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
-            df_table_patient = markdown_to_dataframe(md_table_patient_refined)  # 这
-            # df_table_patient = pd.concat(
-            #     [df_table_patient,
-            #      pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Subject N': 'ERROR'}])],
-            #     ignore_index=True)
-            df_table_patient = pd.concat(
-                [df_table_patient,
-                 pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Pediatric/Gestational age': 'ERROR'}])],
-                ignore_index=True)
-            df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
-            patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
-            # type_unit_list.append(md_type_unit)
-            step_list.append(step_name)
-            res_list.append(res_patient_match)
-            content_list.append(content_patient_match)
-            content_list_clean.append(clean_llm_reasoning(content_patient_match))
-            usage_list.append(usage_patient_match)
-            truncated_list.append(truncated_patient_match)
-            print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
-            print(COLOR_START + "Result:" + COLOR_END)
-            print(display_md_table(patient_list[-1]))
-            content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-            print(COLOR_START + "Reasoning:" + COLOR_END)
-            print(content_to_print)
+            df = markdown_to_dataframe(md)
+            col_name_patient_id = [col for col in df.columns if col_mapping.get(col) == "Patient ID"][0]
+            if col_name_patient_id in patient_cache.keys():
+                patient_list.append(patient_cache[col_name_patient_id])
+            else:
+                print("=" * 64)
+                step_name = "Population Matching" + f" (Trial {str(round)})"
+                round += 1
+                print(COLOR_START + step_name + COLOR_END)
+                patient_match_info = s_pk_match_patient_info(md_table_aligned, description, md, md_table_patient, llm, max_retries, initial_wait)
+                if patient_match_info is None:
+                    return None
+                patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
+                df_table_patient = markdown_to_dataframe(md_table_patient_refined)  # 这
+                df_table_patient = pd.concat(
+                    [df_table_patient,
+                     pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Pediatric/Gestational age': 'ERROR'}])],
+                    ignore_index=True)
+                df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
+                patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
+                # type_unit_list.append(md_type_unit)
+                step_list.append(step_name)
+                res_list.append(res_patient_match)
+                content_list.append(content_patient_match)
+                content_list_clean.append(clean_llm_reasoning(content_patient_match))
+                usage_list.append(usage_patient_match)
+                truncated_list.append(truncated_patient_match)
+                print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+                print(COLOR_START + "Result:" + COLOR_END)
+                print(display_md_table(patient_list[-1]))
+                content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+                print(COLOR_START + "Reasoning:" + COLOR_END)
+                print(content_to_print)
+                patient_cache[col_name_patient_id] = dataframe_to_markdown(df_table_patient_reordered)
 
     print("=" * 64)
     step_name = "Population Matching (Final)"
@@ -521,7 +586,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
         df_value = markdown_to_dataframe(value_list[i])
         # df_time = markdown_to_dataframe(time_list[i])
         # df_combined = pd.concat([df_drug, df_table_patient, df_time, df_type_unit, df_value], axis=1)
-        df_combined = pd.concat([df_drug, df_table_patient, df_value], axis=1)
+        df_combined = pd.concat([df_table_patient, df_drug, df_value], axis=1)
         df_list.append(df_combined)
     df_combined = pd.concat(df_list, ignore_index=True)
     print("=" * 64)
