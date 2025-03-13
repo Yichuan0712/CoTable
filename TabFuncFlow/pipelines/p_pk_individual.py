@@ -325,16 +325,16 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
             if col in df.columns:
                 selected_cols = [c for c in df.columns if c in common_cols or c == col]
                 __md_table_list.append(dataframe_to_markdown(df[selected_cols].copy()))
-    # _md_table_list = __md_table_list
-    # __md_table_list = []
-    # for md in _md_table_list:
-    #     df = markdown_to_dataframe(md)
-    #     parameter_col = [col for col in df.columns if col_mapping.get(col) == "Parameter"][0]
-    #     patient_col = [col for col in df.columns if col_mapping.get(col) == "Patient ID"][0]
-    #     df_reshaped = df.rename(columns={patient_col: patient_col, parameter_col: "Parameter Value"})
-    #     df_reshaped["Parameter Type"] = parameter_col
-    #     df_reshaped = df_reshaped[[patient_col, "Parameter Type", "Parameter Value"]]
-    #     __md_table_list.append(dataframe_to_markdown(df_reshaped))
+    _md_table_list = __md_table_list
+    __md_table_list = []
+    for md in _md_table_list:
+        df = markdown_to_dataframe(md)
+        parameter_col = [col for col in df.columns if col_mapping.get(col) == "Parameter"][0]
+        patient_col = [col for col in df.columns if col_mapping.get(col) == "Patient ID"][0]
+        df_reshaped = df.rename(columns={patient_col: "Patient ID (Rough)", parameter_col: "Parameter Value (Rough)"})
+        df_reshaped["Parameter Type (Rough)"] = parameter_col
+        df_reshaped = df_reshaped[["Patient ID (Rough)", "Parameter Type (Rough)", "Parameter Value (Rough)"]]
+        __md_table_list.append(dataframe_to_markdown(df_reshaped))
     md_table_list = __md_table_list
     print(COLOR_START + "Usage:" + COLOR_END)
     print(usage_split)
