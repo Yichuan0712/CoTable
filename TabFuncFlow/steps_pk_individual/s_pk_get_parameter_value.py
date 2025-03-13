@@ -26,11 +26,11 @@ Subtable 2 should have the following column headers only:
 
 **Parameter type, Parameter unit, Parameter value, Time value, Time unit** 
 
-Parameter type:
-Parameter unit:
-Parameter value: 
-Time value:
-Time unit:
+- **Parameter type:** The type of pharmacokinetic parameter (e.g., "Cmax", "AUC", "Tmax").  
+- **Parameter unit:** The unit corresponding to the parameter (e.g., "ng/mL", "mg·h/L", "hour").  
+- **Parameter value:** The numerical value of the parameter extracted from Subtable 1.  
+- **Time value:** A specific moment (numerical or time range) when the row of data is recorded, or a drug dose is administered.  
+- **Time unit:** The unit corresponding to the recorded time point (e.g., "Hour", "Min", "Day").  
 
 Please Note:
 (1) For values that do not need to be filled, enter "N/A".

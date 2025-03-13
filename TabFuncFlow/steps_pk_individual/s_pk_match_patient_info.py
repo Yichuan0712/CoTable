@@ -18,7 +18,7 @@ From the main table above, I have extracted the following columns to create Subt
 {extracted_param_types}  
 Below is Subtable 1:
 {display_md_table(md_table_aligned_with_1_param_type_and_value)}
-Additionally, I have compiled Subtable 2, where each row represents a unique combination of "Population" - "Pregnancy stage" - "Subject N," as follows:
+Additionally, I have compiled Subtable 2, where each row represents a unique combination of "Patient ID" - "Population" - "Pregnancy stage," as follows:
 {display_md_table(patient_md_table)}
 Carefully analyze the tables and follow these steps:  
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
