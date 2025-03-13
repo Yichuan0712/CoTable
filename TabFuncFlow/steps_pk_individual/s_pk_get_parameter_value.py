@@ -40,7 +40,7 @@ Please Note:
 (5) **Important:** Please return Subtable 2 as a list of lists, excluding the headers. Ensure all values are converted to strings.
 (6) **Absolutely no calculations are allowed—every value must be taken directly from Subtable 1 without any modifications.**  
 (7) Format the final list within double angle brackets, like this:
-<<[["0.162", "Mean", "SD", "0.090", "N/A", "N/A", "N/A", ".67"], ["0.428", "Mean", "SD", "0.162", "N/A", "N/A", "N/A", ".015"]]>>
+<<[["IFX Dose", "mg/kg", "1", "N/A", "N/A"], ["IFX at Birth", "μg/ml", "4.4", "N/A", "N/A"]]>>
 """
 
 
@@ -86,8 +86,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
                 )
 
             expected_columns = [
-                'Main value', 'Statistics type', 'Variation type', 'Variation value',
-                'Interval type', 'Lower bound', 'Upper bound', 'P value'
+                'Parameter type', 'Parameter unit', 'Parameter value', 'Time value', 'Time unit'
             ]
 
             for row in match_list:
