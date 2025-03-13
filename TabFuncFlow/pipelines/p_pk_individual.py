@@ -465,7 +465,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 13: Parameter Value Extraction
+    Step 11: Parameter Value Extraction
     """
     value_list = []
     round = 1
@@ -492,7 +492,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
         print(COLOR_START + "Reasoning:" + COLOR_END)
         print(content_to_print)
     """
-    Step 14: Parameter Value Extraction (Final)
+    Step 12: Parameter Value Extraction (Final)
     """
     print("=" * 64)
     step_name = "Parameter Value Extraction (Final)"
@@ -510,20 +510,18 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
-    exit(0)
     """
-    Step 15: Assembly
+    Step 13: Assembly
     """
     df_list = []
-    assert len(drug_list) == len(patient_list) == len(type_unit_list) == len(value_list)# == len(time_list)
+    assert len(drug_list) == len(patient_list) == len(value_list)# == len(time_list)
     for i in range(len(drug_list)):
         df_drug = markdown_to_dataframe(drug_list[i])
         df_table_patient = markdown_to_dataframe(patient_list[i])
-        df_type_unit = markdown_to_dataframe(type_unit_list[i])
         df_value = markdown_to_dataframe(value_list[i])
         # df_time = markdown_to_dataframe(time_list[i])
         # df_combined = pd.concat([df_drug, df_table_patient, df_time, df_type_unit, df_value], axis=1)
-        df_combined = pd.concat([df_drug, df_table_patient, df_type_unit, df_value], axis=1)
+        df_combined = pd.concat([df_drug, df_table_patient, df_value], axis=1)
         df_list.append(df_combined)
     df_combined = pd.concat(df_list, ignore_index=True)
     print("=" * 64)
@@ -540,6 +538,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
+    exit(0)
     """
     Step 16: Row cleanup
     """
