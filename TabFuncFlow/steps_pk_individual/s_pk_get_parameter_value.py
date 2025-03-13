@@ -24,16 +24,16 @@ Below is Subtable 1:
 Please review the information in Subtable 1 row by row and complete Subtable 2.
 Subtable 2 should have the following column headers only:  
 
-**Parameter value, Parameter unit** 
+**Parameter type, Parameter unit, Parameter value, Time value, Time unit** 
 
-Parameter value: the value of main parameter (not a range). 
+Parameter type:
 Parameter unit:
+Parameter value: 
 Time value:
 Time unit:
 
 Please Note:
-(1) An interval consisting of two numbers must be placed separately into the Low limit and High limit fields; it is prohibited to place it in the Variation value field.
-(2) For values that do not need to be filled, enter "N/A".
+(1) For values that do not need to be filled, enter "N/A".
 (3) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total). 
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
 (4) For rows in Subtable 1 that can not be extracted, enter "N/A" for the entire row.
