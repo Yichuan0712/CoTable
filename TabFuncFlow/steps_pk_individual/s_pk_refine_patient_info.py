@@ -41,8 +41,6 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
     - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the fetal or neonatal age (or age range).
         Note: Verify that the value explicitly states the age. Only consider it valid if the age is directly mentioned. Do not infer age from the timing of data recording or drug administration.
         For example: "Concentrations on Days 7" refers to a measurement time point, not an age, and should not be treated as such.
-        
-    - **Subject N**: The number of subjects corresponding to the specific population.
 
 (2) Compile each unique combination in the format of a **list of lists**, using **Python string syntax**.  
    - Your response should be enclosed in **double angle brackets** `<< >>` and formatted as a **single line**.
