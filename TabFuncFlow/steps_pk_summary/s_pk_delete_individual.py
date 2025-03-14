@@ -49,7 +49,7 @@ def s_pk_delete_individual(md_table, model_name="gemini_15_pro", max_retries=5, 
             elif match_angle:
                 extracted_data = match_angle[2:-2]
                 try:
-                    row_list, col_list = ast.literal_eval(extracted_data)
+                    row_list, col_list = ast.literal_eval(fix_trailing_brackets(extracted_data))
                 except Exception as e:
                     raise ValueError(f"Failed to parse row/column data: {e}") from e
 

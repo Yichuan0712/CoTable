@@ -52,7 +52,7 @@ def s_pk_get_col_mapping(md_table, model_name="gemini_15_pro", max_retries=5, in
             extracted_data = matches[-1][2:-2]
 
             try:
-                match_dict = ast.literal_eval(extracted_data)
+                match_dict = ast.literal_eval(fix_trailing_brackets(extracted_data))
             except Exception as e:
                 raise ValueError(f"Failed to parse column mapping: {e}") from e
 

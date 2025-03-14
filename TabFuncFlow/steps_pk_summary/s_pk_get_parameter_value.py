@@ -75,7 +75,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
             extracted_data = matches[-1][2:-2]
 
             try:
-                match_list = ast.literal_eval(extracted_data)
+                match_list = ast.literal_eval(fix_trailing_brackets(extracted_data))
             except (SyntaxError, ValueError) as e:
                 raise ValueError(f"Failed to parse parameter values: {e}") from e
 

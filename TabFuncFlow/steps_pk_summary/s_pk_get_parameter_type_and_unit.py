@@ -67,7 +67,7 @@ def s_pk_get_parameter_type_and_unit(md_table_aligned, col_dict, md_table, capti
                 extracted_data = matches[-1][2:-2]
 
                 try:
-                    match_tuple = ast.literal_eval(extracted_data)
+                    match_tuple = ast.literal_eval(fix_trailing_brackets(extracted_data))
                 except (SyntaxError, ValueError) as e:
                     raise ValueError(f"Failed to parse parameter type and unit: {e}") from e
 

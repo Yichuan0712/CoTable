@@ -85,7 +85,7 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
 
             if match_angle:
                 try:
-                    match_list = ast.literal_eval(match_angle[2:-2])
+                    match_list = ast.literal_eval(fix_trailing_brackets(match_angle[2:-2]))
                     match_list = [list(t) for t in dict.fromkeys(map(tuple, match_list))]
                 except Exception as e:
                     raise ValueError(f"Failed to parse refined population information. {e}") from e

@@ -187,7 +187,7 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro", max
 
             if match_angle:
                 try:
-                    match_list = ast.literal_eval(match_angle[2:-2])
+                    match_list = ast.literal_eval(fix_trailing_brackets(match_angle[2:-2]))
                     match_list = [list(t) for t in dict.fromkeys(map(tuple, match_list))]
                 except Exception as e:
                     raise ValueError(f"Failed to parse extracted population information. {e}") from e

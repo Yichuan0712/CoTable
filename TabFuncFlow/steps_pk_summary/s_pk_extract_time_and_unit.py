@@ -69,7 +69,7 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_proce
 
             if match_angle:
                 try:
-                    match_list = ast.literal_eval(match_angle[2:-2])
+                    match_list = ast.literal_eval(fix_trailing_brackets(match_angle[2:-2]))
                     # match_list = [list(t) for t in dict.fromkeys(map(tuple, match_list))]
                 except Exception as e:
                     raise ValueError(f"Failed to parse extracted time information. {e}") from e
