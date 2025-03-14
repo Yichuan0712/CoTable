@@ -75,7 +75,7 @@ def s_pk_split_by_cols(md_table, col_mapping, model_name="gemini_15_pro", max_re
             extracted_data = matches[-1][2:-2]
 
             try:
-                col_groups = ast.literal_eval(extracted_data)
+                col_groups = ast.literal_eval(fix_trailing_brackets(extracted_data))
             except Exception as e:
                 raise ValueError(f"Failed to parse column groups: {e}") from e
 

@@ -47,7 +47,7 @@ def s_pk_delete_summary(md_table, model_name="gemini_15_pro", max_retries=5, ini
             if match_end:
                 row_list, col_list = None, None
             elif match_angle:
-                extracted_data = match_angle[2:-2]
+                extracted_data = fix_trailing_brackets(match_angle[2:-2])
                 try:
                     row_list, col_list = ast.literal_eval(extracted_data)
                 except Exception as e:

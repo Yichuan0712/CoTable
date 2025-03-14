@@ -57,7 +57,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
             extracted_data = matches[-1][2:-2]
 
             try:
-                match_list = ast.literal_eval(extracted_data)
+                match_list = ast.literal_eval(fix_trailing_brackets(extracted_data))
             except Exception as e:
                 raise ValueError(f"Failed to parse matched drug info: {e}") from e
 
