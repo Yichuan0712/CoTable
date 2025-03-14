@@ -41,11 +41,11 @@ def html_table_to_markdown(html):
         is_header = all(col.name == "th" for col in cols)
 
         for col in cols:
-            # for sup in col.find_all("sup"):  # Remove superscript elements
-            #     sup.decompose()
+            for sup in col.find_all("sup"):  # Remove superscript elements
+                sup.decompose()
             # Handle superscript elements explicitly
-            for sup in col.find_all("sup"):
-                sup.string = f"^{sup.get_text(strip=True)}^"  # Convert to Markdown superscript format
+            # for sup in col.find_all("sup"):
+            #     sup.string = f"^{sup.get_text(strip=True)}^"  # Convert to Markdown superscript format
 
             text = "".join(col.stripped_strings)
             colspan = int(col.get("colspan", 1))
