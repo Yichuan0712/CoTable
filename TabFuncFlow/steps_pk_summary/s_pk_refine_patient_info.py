@@ -38,7 +38,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Postpartum" (~6–8 weeks after birth)  
         - "Nursing," "Breastfeeding," or "Lactation" (refers to the period of breastfeeding after birth) 
  
-    - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the fetal or neonatal age (or age range).
+    - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the pregnancy weeks.
         Note: Verify that the value explicitly states the age. Only consider it valid if the age is directly mentioned. Do not infer age from the timing of data recording or drug administration.
         For example: "Concentrations on Days 7" refers to a measurement time point, not an age, and should not be treated as such.
         

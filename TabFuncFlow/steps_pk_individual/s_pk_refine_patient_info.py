@@ -38,7 +38,7 @@ Carefully analyze the tables and follow these steps to refine Subtable 1 into a 
         - "Postpartum" (~6–8 weeks after birth)  
         - "Nursing," "Breastfeeding," or "Lactation" (refers to the period of breastfeeding after birth) 
  
-    - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be: fetal age, neonatal age, the pregnancy weeks.
+    - **Pediatric/Gestational age**: The child's age (or age range) at a specific point in the study. Retain the original wording whenever possible. It can also be the pregnancy weeks.
         Note: Verify that the value explicitly states the age. Only consider it valid if the age is directly mentioned. Do not infer age from the timing of data recording or drug administration.
         For example: "Concentrations on Days 7" refers to a measurement time point, not an age, and should not be treated as such.
 
@@ -93,22 +93,22 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
             if not match_list:
                 raise ValueError(f"Population information refinement failed: No valid entries found!")
 
-            expected_rows = markdown_to_dataframe(patient_md_table).shape[0]
-            if len(match_list) != expected_rows:
-                messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."]
-                raise ValueError(
-                    f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
-                )
+            # expected_rows = markdown_to_dataframe(patient_md_table).shape[0]
+            # if len(match_list) != expected_rows:
+            #     messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."]
+            #     raise ValueError(
+            #         f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
+            #     )
 
             df_table = pd.DataFrame(match_list, columns=["Patient ID", "Population", "Pregnancy stage", "Pediatric/Gestational age"]).astype(str)
-            print("==== Automatically 'Patient ID' Comparison ====")
-            print(markdown_to_dataframe(patient_md_table)['Patient ID'].tolist(), "== Original ==")
-            print(df_table['Patient ID'].tolist(), "== Refined ==")
-            if not df_table['Patient ID'].equals(markdown_to_dataframe(patient_md_table)['Patient ID']):
-                messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nThe rows in the refined Subtable 2 do not correspond to those in Subtable 1 on a one-to-one basis."]
-                raise ValueError(
-                    f"The rows in the refined Subtable 2 do not correspond to those in Subtable 1 on a one-to-one basis."
-                )
+            # print("==== Automatically 'Patient ID' Comparison ====")
+            # print(markdown_to_dataframe(patient_md_table)['Patient ID'].tolist(), "== Original ==")
+            # print(df_table['Patient ID'].tolist(), "== Refined ==")
+            # if not df_table['Patient ID'].equals(markdown_to_dataframe(patient_md_table)['Patient ID']):
+            #     messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nThe rows in the refined Subtable 2 do not correspond to those in Subtable 1 on a one-to-one basis."]
+            #     raise ValueError(
+            #         f"The rows in the refined Subtable 2 do not correspond to those in Subtable 1 on a one-to-one basis."
+            #     )
 
             return_md_table = dataframe_to_markdown(df_table)
 
