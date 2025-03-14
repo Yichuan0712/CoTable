@@ -40,7 +40,6 @@ def s_pk_extract_patient_info(md_table, caption, model_name="gemini_15_pro", max
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(content)
             content = fix_angle_brackets(content)
 
             total_usage += usage
