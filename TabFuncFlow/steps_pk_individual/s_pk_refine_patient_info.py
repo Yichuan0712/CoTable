@@ -72,7 +72,6 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
             content = fix_angle_brackets(content)
-            print(content)
 
             total_usage += usage
             all_content.append(f"Attempt {retries + 1}:\n{content}")
