@@ -8,6 +8,7 @@ from extractor.request_geminiai import (
     request_to_gemini_15_pro,
     request_to_gemini_15_flash,
 )
+import ast
 # from dotenv import load_dotenv
 # load_dotenv()
 
@@ -32,7 +33,22 @@ def get_llm_response(messages, question, model="gemini_15_pro"):
 
 
 def fix_angle_brackets(text: str) -> str:
-    text = text.rstrip(' \n')
-    return text + '>' if text.strip().endswith('>') and not text.strip().endswith('>>') else text
+    text = text.rstrip()
+    return text + '>' if text.endswith('>') and not text.endswith('>>') else text
+
+
+def fix_trailing_brackets(text):
+    try:
+        ast.literal_eval(text)
+        return text
+    except Exception:
+        pass
+    for bracket in ["]", ")", "}"]:
+        try:
+            if ast.literal_eval(text + bracket):
+                return text + bracket
+        except Exception:
+            continue
+    return text
 
 

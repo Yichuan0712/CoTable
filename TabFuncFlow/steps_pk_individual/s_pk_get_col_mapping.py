@@ -17,7 +17,7 @@ Carefully analyze the table and follow these steps:
 (1) Examine all column headers and categorize each one into one of the following groups:  
    - **"Patient ID"**: Columns that describe the identifier assigned to each patient.
    - **"Parameter"**: Columns that describe pharmacokinetics concentration or ratio parameter data.  
-        - Examples: Drug concentration (e.g., "Plasma Conc ng/mL"), Area under the curve (e.g., "AUC 0-∞"), Maximum concentration (e.g., "Cmax"), Half-life (e.g., "T1/2"), Clearance rate (e.g., "CL/F").
+        - Examples: Drug concentration (e.g., "Plasma Conc ng/mL"), Area under the curve (e.g., "AUC 0-∞"), Maximum concentration (e.g., "Cmax"), Time to Maximum Concentration (e.g., "Tmax"), Half-life (e.g., "T1/2"), Clearance rate (e.g., "CL/F").
    - **"Uncategorized"**: Columns that do not fit into the above categories, such as those representing time-related information, or dose amount information.
         - Examples: Dose amount (e.g. "1 mg/kg"), Sampling time (e.g., "Time postdose_hr"), Dosing interval (e.g., "Tau hr"), Collection date (e.g., "Sample Date"), Study period (e.g., "Period").
 (3) if a column is only about the subject number, it is considered as "Uncategorized"
