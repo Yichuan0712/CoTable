@@ -109,6 +109,24 @@ def s_pk_refine_patient_info(md_table_aligned, caption, patient_md_table, model_
             #         f"The rows in the refined Subtable 2 do not correspond to those in Subtable 1 on a one-to-one basis."
             #     )
 
+            print("==== Automatically 'Patient ID' Comparison ====")
+            original_ids = set(markdown_to_dataframe(patient_md_table)['Patient ID'])
+            refined_ids = set(df_table['Patient ID'])
+            print(original_ids, "== Original ==")
+            print(refined_ids, "== Refined ==")
+
+            if original_ids != refined_ids:
+                missing_ids = original_ids - refined_ids
+                extra_ids = refined_ids - original_ids
+                error_message = "The refined Subtable 2 does not contain the same 'Patient ID' values as Subtable 1."
+                if missing_ids:
+                    error_message += f"\nMissing Patient IDs: {missing_ids}"
+                if extra_ids:
+                    error_message += f"\nExtra Patient IDs: {extra_ids}"
+
+                messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\n{error_message}"]
+                raise ValueError(error_message)
+
             return_md_table = dataframe_to_markdown(df_table)
 
             return return_md_table, res, "\n\n".join(all_content), total_usage, truncated
