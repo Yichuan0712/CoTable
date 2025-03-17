@@ -50,6 +50,10 @@ def s_pk_delete_summary(md_table, model_name="gemini_15_pro", max_retries=5, ini
                 extracted_data = fix_trailing_brackets(match_angle[2:-2])
                 try:
                     row_list, col_list = ast.literal_eval(extracted_data)
+                    if not row_list:
+                        row_list = None
+                    if not col_list:
+                        col_list = None
                 except Exception as e:
                     raise ValueError(f"Failed to parse row/column data: {e}") from e
 
