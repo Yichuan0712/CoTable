@@ -345,10 +345,10 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
     """
-    Step 9: Unit Extraction
+    Step 9: Parameter Value Extraction
     """
     print("=" * 64)
-    step_name = "Unit Extraction"
+    step_name = "Parameter Value Extraction"
     print(COLOR_START + step_name + COLOR_END)
     df = markdown_to_dataframe(md_table_aligned)
     col_name_of_parameter_type_list = [col for col in df.columns if col_mapping.get(col) == "Parameter"]
@@ -506,13 +506,13 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 12: Parameter Value Extraction
+    Step 12: Time Extraction
     """
     time_list = []
     round = 1
     for md in md_table_list:
         print("=" * 64)
-        step_name = "Parameter Value Extraction" + f" (Trial {str(round)})"
+        step_name = "Time Extraction" + f" (Trial {str(round)})"
         round += 1
         print(COLOR_START + step_name + COLOR_END)
         time_info = s_pk_extract_time_and_unit(md_table_aligned, description, md, llm, max_retries, initial_wait)
@@ -533,10 +533,10 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
         print(COLOR_START + "Reasoning:" + COLOR_END)
         print(content_to_print)
     """
-    Step 13: Parameter Value Extraction (Final)
+    Step 13: Time Extraction (Final)
     """
     print("=" * 64)
-    step_name = "Parameter Value Extraction (Final)"
+    step_name = "Time Extraction (Final)"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
