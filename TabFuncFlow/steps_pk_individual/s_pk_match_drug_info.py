@@ -24,9 +24,9 @@ Carefully analyze the tables and follow these steps:
 (1) For each row in Subtable 1, find **the best matching one** row in Subtable 2. Return a list of unique row indices (as integers) from Subtable 2 that correspond to each row in Subtable 1.  
 (2) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]} rows in total).   
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
-(3) If a row in Subtable 1 cannot be matched, do not ignore, return -1 for that row.
+(3) If a row in Subtable 1 cannot be matched, **do not** ignore it. Instead, make your best effort to return the closest possible number by checking the surrounding rows, as they are likely to be relevant.
 (4) Format the final list within double angle brackets without removing duplicates or sorting, like this:  
-    <<[-1,1,1,2,2,-1,3,3,0,0]>>
+    <<[1,1,2,2,3,3,0,0]>>
 """
 
 
@@ -43,7 +43,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(usage, content)
+            # print(usage, content)
             content = fix_angle_brackets(content)
 
             total_usage += usage
