@@ -28,7 +28,6 @@ Carefully analyze the tables and follow these steps:
 (4) Format the final list within double angle brackets without removing duplicates or sorting, like this:  
     <<[-1,1,1,2,2,-1,3,3,0,0]>>
 """
-# (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
 
 
 def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_param_type_and_value, drug_md_table, model_name="gemini_15_pro", max_retries=5, initial_wait=1):

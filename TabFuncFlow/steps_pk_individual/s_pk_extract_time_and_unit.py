@@ -19,6 +19,7 @@ Carefully analyze the table and follow these steps:
 (1) For each row in Subtable 1, add two more columns [Time value, Time unit].  
 - **Time Value:** A specific moment (numerical or time range) when the row of data is recorded, or a drug dose is administered.  
   - Examples: Sampling times, dosing times, or reported observation times.  
+  - **The duration of pregnancy (e.g. 20 weeks) must not be recorded as a time value.**
 - **Time Unit:** The unit corresponding to the recorded time point (e.g., "Hour", "Min").  
 (2) List each unique combination in the format of a list of lists, using Python string syntax. Your answer should be enclosed in double angle brackets, like this:  
    <<[["1", "Hour"], ["10", "Min"], ["N/A", "N/A"]]>> (example)  
