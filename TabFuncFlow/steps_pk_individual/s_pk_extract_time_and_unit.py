@@ -30,9 +30,10 @@ Carefully analyze the table and follow these steps:
     **<<[["N/A", "N/A"]]>>**  
 
 **The following parameter types must not include time or time units and should be directly entered as "N/A":**
-    - Tmax
-    - Cmax
-    - Cavg
+    Tmax – Maximum Time (Time to reach the maximum concentration)
+    Cmax – Maximum Concentration
+    Cavg – Average Concentration
+    AUC Ratio – Area Under the Curve Ratio
 
 """
 
