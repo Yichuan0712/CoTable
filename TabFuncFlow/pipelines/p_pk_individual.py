@@ -345,6 +345,13 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_split)
     """
+    Step 9: Unit Extraction
+    """
+    df = markdown_to_dataframe(md_table_aligned)
+    col_name_of_parameter_type_list = [col for col in df.columns if col_mapping.get(col) == "Parameter"]
+    print(col_name_of_parameter_type_list)
+    exit(0)
+    """
     Step 9: Drug Matching
     """
     drug_list = []
