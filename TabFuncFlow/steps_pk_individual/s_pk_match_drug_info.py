@@ -26,7 +26,7 @@ Carefully analyze the tables and follow these steps:
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
 (3) If a row in Subtable 1 cannot be matched, do not ignore, return -1 for that row.
 (4) Format the final list within double angle brackets without removing duplicates or sorting, like this:  
-    <<[-1,1,1,-1,2,2,-1,3,3]>>
+    <<[-1,1,1,2,2,-1,3,3,0,0]>>
 """
 # (3) If a row in Subtable 1 cannot be matched, return -1 for that row.
 
