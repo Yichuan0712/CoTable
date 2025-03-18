@@ -4,7 +4,7 @@ from TabFuncFlow.steps_pk_individual.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
 # from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
 from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
-# from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
+from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
 from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
@@ -350,6 +350,10 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     df = markdown_to_dataframe(md_table_aligned)
     col_name_of_parameter_type_list = [col for col in df.columns if col_mapping.get(col) == "Parameter"]
     print(col_name_of_parameter_type_list)
+    unit_info = s_pk_get_parameter_type_and_unit(md_table_aligned, col_name_of_parameter_type_list, description, llm, max_retries, initial_wait)
+    if unit_info is None:
+        return None
+    tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
     exit(0)
     """
     Step 9: Drug Matching
