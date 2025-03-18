@@ -25,15 +25,14 @@ Carefully analyze the table and follow these steps:
 (3) Strictly ensure that you process only rows 0 to {markdown_to_dataframe(md_data_lines).shape[0] - 1} from the Subtable 1 (which has {markdown_to_dataframe(md_data_lines).shape[0]} rows in total). 
     - The number of processed rows must **exactly match** the number of rows in the Subtable 1—no more, no less.  
 (4) Verify the source of each [Time value, Time unit] combination before including it in your answer.  
+    **Important: The following parameter types must not include time or time units and must be directly entered as ["N/A", "N/A"]:**
+        Tmax – Maximum Time (Time to reach the maximum concentration)
+        Cmax – Maximum Concentration
+        Cavg – Average Concentration
+        AUC Ratio – Area Under the Curve Ratio
 (5) **Absolutely no calculations are allowed—every value must be taken directly from the table without any modifications.** 
 (6) **If no valid [Time value, Time unit] combinations are found, return the default output:**  
     **<<[["N/A", "N/A"]]>>**  
-
-**The following parameter types must not include time or time units and should be directly entered as "N/A":**
-    Tmax – Maximum Time (Time to reach the maximum concentration)
-    Cmax – Maximum Concentration
-    Cavg – Average Concentration
-    AUC Ratio – Area Under the Curve Ratio
 
 """
 
