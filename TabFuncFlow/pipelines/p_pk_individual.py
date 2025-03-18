@@ -602,14 +602,27 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
 
     """Delete ERROR rows"""
     df_combined = df_combined[df_combined.ne("ERROR").all(axis=1)]
-    # """if Time == "N/A", Time unit must be "N/A"。"""
-    # df_combined.loc[
-    #     (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
+    """if Time == "N/A", Time unit must be "N/A"。"""
+    df_combined.loc[
+        (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
     """if Value == "N/A", type and unit must be "N/A"。"""
     df_combined.loc[
         (df_combined["Parameter value"] == "N/A"), "Parameter type"] = "N/A"
     df_combined.loc[
         (df_combined["Parameter value"] == "N/A"), "Parameter unit"] = "N/A"
+    """if Cmax, Cavg, Tmax, time value and unit must be "N/A"。"""
+    df_combined.loc[
+        (df_combined["Parameter type"] == "Cmax"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Parameter value"] == "Cmax"), "Time unit"] = "N/A"
+    df_combined.loc[
+        (df_combined["Parameter type"] == "Tmax"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Parameter value"] == "Tmax"), "Time unit"] = "N/A"
+    df_combined.loc[
+        (df_combined["Parameter type"] == "Cavg"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Parameter value"] == "Cavg"), "Time unit"] = "N/A"
     """replace empty by N/A"""
     df_combined.replace(r'^\s*$', 'N/A', regex=True, inplace=True)
     """replace n/a by N/A"""
