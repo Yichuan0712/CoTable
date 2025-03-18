@@ -43,6 +43,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
+            print(usage, content)
             content = fix_angle_brackets(content)
 
             total_usage += usage
