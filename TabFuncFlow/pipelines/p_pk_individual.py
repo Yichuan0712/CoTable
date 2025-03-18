@@ -2,13 +2,13 @@ from TabFuncFlow.steps_pk_individual.s_pk_delete_summary import *
 from TabFuncFlow.steps_pk_individual.s_pk_align_parameter import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_extract_patient_info import *
-# from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
+from TabFuncFlow.steps_pk_individual.s_pk_extract_time_and_unit import *
 from TabFuncFlow.steps_pk_individual.s_pk_get_col_mapping import *
-from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_and_unit import *
+from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_type_unit_value import *
 from TabFuncFlow.steps_pk_individual.s_pk_match_drug_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_match_patient_info import *
 from TabFuncFlow.steps_pk_individual.s_pk_split_by_cols import *
-from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
+# from TabFuncFlow.steps_pk_individual.s_pk_get_parameter_value import *
 from TabFuncFlow.steps_pk_individual.s_pk_refine_patient_info import *
 import re
 import itertools
@@ -352,8 +352,8 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     print(COLOR_START + step_name + COLOR_END)
     df = markdown_to_dataframe(md_table_aligned)
     col_name_of_parameter_type_list = [col for col in df.columns if col_mapping.get(col) == "Parameter"]
-    print(col_name_of_parameter_type_list)
-    unit_info = s_pk_get_parameter_type_and_unit(md_table_aligned, col_name_of_parameter_type_list, description, llm, max_retries, initial_wait)
+    # print(col_name_of_parameter_type_list)
+    unit_info = s_pk_get_parameter_type_unit_value(md_table_aligned, col_name_of_parameter_type_list, description, llm, max_retries, initial_wait)
     if unit_info is None:
         return None
     tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
@@ -383,9 +383,8 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
-    exit(0)
     """
-    Step 9: Drug Matching
+    Step 10: Drug Matching
     """
     drug_list = []
     round = 1
@@ -441,71 +440,8 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     content_list_clean.append("Automatic execution.\n")
     usage_list.append(0)
     truncated_list.append(False)
-    # """
-    # Step 10: Population Matching
-    # """
-    # patient_list = []
-    # round = 1
-    # if need_match_patient is False:
-    #     for md in md_table_list:
-    #         df = markdown_to_dataframe(md)
-    #         row_num = df.shape[0]
-    #         # df_expanded = pd.concat([markdown_to_dataframe(md_table_patient)] * row_num, ignore_index=True)
-    #         df_expanded = pd.concat([markdown_to_dataframe(md_table_patient_refined)] * row_num, ignore_index=True)  # 这
-    #         patient_list.append(dataframe_to_markdown(df_expanded))
-    # else:
-    #     for md in md_table_list:
-    #         print("=" * 64)
-    #         step_name = "Population Matching" + f" (Trial {str(round)})"
-    #         round += 1
-    #         print(COLOR_START + step_name + COLOR_END)
-    #         patient_match_info = s_pk_match_patient_info(md_table_aligned, description, md, md_table_patient, llm, max_retries, initial_wait)
-    #         if patient_match_info is None:
-    #             return None
-    #         patient_match_list, res_patient_match, content_patient_match, usage_patient_match, truncated_patient_match = patient_match_info
-    #         df_table_patient = markdown_to_dataframe(md_table_patient_refined)  # 这
-    #         # df_table_patient = pd.concat(
-    #         #     [df_table_patient,
-    #         #      pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Subject N': 'ERROR'}])],
-    #         #     ignore_index=True)
-    #         df_table_patient = pd.concat(
-    #             [df_table_patient,
-    #              pd.DataFrame([{'Population': 'ERROR', 'Pregnancy stage': 'ERROR', 'Pediatric/Gestational age': 'ERROR'}])],
-    #             ignore_index=True)
-    #         df_table_patient_reordered = df_table_patient.iloc[patient_match_list].reset_index(drop=True)
-    #         patient_list.append(dataframe_to_markdown(df_table_patient_reordered))
-    #         # type_unit_list.append(md_type_unit)
-    #         step_list.append(step_name)
-    #         res_list.append(res_patient_match)
-    #         content_list.append(content_patient_match)
-    #         content_list_clean.append(clean_llm_reasoning(content_patient_match))
-    #         usage_list.append(usage_patient_match)
-    #         truncated_list.append(truncated_patient_match)
-    #         print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
-    #         print(COLOR_START + "Result:" + COLOR_END)
-    #         print(display_md_table(patient_list[-1]))
-    #         content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
-    #         print(COLOR_START + "Reasoning:" + COLOR_END)
-    #         print(content_to_print)
-    #
-    # print("=" * 64)
-    # step_name = "Population Matching (Final)"
-    # print(COLOR_START+step_name+COLOR_END)
-    # print(COLOR_START+"Usage:"+COLOR_END, 0)
-    # print(COLOR_START+"Result:"+COLOR_END)
-    # for i in range(len(patient_list)):
-    #     print(f"Index [{i}]:")
-    #     print(display_md_table(patient_list[i]))
-    # print(COLOR_START + "Reasoning:" + COLOR_END)
-    # print("Automatic execution.\n")
-    # step_list.append(step_name)
-    # res_list.append(True)
-    # content_list.append("Automatic execution.\n")
-    # content_list_clean.append("Automatic execution.\n")
-    # usage_list.append(0)
-    # truncated_list.append(False)
     """
-    Step 10: Population Matching (with cache)
+    Step 11: Population Matching (with cache)
     """
     patient_list = []
     patient_cache = {}
@@ -570,43 +506,43 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 11: Parameter Value Extraction
+    Step 12: Parameter Value Extraction
     """
-    value_list = []
+    time_list = []
     round = 1
     for md in md_table_list:
         print("=" * 64)
         step_name = "Parameter Value Extraction" + f" (Trial {str(round)})"
         round += 1
         print(COLOR_START + step_name + COLOR_END)
-        value_info = s_pk_get_parameter_value(md_table_aligned, description, md, llm, max_retries, initial_wait)
-        if value_info is None:
+        time_info = s_pk_extract_time_and_unit(md_table_aligned, description, md, llm, max_retries, initial_wait)
+        if time_info is None:
             return None
-        md_value, res_value, content_value, usage_value, truncated_value = value_info
-        value_list.append(md_value)
+        md_time, res_time, content_time, usage_time, truncated_time = time_info
+        time_list.append(md_time)
         step_list.append(step_name)
-        res_list.append(res_value)
-        content_list.append(content_value)
-        content_list_clean.append(clean_llm_reasoning(content_value))
-        usage_list.append(usage_value)
-        truncated_list.append(truncated_value)
+        res_list.append(res_time)
+        content_list.append(content_time)
+        content_list_clean.append(clean_llm_reasoning(content_time))
+        usage_list.append(usage_time)
+        truncated_list.append(truncated_time)
         print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
         print(COLOR_START + "Result:" + COLOR_END)
-        print(display_md_table(md_value))
+        print(display_md_table(md_time))
         content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
         print(COLOR_START + "Reasoning:" + COLOR_END)
         print(content_to_print)
     """
-    Step 12: Parameter Value Extraction (Final)
+    Step 13: Parameter Value Extraction (Final)
     """
     print("=" * 64)
     step_name = "Parameter Value Extraction (Final)"
     print(COLOR_START+step_name+COLOR_END)
     print(COLOR_START+"Usage:"+COLOR_END, 0)
     print(COLOR_START+"Result:"+COLOR_END)
-    for i in range(len(value_list)):
+    for i in range(len(time_list)):
         print(f"Index [{i}]:")
-        print(display_md_table(value_list[i]))
+        print(display_md_table(time_list[i]))
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print("Automatic execution.\n")
     step_list.append(step_name)
@@ -616,17 +552,16 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 13: Assembly
+    Step 14: Assembly
     """
     df_list = []
-    assert len(drug_list) == len(patient_list) == len(value_list)# == len(time_list)
+    assert len(drug_list) == len(patient_list) == len(type_unit_value_list) == len(time_list)
     for i in range(len(drug_list)):
         df_drug = markdown_to_dataframe(drug_list[i])
         df_table_patient = markdown_to_dataframe(patient_list[i])
-        df_value = markdown_to_dataframe(value_list[i])
-        # df_time = markdown_to_dataframe(time_list[i])
-        # df_combined = pd.concat([df_drug, df_table_patient, df_time, df_type_unit, df_value], axis=1)
-        df_combined = pd.concat([df_table_patient, df_drug, df_value], axis=1)
+        df_type_unit_value = markdown_to_dataframe(type_unit_value_list[i])
+        df_time = markdown_to_dataframe(time_list[i])
+        df_combined = pd.concat([df_table_patient, df_drug, df_type_unit_value, df_time], axis=1)
         df_list.append(df_combined)
     df_combined = pd.concat(df_list, ignore_index=True)
     print("=" * 64)
@@ -644,12 +579,12 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     usage_list.append(0)
     truncated_list.append(False)
     """
-    Step 16: Row cleanup
+    Step 15: Row cleanup
     """
     df_combined["original_index"] = df_combined.index
 
     """fix col name"""
-    expected_columns = ["Patient ID", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Drug name", "Analyte", "Specimen", "Parameter type", "Parameter unit", "Parameter value", "Variation value", "Time value", "Time unit"]
+    expected_columns = ["Patient ID", "Population", "Pregnancy stage", "Pediatric/Gestational age", "Drug name", "Analyte", "Specimen", "Parameter type", "Parameter unit", "Parameter value", "Time value", "Time unit"]
 
     def rename_columns(df, expected_columns):
         renamed_columns = {}
@@ -731,7 +666,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     truncated_list.append(False)
 
     """
-    Step 17: Post-operation Inspection
+    Step 16: Post-operation Inspection
     """
 
     """Rename col names"""

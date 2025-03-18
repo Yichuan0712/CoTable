@@ -5,7 +5,7 @@ import re
 import time
 
 
-def s_pk_get_parameter_type_and_unit_prompt(md_table_aligned, parameter_type_list, caption):
+def s_pk_get_parameter_type_unit_value_prompt(md_table_aligned, parameter_type_list, caption):
     return f"""
 The following main table contains pharmacokinetics (PK) data:  
 {display_md_table(md_table_aligned)}
@@ -28,8 +28,8 @@ Carefully analyze the table and follow these steps:
 """
 
 
-def s_pk_get_parameter_type_and_unit(md_table_aligned, parameter_type_list, caption, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
-    msg = s_pk_get_parameter_type_and_unit_prompt(md_table_aligned, parameter_type_list, caption)
+def s_pk_get_parameter_type_unit_value(md_table_aligned, parameter_type_list, caption, model_name="gemini_15_pro", max_retries=5, initial_wait=1):
+    msg = s_pk_get_parameter_type_unit_value_prompt(md_table_aligned, parameter_type_list, caption)
     messages = [msg]
     question = "Do not give the final result immediately. First, explain your thought process, then provide the answer."
 
@@ -41,7 +41,6 @@ def s_pk_get_parameter_type_and_unit(md_table_aligned, parameter_type_list, capt
     while retries < max_retries:
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
-            print(usage, content)
             content = fix_angle_brackets(content)
 
             total_usage += usage
