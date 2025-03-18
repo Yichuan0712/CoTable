@@ -670,6 +670,18 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=10, 
     df_combined.loc[
         (df_combined["Time unit"] == "week"), "Time value"] = "N/A"
     df_combined.loc[
+        (df_combined["Time unit"] == "Wks"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Time unit"] == "wks"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Time unit"] == "Wk"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Time unit"] == "wk"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Time unit"] == "W"), "Time value"] = "N/A"
+    df_combined.loc[
+        (df_combined["Time unit"] == "w"), "Time value"] = "N/A"
+    df_combined.loc[
         (df_combined["Time unit"] == "Months"), "Time value"] = "N/A"
     df_combined.loc[
         (df_combined["Time unit"] == "months"), "Time value"] = "N/A"
@@ -685,6 +697,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=10, 
         (df_combined["Time unit"] == "Year"), "Time value"] = "N/A"
     df_combined.loc[
         (df_combined["Time unit"] == "year"), "Time value"] = "N/A"
+
     """if Time == "N/A", Time unit must be "N/A" ......"""
     df_combined.loc[
         (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
