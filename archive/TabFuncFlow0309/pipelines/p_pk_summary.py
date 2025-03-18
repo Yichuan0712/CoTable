@@ -388,7 +388,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     """
     type_unit_list = []
     type_unit_cache = {}
-    round = 1
+    round = 0
     for md in md_table_list:
         df = markdown_to_dataframe(md)
         col_name_of_parameter_type = [col for col in df.columns if col_mapping.get(col) == "Parameter type"][0]
@@ -456,7 +456,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     Step 10: Drug Matching
     """
     drug_list = []
-    round = 1
+    round = 0
     if need_match_drug is False:
         for md in md_table_list:
             df = markdown_to_dataframe(md)
@@ -513,7 +513,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     Step 11: Population Matching
     """
     patient_list = []
-    round = 1
+    round = 0
     if need_match_patient is False:
         for md in md_table_list:
             df = markdown_to_dataframe(md)
@@ -571,7 +571,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     Step 12: Parameter Value Extraction
     """
     value_list = []
-    round = 1
+    round = 0
     for md in md_table_list:
         print("=" * 64)
         step_name = "Parameter Value Extraction" + f" (Trial {str(round)})"

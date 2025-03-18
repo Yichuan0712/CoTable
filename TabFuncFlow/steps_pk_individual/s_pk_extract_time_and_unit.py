@@ -53,7 +53,7 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines, model_name="gem
         try:
             res, content, usage, truncated = get_llm_response(messages, question, model=model_name)
             content = fix_angle_brackets(content)
-            # print(usage, content)
+            print(usage, content)
 
             total_usage += usage
             all_content.append(f"Attempt {retries + 1}:\n{content}")

@@ -67,7 +67,7 @@ def clean_llm_reasoning(text: str) -> str:
     return result if result.endswith("\n") else result + "\n"
 
 
-def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=1, use_color=True, clean_reasoning=False):
+def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=10, initial_wait=2, use_color=True, clean_reasoning=False):
     """
     PK Individual Pipeline 250312
     Summarizes pharmacokinetic (PK) data from a given markdown table.
@@ -387,7 +387,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     Step 10: Drug Matching
     """
     drug_list = []
-    round = 1
+    round = 0
     if need_match_drug is False:
         for md in md_table_list:
             df = markdown_to_dataframe(md)
@@ -444,7 +444,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     Step 11: Population Matching
     """
     patient_list = []
-    round = 1
+    round = 0
     if need_match_patient is False:
         for md in md_table_list:
             df = markdown_to_dataframe(md)
@@ -503,7 +503,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     # """
     # patient_list = []
     # patient_cache = {}
-    # round = 1
+    # round = 0
     # if need_match_patient is False:
     #     for md in md_table_list:
     #         df = markdown_to_dataframe(md)
@@ -567,7 +567,7 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     Step 12: Time Extraction
     """
     time_list = []
-    round = 1
+    round = 0
     for md in md_table_list:
         print("=" * 64)
         step_name = "Time Extraction" + f" (Trial {str(round)})"
