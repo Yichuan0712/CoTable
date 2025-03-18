@@ -331,9 +331,9 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
         df = markdown_to_dataframe(md)
         parameter_col = [col for col in df.columns if col_mapping.get(col) == "Parameter"][0]
         patient_col = [col for col in df.columns if col_mapping.get(col) == "Patient ID"][0]
-        df_reshaped = df.rename(columns={patient_col: patient_col, parameter_col: "Parameter Value (Rough)"})
-        df_reshaped["Parameter Type (Rough)"] = parameter_col
-        df_reshaped = df_reshaped[[patient_col, "Parameter Type (Rough)", "Parameter Value (Rough)"]]
+        df_reshaped = df.rename(columns={patient_col: patient_col, parameter_col: "Parameter value"})
+        df_reshaped["Parameter type (rough)"] = parameter_col
+        df_reshaped = df_reshaped[[patient_col, "Parameter type (rough)", "Parameter value"]]
         __md_table_list.append(dataframe_to_markdown(df_reshaped))
     md_table_list = __md_table_list
     print(COLOR_START + "Usage:" + COLOR_END)
@@ -347,6 +347,9 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     """
     Step 9: Unit Extraction
     """
+    print("=" * 64)
+    step_name = "Unit Extraction"
+    print(COLOR_START + step_name + COLOR_END)
     df = markdown_to_dataframe(md_table_aligned)
     col_name_of_parameter_type_list = [col for col in df.columns if col_mapping.get(col) == "Parameter"]
     print(col_name_of_parameter_type_list)
@@ -354,6 +357,18 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     if unit_info is None:
         return None
     tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
+    step_list.append(step_name)
+    res_list.append(res_type_unit)
+    content_list.append(content_type_unit)
+    content_list_clean.append(clean_llm_reasoning(content_type_unit))
+    usage_list.append(usage_type_unit)
+    truncated_list.append(truncated_type_unit)
+    print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
+    print(COLOR_START + "Result:" + COLOR_END)
+    # print(display_md_table(md_type_unit))
+    content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
+    print(COLOR_START + "Reasoning:" + COLOR_END)
+    print(content_to_print)
     exit(0)
     """
     Step 9: Drug Matching
