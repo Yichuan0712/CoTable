@@ -357,6 +357,18 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     if unit_info is None:
         return None
     tuple_type_unit, res_type_unit, content_type_unit, usage_type_unit, truncated_type_unit = unit_info
+    type_unit_value_list = []
+    for md_table in md_table_list:
+        df = markdown_to_dataframe(md_table)
+        df.rename(columns={'Parameter type (rough)': 'Parameter type'}, inplace=True)
+        df['Parameter unit'] = ""
+        for idx, value in df['Parameter type'].items():
+            if value in col_name_of_parameter_type_list:
+                position = col_name_of_parameter_type_list.index(value)
+                df.at[idx, 'Parameter type'] = tuple_type_unit[0][position]
+                df.at[idx, 'Parameter unit'] = tuple_type_unit[1][position]
+        df_filtered = df[['Parameter type', 'Parameter value', 'Parameter unit']]
+        type_unit_value_list.append(dataframe_to_markdown(df_filtered))
     step_list.append(step_name)
     res_list.append(res_type_unit)
     content_list.append(content_type_unit)
@@ -365,7 +377,9 @@ def p_pk_individual(md_table, description, llm="gemini_15_pro", max_retries=5, i
     truncated_list.append(truncated_type_unit)
     print(COLOR_START + "Usage:" + COLOR_END, usage_list[-1])
     print(COLOR_START + "Result:" + COLOR_END)
-    # print(display_md_table(md_type_unit))
+    for i in range(len(type_unit_value_list)):
+        print(f"Index [{i}]:")
+        print(display_md_table(type_unit_value_list[i]))
     content_to_print = content_list_clean[-1] if clean_reasoning else content_list[-1]
     print(COLOR_START + "Reasoning:" + COLOR_END)
     print(content_to_print)
