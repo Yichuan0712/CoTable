@@ -27,7 +27,7 @@ Carefully analyze the table and follow these steps:
 (4) Verify the source of each [Time value, Time unit] combination before including it in your answer.  
     **Important: The following parameter types must not include time or time units and must be directly entered as ["N/A", "N/A"]:**
         Tmax – Maximum Time (Time to reach the maximum concentration)
-        Cmax – Maximum Concentration
+        Cmax – Maximum Concentration (You MUST NOT use Tmax value as its time, You MUST use "N/A")
         Cavg – Average Concentration
         AUC Ratio – Area Under the Curve Ratio
 (5) **Absolutely no calculations are allowed—every value must be taken directly from the table without any modifications.** 
