@@ -67,7 +67,7 @@ def clean_llm_reasoning(text: str) -> str:
     return result if result.endswith("\n") else result + "\n"
 
 
-def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=1, use_color=True, clean_reasoning=False):
+def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, initial_wait=2, use_color=True, clean_reasoning=False):
     """
     PK Summary Pipeline 250227
     Summarizes pharmacokinetic (PK) data from a given markdown table.
