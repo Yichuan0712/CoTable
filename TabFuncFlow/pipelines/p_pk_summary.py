@@ -937,8 +937,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
         # "Upper bound": "High limit",
         "Main value": "Parameter value",
         "Statistics type": "Parameter statistic",
-        "Lower bound": "Lower limit",
-        "Upper bound": "High limit",
+        # "Lower bound": "Lower limit",
+        # "Upper bound": "High limit",
     }
     df_combined = df_combined.rename(columns=column_mapping)
 

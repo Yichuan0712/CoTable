@@ -1,2 +1,2 @@
 # CoTable
-OSU Data Curation Tool: Chain of Table
+OSU Data Curation Tool
