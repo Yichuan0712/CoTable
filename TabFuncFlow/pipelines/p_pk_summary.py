@@ -929,7 +929,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # # split df_combined and insert df of time
     # df_combined = pd.concat([df_combined.iloc[:, :insert_pos], markdown_to_dataframe(md_table_time), df_combined.iloc[:, insert_pos:]], axis=1)
     df_combined = pd.concat([df_combined, markdown_to_dataframe(md_table_time)], axis=1)
-    df_combined = df_combined.reset_index(drop=True)
+    # df_combined = df_combined.reset_index(drop=True)
     """
     Step 17: Post-operation Inspection
     """
