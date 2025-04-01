@@ -820,6 +820,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     def remove_contained_rows(df):
         df_cleaned = df
         print("*"*64)
+        print(df_cleaned)
 
         rows_to_drop = set()
         for i in range(len(df_cleaned)):
