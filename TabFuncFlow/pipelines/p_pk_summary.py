@@ -704,6 +704,16 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
         ),
         ["Main value", "Statistics type"]
     ] = "N/A"
+    """if Lower bound and Upper bound are both in Main value (string), Main value = N/A"""
+    def contains_bounds(row):
+        main_value = str(row["Main value"])
+        lower = str(row["Lower bound"])
+        upper = str(row["Upper bound"])
+        if lower.strip() != "N/A" and upper.strip() != "N/A":
+            return lower in main_value and upper in main_value
+        return False
+    mask = df_combined.apply(contains_bounds, axis=1)
+    df_combined.loc[mask, "Main value"] = "N/A"
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
         (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
