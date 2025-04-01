@@ -695,6 +695,15 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # """if Time == "N/A", Time unit must be "N/A"。"""
     # df_combined.loc[
     #     (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
+    """if Statistics type == Interval type, and (Main value == Lower bound or Main value == Upper bound), set Main value and Statistics type = N/A"""
+    df_combined.loc[
+        (df_combined["Statistics type"] == df_combined["Interval type"]) &
+        (
+                (df_combined["Main value"] == df_combined["Lower bound"]) |
+                (df_combined["Main value"] == df_combined["Upper bound"])
+        ),
+        ["Main value", "Statistics type"]
+    ] = "N/A"
     """if Value == "N/A", Summary Statistics must be "N/A"。"""
     df_combined.loc[
         (df_combined["Main value"] == "N/A"), "Statistics type"] = "N/A"
