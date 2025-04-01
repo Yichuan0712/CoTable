@@ -726,8 +726,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     df_combined.replace(",", " ", inplace=True)
 
     """Remove non-digit rows"""
-    columns_to_check = ["Main value", "Statistics type", "Variation type", "Variation value",
-                        "Interval type", "Lower bound", "Upper bound", "P value"]
+    columns_to_check = ["Main value", "Variation value", "Lower bound", "Upper bound"]
 
     def contains_number(s):
         return any(char.isdigit() for char in s)
