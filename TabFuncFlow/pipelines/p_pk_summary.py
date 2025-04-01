@@ -818,13 +818,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     df_combined = df_combined.reset_index(drop=True)
 
     """remove inclusive rows"""
-
-    def normalize_na(value):
-        return "N/A" if pd.isna(value) or str(value).strip().upper() in ["", "NA", "NAN", "NONE", "N/A"] else str(
-            value).strip()
-
     def remove_contained_rows(df):
-        df_cleaned = df.copy().applymap(normalize_na)
+        df_cleaned = df
 
         rows_to_drop = set()
         for i in range(len(df_cleaned)):
