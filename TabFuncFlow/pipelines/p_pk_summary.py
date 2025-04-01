@@ -878,8 +878,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # df_combined.sort_values(by="original_index", inplace=True)
     # df_combined.drop(columns=["original_index"], inplace=True)
     # df_combined.reset_index(drop=True, inplace=True)
-    # df["original_order"] = df.index
-    # df = df.sort_values(by="original_order").drop(columns=["original_order"]).reset_index(drop=True)
+    df_combined["original_order"] = df_combined.index
+    df_combined = df_combined.sort_values(by="original_order").drop(columns=["original_order"]).reset_index(drop=True)
 
     print("=" * 64)
     step_name = "Row cleanup"
@@ -925,7 +925,7 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # # split df_combined and insert df of time
     # df_combined = pd.concat([df_combined.iloc[:, :insert_pos], markdown_to_dataframe(md_table_time), df_combined.iloc[:, insert_pos:]], axis=1)
     df_combined = pd.concat([df_combined, markdown_to_dataframe(md_table_time)], axis=1)
-    # df_combined = df_combined.reset_index(drop=True)
+    df_combined = df_combined.reset_index(drop=True)
     """
     Step 17: Post-operation Inspection
     """
