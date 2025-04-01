@@ -819,8 +819,6 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     """remove inclusive rows"""
     def remove_contained_rows(df):
         df_cleaned = df
-        print("*"*64)
-        print(df_cleaned)
 
         rows_to_drop = set()
         for i in range(len(df_cleaned)):
@@ -829,10 +827,8 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
                 row2 = df_cleaned.iloc[j]
 
                 if all((r1 == r2) or (r1 == "N/A") for r1, r2 in zip(row1, row2)):
-                    print(df_cleaned[i])
                     rows_to_drop.add(i)  # row1 included by row2
                 elif all((r2 == r1) or (r2 == "N/A") for r1, r2 in zip(row1, row2)):
-                    print(df_cleaned[j])
                     rows_to_drop.add(j)
 
         df_cleaned = df_cleaned.drop(index=rows_to_drop)  # .reset_index(drop=True)
