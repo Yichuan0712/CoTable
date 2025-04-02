@@ -695,24 +695,18 @@ def p_pk_summary(md_table, description, llm="gemini_15_pro", max_retries=5, init
     # """if Time == "N/A", Time unit must be "N/A"。"""
     # df_combined.loc[
     #     (df_combined["Time value"] == "N/A"), "Time unit"] = "N/A"
-    """if Statistics type == Interval type, and (Main value == Lower bound or Main value == Upper bound), set Main value and Statistics type = N/A"""
-    df_combined.loc[
-        (df_combined["Statistics type"] == df_combined["Interval type"]) &
-        (
-                (df_combined["Main value"] == df_combined["Lower bound"]) |
-                (df_combined["Main value"] == df_combined["Upper bound"])
-        ),
-        ["Main value", "Statistics type"]
-    ] = "N/A"
-    """if Statistics type == N/A, and (Main value == Lower bound or Main value == Upper bound), set Main value and Statistics type = N/A"""
-    df_combined.loc[
-        (df_combined["Statistics type"] == 'N/A') &
-        (
-                (df_combined["Main value"] == df_combined["Lower bound"]) |
-                (df_combined["Main value"] == df_combined["Upper bound"])
-        ),
-        "Main value"
-    ] = "N/A"
+    """if Statistics type == Interval type or N/A, and (Main value == Lower bound or Main value == Upper bound), set Main value and Statistics type = N/A"""
+    condition = (
+            (
+                    (df_combined["Statistics type"] == df_combined["Interval type"]) |
+                    (df_combined["Statistics type"] == 'N/A')
+            ) &
+            (
+                    (df_combined["Main value"] == df_combined["Lower bound"]) |
+                    (df_combined["Main value"] == df_combined["Upper bound"])
+            )
+    )
+    df_combined.loc[condition, ["Main value", "Statistics type"]] = "N/A"
     """if Lower bound and Upper bound are both in Main value (string), Main value = N/A"""
     def contains_bounds(row):
         main_value = str(row["Main value"])
