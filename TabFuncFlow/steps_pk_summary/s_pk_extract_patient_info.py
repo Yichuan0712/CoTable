@@ -160,7 +160,7 @@ Subject N represents the number of subjects corresponding to the specific parame
     - Specifically, **YOU MUST** explain every number, in this list: {int_list} to determine if it should be listed in Subject N.
     - For example, if a population group has a Subject N of 8, but further analysis shows that 5, 6, and 7 of the 8 subjects correspond to different parameter values, then 5, 6, 7, and 8 must all be included as Subject N in different combinations in the final answer.
     - Fill in "N/A" when you don't know the exact N.
-    - Patient ID is not Subject N.
+    - Important: Do not confuse Patient ID with Subject N. Subject N refers to the number of subjects contributing data to a specific parameter — not just the count of unique IDs.
 (6) If any information is missing, first try to infer it from the available data (e.g., using context, related entries, or common pharmacokinetic knowledge). Only use "N/A" as a last resort if the information cannot be reasonably inferred.
 """
 
