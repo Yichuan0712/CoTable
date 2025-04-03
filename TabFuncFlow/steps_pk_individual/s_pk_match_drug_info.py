@@ -74,7 +74,7 @@ def s_pk_match_drug_info(md_table_aligned, caption, md_table_aligned_with_1_para
 
             expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
             if len(match_list) != expected_rows:
-                messages = [msg, "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches. Think about why this happened, correct your approach, and try again with the right answer."]
+                messages.append("Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches. Think about why this happened, correct your approach, and try again with the right answer.")
                 raise ValueError(
                     f"Mismatch: Expected {expected_rows} rows, but got {len(match_list)} extracted matches."
                 )

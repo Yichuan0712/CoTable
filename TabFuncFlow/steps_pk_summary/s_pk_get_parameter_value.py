@@ -96,8 +96,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
 
             for row in match_list:
                 if len(row) != len(expected_columns):
-                    messages = [msg,
-                                "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nInvalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}\nThink about why this happened, correct your approach, and try again with the right answer."]
+                    messages.append("Wrong answer example:\n" + content + f"\nWhy it's wrong:\nInvalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}\nThink about why this happened, correct your approach, and try again with the right answer.")
                     raise ValueError(
                         f"Invalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}"
                     )
@@ -106,8 +105,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
 
             expected_rows = markdown_to_dataframe(md_table_aligned_with_1_param_type_and_value).shape[0]
             if df_table.shape[0] != expected_rows:
-                messages = [msg,
-                            "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values. Think about why this happened, correct your approach, and try again with the right answer."]
+                messages.append("Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values. Think about why this happened, correct your approach, and try again with the right answer.")
                 raise ValueError(
                     f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values."
                 )

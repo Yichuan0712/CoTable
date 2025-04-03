@@ -89,8 +89,7 @@ def s_pk_extract_time_and_unit(md_table, caption, md_data_lines_after_post_proce
             df_table = pd.DataFrame(match_list, columns=["Time value", "Time unit"])
 
             if df_table.shape[0] != expected_rows:
-                messages = [msg,
-                            "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted matches. Think about why this happened, correct your approach, and try again with the right answer."]
+                messages.append("Wrong answer example:\n" + content + f"\nWhy it's wrong:\nMismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted matches. Think about why this happened, correct your approach, and try again with the right answer.")
                 raise ValueError(
                     f"Mismatch: Expected {expected_rows} rows, but got {df_table.shape[0]} extracted values."
                 )
