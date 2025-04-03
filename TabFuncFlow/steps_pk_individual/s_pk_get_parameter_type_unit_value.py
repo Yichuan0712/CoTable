@@ -69,7 +69,7 @@ def s_pk_get_parameter_type_unit_value(md_table_aligned, parameter_type_list, ca
 
             expected_elements = len(parameter_type_list)
             if len(match_tuple[0]) != expected_elements or len(match_tuple[1]) != expected_elements:
-                messages = [msg, "Wrong answer example:\n"+content+f"\nWhy it's wrong:\nMismatch: Expected {expected_elements} parameter types/units, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units)."]
+                messages = [msg, "Wrong answer example:\n"+content+f"\nWhy it's wrong:\nMismatch: Expected {expected_elements} parameter types/units, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units). Think about why this happened, correct your approach, and try again with the right answer."]
                 raise ValueError(
                     f"Mismatch: Expected {expected_elements} parameter types/units, but got {len(match_tuple[0])} (types) and {len(match_tuple[1])} (units)."
                 )

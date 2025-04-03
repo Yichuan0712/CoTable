@@ -97,7 +97,7 @@ def s_pk_get_parameter_value(md_table_aligned, caption, md_table_aligned_with_1_
             for row in match_list:
                 if len(row) != len(expected_columns):
                     messages = [msg,
-                                "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nInvalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}"]
+                                "Wrong answer example:\n" + content + f"\nWhy it's wrong:\nInvalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}\nThink about why this happened, correct your approach, and try again with the right answer."]
                     raise ValueError(
                         f"Invalid data format: Expected {len(expected_columns)} columns per row, but got {len(row)}.\nRow: {row}"
                     )
